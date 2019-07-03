@@ -1,1 +1,449 @@
-write document here
+% GigaScience template
+\documentclass[a4paper,num-refs]{oup-contemporary}
+
+\journal{gigascience}
+
+
+%%%% Packages %%%%
+\usepackage{siunitx}
+\usepackage{minted} % Used for JSON highlighting
+\usepackage{algpseudocode} % Algorithmic environment
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{makecell}
+\usepackage[flushleft]{threeparttable}
+
+%%%% Commands %%%%
+\newcommand{\todo}[1]{\color{red}\textbf{TODO:}#1\color{black}}
+\newcommand{\note}[2]{\color{blue}Note: #1\color{black}}
+\newcommand{\reprozip}[0]{ReproZip}
+
+
+\title{Use of Containers and Security threat to Clusters}
+  
+\begin{document}
+
+\author[1]{Bhupinder Kaur}
+\author[1]{Aiman Latif Hanna}
+\author[1]{Tristan Glatard}
+
+\affil[1]{Department of Computer Science and Software Engineering, Concordia University, Montreal, Canada}
+
+\maketitle
+
+\begin{abstract} 
+
+Today, containers, which provide operating system level virtualization, are very
+popular. This is due to the need for fast development cycles, continuous deliv-
+ery, and cost reduction of infrastructure. Moreover, demand for an isolated en-
+vironment adds on to the popularity of containers. Indeed, containers accelerate
+development cycles as compared to virtual machines and provide near-native performance.
+Containers are isolated from each other but they share the host kernel. If the host
+is compromised, all containers running on it are at risk. In this paper, we pre-
+cisely study the security implications of containers. This includes the study of
+vulnerabilities in container images, Linux kernel, and in the network. Here, we
+first provide an introduction of containers, review of container’s security, and
+later, we discuss how these security loopholes can be a risk to clusters.
+\end{abstract}
+
+\begin{keywords}
+Containers; Docker; Singularity; Security; 
+Clusters.
+\end{keywords}
+
+\section{Introduction}
+
+Containers are very lightweight, flexible, and more resource-efficient than virtual
+machines. They provide an operating system (OS) level virtualization, which
+removes the overhead of having an extra OS layer. However, containers tightly
+integrate with the host due to the sharing of the kernel, which raises security
+concerns. Linux Containers (LXC) were introduced in 2008 and gained advantage 
+over other Linux-based projects due to the integration of virtualization features 
+into the upstream Linux kernel, which removed the need of applying patches to
+Linux kernel and recompiling. LXC relies on cgroups and namespaces features
+of the Linux kernel. Cgroups control the usage of system resources (memory, CPU,
+network, etc) among a group of processes. Namespaces define what a process can
+see by providing an isolated view of the operating system.
+
+Later in 2013, Docker, which is an extension of LXC capabilities, was introduced.
+Docker is a portable container engine used to pack an application
+alongwith all its dependencies and libraries. The packed application is known as
+a Docker image and it can be run on any Linux server. As Docker is also based
+on LXC it also relies on cgroups for limiting resources and namespaces for
+container isolation. All Docker containers are managed by the Docker engine
+which is knows as Docker daemon. It is a service that runs on the host operating
+system and requires root access to operate. Docker containers are
+spawned as children of root-owned Docker daemon. Therefore,
+users can gain escalated privileges by coercing Docker daemon,
+which creates important security risks in shared environments. As a conse-
+quence, Docker is usually not supported in multi-user environments.
+
+Couple of years later, Singularity was introduced in 2016 with the main goal
+of providing support for multi-user environment.
+It offers mobility of compute by facilitating portable environments through 
+a single image file, which makes Singularity containers different from 
+Docker’s layered containers. Singularity takes snapshot, locks, and 
+archives the developed application, which is known as Singularity image
+Once Singularity image is created, it is hashed by using SHA256 hashing. 
+Hence, it cannot be changed once it is created, consequently, it can be 
+used for reproducing the results of scientific experiments.
+
+Mobility of compute is defined as creating and maintaining a workflow on
+a local machine that can be easily ported on other hosts, Linux distributions,
+and/or cloud service providers. To achieve this, Singularity packs everything
+that is required for the application to run in a distributable image. Then that
+image can be copied, archived, and shared. Moreover, Singularity containers
+are easily portable across different versions of the C library and different kernel
+implementations.
+Same features of Singularity, which are used for mobility of compute, facil-
+itate reproducibility as well. Hash of the image is also stored along with the
+image. All Singularity images can be stored at a central place is known as
+Singularity hub and Docker images can be stored at Docker hub.
+
+The remainder of this article describes security concerns of containers
+and their chances of being exploited on clusters. It closes on a discussion
+of ten simple rules that can be followed to release secure container images
+for use in clusters.
+
+\begin{figure}
+\centering
+        \includegraphics[width=\columnwidth]{Figures/virtualization.png}
+        \caption{Architecture of Container-based
+                Virtualization}
+	\label{virtualization}
+\end{figure}
+
+\section{Container's Security Review}
+
+In spite of the popularity of containers, there are various security concerns
+as well. We categorize security of containers in two broad categories i.e container's 
+internal security and security provided by the host which is known as
+host hardening. In this article, we mainly focus on security concerns of 
+Docker and Singularity containers as both are currently more popular than other 
+OS-level virtualizations. 
+
+\subsection{Container's Internal Security}
+
+We examine the internal security of containers based on the requirements given by
+Reshetova et al.,2014 for comparing the security of a number of OS-level
+virtualization techniques. According to this paper, an OS-level virtualization
+technique security can be analyzed from its isolation from the host machine and from 
+the technique used by it to limit resources. Apart from that, in this section, we discuss various security 
+concerns added by vulnerabilities that are present in Docker images.
+
+Isolation of containers from the host can be of different categorize such as process isolation, filesys-
+tem isolation, device isolation, IPC isolation, network isolation. In this section, we discuss how
+much justice is done to these isolations by Docker and Singularity containers.
+
+\subsubsection{Process Isolation}
+
+The main goal of process isolation is to prevent one container process from
+seeing or interfering with another container process. In other words, it limits
+9the permissions and visibility of a container process to processes running in other
+containers. Docker achieves this goal through the use of namespaces in the Linux
+kernel. For this purpose, Docker uses PID namespaces which isolate a process
+with particular process ID from the host and other containers. Provided that,
+it becomes difficult for an attacker to see processes running in other containers,
+hence harder to attack them [24]. In contrast to the Docker, the PID namespace
+is not isolated from the host by default in Singularity because it’s main goal is
+to provide mobility of compute and reproducibility, not full isolation. But if
+there is a need the user can separate the PID namespace using a command line
+(or environment variable) setting.
+
+\subsubsection{Filesystem Isolation}
+
+Filesystem isolation is required to prevent illegitimate access to filesystems of
+the host and containers. Docker uses filesystem namespaces, also called mount
+namespaces, for achieving this goal. Filesystem namespaces hide filesystems
+of the host and containers from other containers. However, some of the kernel
+filesystems are not namespaced, so Docker containers mount them for operation,
+for example, /sys, /proc/sys, /proc/sysrq - trigger, /proc/irq, and /proc/bus
+[25]. This causes security concerns as Docker containers are directly able to
+access host filesystems. Consequently, Docker provides two filesystem protection
+mechanisms. First, Docker gives read-only permissions to containers for these
+filesystems. Second, containers are not allowed to remount any filesystem within
+containers. Additionally, Docker offers a copy-on-write filesystem mechanism,
+which allows containers to write to their specific filesystems and changes are not
+visible to other containers. On the other hand, files in Singularity containers
+are not isolated using filesystem namespaces because a user inside a Singularity
+container is the same user outside the container.
+
+\subsubsection{Device Isolation}
+
+Applications and kernel access devices through special files known as device
+nodes. It is very crucial to limit the set of devices nodes that containers can
+access. This is primarily because an attacker can own the whole system by
+gaining access to some important device nodes such as /dev/mem, /dev/sd*,
+or /dev/tty. Docker uses the Device Whitelist Controller [26] feature of con-
+trol groups to limit the set of devices that a Docker container can see and use.
+Additionally, Docker starts containers with nodev which prevents the use of
+already created device nodes inside the image. Furthermore, Docker does not
+allow containers to create new device nodes. However, some of the important
+device nodes cannot be namespaced such as /dev/mem, /dev/sd* and kernel
+modules. Direct access to these device nodes by containers possess serious se-
+curity concerns. Besides that, if a Docker container is executed in privileged
+mode then it gets access to all devices. Conversely, in Singularity devices are
+also not isolated between the host and the container similar to filesystem due to
+same user inside and outside the container. In Singularity by default the user
+is allowed to interface all the devices of the host.
+\subsubsection{IPC Isolation}
+
+IPC is a set of objects through which processes communicate with each other
+such as, shared memory segments, semaphores, message queues, and POSIX
+message queues. IPC isolation is needed to prevent containers from accessing
+or modifying data belonging to other containers, which is transmitted through
+these objects. Docker utilizes IPC namespaces to assign an IPC namespace
+to each container. Process in one IPC namespace cannot read or write IPC
+resources of another IPC namespace.
+
+\subsubsection{Network Isolation}
+
+Isolation of containers network is very important to prevent network-based
+attacks such as address resolution protocol (ARP) spoofing and Man-in-the-
+Middle (MitM) Attack [27]. ARP spoofing is an attack, which associates the
+attacker’s media access control (MAC) address with the internet protocol (IP)
+address of another host. ARP is a stateless protocol and hosts save all ARP
+replies even if they had not sent any ARP request for it [28], which becomes
+a reason of attack. So, the host that has spoofed ARP response is not able to
+verify whether it belongs to legitimate host or attacker and hence, it starts send-
+ing packets at attacker’s MAC address. Docker uses network namespaces [29]
+to isolate the network of Docker containers. Therefore, each Docker container
+has its different IP address, IP routing tables, network devices, etc. Conse-
+quently, Docker containers interact through the network interfaces with each
+other as well as with the host [30]. On the contrary, all containers share the
+same network bridge, which makes Docker vulnerable to ARP spoofing attack.
+In addition to that, the Docker network bridge forwards all incoming packets
+without any kind of filtering which makes it vulnerable to Mac flooding.
+In Singularity, by default the container share network
+with the host. 
+
+Network is also used to pull container images from the central repository.
+Images are pulled in compressed format and then uncompressed on the host and
+run into containers. This may include storing and processing potentially
+untrusted code in images by container engine. The source code can
+be tampered during transfer or at the source. If some part of the network
+is compromised, an attacker can replace an image with malicious image, and
+that image gets downloaded on the host. As the image is in a compressed
+format, the attacker can cleverly craft the image (i.e. all zeros) and when it
+gets decompressed on the host it can fill whole storage of host causing denial-
+of-service (DoS) attack. Other possible attacks are code injection or replay
+attacks. Additionally, the malicious image can be uploaded to the image
+repository by an adversary. That image can be downloaded by millions of users infecting
+millions of machines.
+
+For mitigation of these attacks, Docker introduced content trust which al-
+lowed signing images before pushing to Docker Hub. But this content trust can
+be disabled and thus disabling image signature check. Another issue is with au-
+tomated build and webhooks, which are described earlier, where compromised
+GitHub account can lead to the execution of malicious code. According to the
+experiment performed in [13] the malicious code was put in production within
+5 minutes and 30 seconds of commit on GitHub. The Content trust provides
+an environment where a single entity is trusted but in this case, trust is divided
+among several external entities.
+\subsubsection{Limiting of Resources}
+
+A DoS attack occurs when intended users are not able to use the system or
+network resources [32]. To launch DoS, the attacker floods targeted host or
+network traffic with superfluous requests to overload the systems. Consequently,
+the target crashes, hence disrupting normal execution of the system. To solve
+this issue Docker uses cgroups. Cgroups restrict the amount of resources (CPU,
+memory, and disk I/O) that are used by Docker containers, thus all containers
+get their fair amount of resources.
+
+\subsection{Image vulnerabilities}
+
+There can be vulnerabilities present inside the image itself when it is downloaded
+from image repository. According to the technical report [33] over 30\% official im-
+ages have high-priority common vulnerabilities and exposures (CVE) identifiers
+(IDs) and around 64\% have high or medium level CVE vulnerabilities. This
+technical report also states that Docker images with the latest tag also have
+vulnerabilities. These vulnerabilities are due to the outdated packages con-
+tained by images which can be due to the use of an old base image or due to
+12outdated code pulled during build. Vulnerabilities can also be present 
+inside Singularity images as well. As these Docker images can also be
+wrapped in Singularity images which automatically transfers vulnerabilities
+between images.
+Docker introduced Docker security scanning through which users can scan
+images to check whether they contain vulnerability or not. However, this scan-
+ning is limited to only private repositories and it is paid. The scan traverses
+all layers of the image and then identifies packages and software in those layers.
+Further, it checks vulnerabilities in these software components by taking their
+Secure Hash Algorithms (SHAs) and then comparing against a standard list of
+CVEs. This scan can take up to 1 to 24 hours depending on the image sizes.
+Additionally, this scanning technique do not detect vulnerabilities which are not
+mentioned in the standard CVE database.
+
+\subsection{Host Hardening}
+
+Out-of-the-box security provided by the Linux kernel to secure the host from
+containers is known as host hardening. Linux provides Linux capabilities and
+Linux Security Modules (LSM) to harden the security of the host system. Linux
+capabilities divide the privileges of superuser into pieces and assign a subset of
+these capabilities to specific processes. Whereas, LSM provides a framework for
+Linux to support various security modules. Currently, three security modules
+are officially integrated with Linux kernel which includes Security Enhancement
+to the Linux system (SELinux), AppArmor, and Seccomp. Out of these three, 
+only SELinux and AppArmor are supported by Docker. Docker integrates with 
+Seccomp only if LXC are used.
+
+\subsubsection{Linux Capabilities}
+
+According to the main page of Linux capabilities, traditionally Unix systems
+categorized processes as privileged processes and unprivileged processes. Priv-
+ileged processes are root users with zero user id (UID), whereas unprivileged
+users are normal users with nonzero UID. Privileged processes are exempted
+from permission check whereas, unprivileged processes are liable to full per-
+mission checks. Linux divides the privileges of superuser into different pieces,
+known as capabilities, which can be independently enabled or disabled. As a
+result, Docker can disable some of the capabilities of containers, thus improv-
+ing the security of the system. As Docker containers share the kernel with the
+host so, most of their tasks are done by the host. As a consequence, disabling
+some of the capabilities in Docker containers do not affect their functionality.
+For example, CAP\_NET\_ ADMIN capability allows configuration of the network
+which can be disabled in Docker containers because all network configurations
+are handled by Docker daemon. By default, most of the Linux capabilities are
+disabled when Docker container is started, in order to secure the host system
+from attackers.
+
+\subsubsection{Linux Security Modules}
+
+SELinux and AppArmor are both Media Access Control (MAC) solutions for 
+enhancing security of Linux systems. MAC strongly separates all 
+applications, which in turn decreases potential damage if an 
+application is compromised. Unfortunately, Security provided by these modules 
+is limited due to generic nature of profiles
+provided by these security modules. For example, default SELinux profile
+assigns same domain to all Docker containers which helps in protecting host from
+containers but not containers from containers. Similarly, default Apparmor
+profile provide full access of network system, file system and capabilities to
+Docker containers. Solution can be writing specific profiles for the individual
+containers.
+
+\section{Materials and Methods}
+
+\subsection{Compute Canada Clusters}
+Compute Canada is a national High Performance Computing (HPC) research platform.
+It integrates with four regional partners namely ACENET, Calcul Québec, Compute
+Ontario, and WestGrid for providing local support.
+Compute Canada uses Slurm Workload Manager to schedule jobs.
+Control groups are used to limit number of resources that can be used
+by a particular user.
+Compute Canada do not support Docker as its default configuration
+runs containers as root. Whereas, Compute Canada supports Singularity
+because it removes the drawback of Docker.
+Compute Canada uses Lustre shared file system to provide high
+bandwidth to its users.
+
+\subsection{Container Engine: Singularity}
+
+Singlarity, which came in 2016, provides operating system (OS)level.
+It offers mobility of compute by facilitating portable environments 
+through a single image file. Once Singularity image
+is created, it is hashed by using SHA256 hashing. Hence, it cannot be changed
+once it is created, consequently, it can be used for reproducing the results of
+scientific experiments. Singularity was introduced with the main goal of pro-
+viding support for multi-user environment. Main features provided by
+Singularity are mobility of compute and reproducibility.
+Mobility of compute is defined as creating and maintaining a workflow on
+a local machine that can be easily ported on other hosts, Linux distributions,
+and/or cloud service providers. To achieve this, Singularity packs everything
+that is required for the application to run in a distributable image. Then that
+image can be copied, archived, and shared. Moreover, Singularity containers
+are easily portable across different versions of the C library and different kernel
+implementations [16].
+Same features of Singularity, which are used for mobility of compute, facil-
+itate reproducibility as well.
+
+\subsection{Container Image Formats}
+
+A container image is a package that contains the application alongwith its
+required dependencies and libraries.
+Nowadays, two most popular containerization tools used are Docker and Singularity.
+Both have different image format.
+
+\subsubsection{Docker Image Format}
+
+There are two ways to create Docker image. The first is to use an existing
+Docker image as a base image and then build a new image from that one, by
+making changes in the filesystem, which is saved as a new layer of the
+Docker image. The second way is to build a new Docker image from scratch.
+Docker images are organized as a series of layers which are stacked on top
+of each other. Each layer consists of a filesystem diff that is introduced
+due to the changes made on the layer below it. All layers of the Docker image
+are identified by unique layerIDs. All these layers stacked together gives a
+unified and complete view of a Docker image. These layers are
+compressed into a single image and can be pushed to the Docker Hub.
+
+\subsubsection{Singularity Image Format}
+
+Singularity takes snapshot, locks, and archives the developed application, which
+is known as Singularity image. Due to image hashing, Singularity does not
+contain image layers, unlike Docker images. While publishing experimental
+results, authors can also publish Singularity image along with its hash, which
+allow other researchers to verify results.
+
+\subsection{Application frameworks}
+
+Following are the application frameworks that are using containers
+on HPC clusters.
+
+\subsubsection{Boutiques}
+
+Boutiques framework is used to publish, integrate, and execute third-party
+applications across CBRAIN platform automatically. Boutiques framework is
+employed by CONP. With Boutiques, the command-line of the application is
+described through a flexible template, which is called descriptor. Descriptor de-
+scribes the input that is required by the application and the output it produces.
+It points to a Docker or Singularity image, where the application is installed.
+Developers of the application produce Boutiques descriptor, and stores it along
+with the application. Boutiques descriptor are described in JSON format. There
+is a set of core tools which help in constructing, validating and executing bou-
+tiques descriptors. During the application run-time, the execution platform
+builds a command line by using input values given by the user and boutiques
+descriptor of the application.
+
+\subsubsection{Brain Imaging Data Structure (BIDS)}
+
+ BIDS is a framework
+
+
+\section{Containers on Clusters}
+
+In this section, we discuss Canadian Open Neuroscience Platform (CONP) which is 
+real use case of containers that involves running containers on clusters. 
+CONP is a national platform
+for sharing neuroscience research data and aims at creating an interactive inter-
+face for neuroscientists and clinical neuroscience. The main goal of the CONP
+platform is to store, process, and distribute massive amounts of data produced
+by modern neuroscience. The effective data sharing by CONP increases data
+accessibility and re-usability. Through CONP, neuroscientists remain updated
+of on-going and past research efforts, which avoids unnecessary duplication.
+CONP uses Compute Canada cluster for providing its services. So we take
+this real use case to explain the effect of image vulnerabilities on clusters.
+
+\sections{Cluster}
+
+A cluster is an arrangement of multiple computers together in particular topol-
+ogy to increase computational power, memory and reduce processing time than
+personal computer. When a single computer becomes insufficient to use due
+to the massive amount of data, cluster of computers can be used to run jobs
+in parallel. Most importantly, clusters are the resources for high performing
+computing (HPC). HPC refers to the use of clusters at large scale and parallel
+processing techniques to solve large and difficult problems. Research, aca-
+demics, and IT world share clusters for running jobs. Due to the wide use and
+popularity of clusters, its security becomes a main concern. Below is the real
+use case of clusters that deal with containers and might be at risk.
+
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+
+\end{document}
+
