@@ -31,23 +31,114 @@ Clusters}
   
 \begin{document}
 
-\author[1]{Aiman Latif Hanna}
 \author[1]{Bhupinder Kaur}
+\author[1]{Aiman Hanna}
 \author[1]{Tristan Glatard}
 
 \affil[1]{Department of Computer Science and Software Engineering, Concordia University, Montreal, Canada}
 
 \maketitle
 
+\begin{keywords}
+Containers; Security; Docker; Singularity; Neuroimaging.
+\end{keywords}
+
+
+\section{Introduction}
+
+Virtualization, which was introduced in 1960s, refers to the creation of a virtual
+version of something. Its meaning has evolved and took different forms since then, for
+instance hardware virtualization, containerization, desktop virtualization, etc.
+Here, in this paper our main focus is on containerarization and its security concerns,
+specifically in neuroimaging field.
+Containers, which provide operating system (OS) level virtualization, are very
+popular. This is due to the need for fast development cycles, continuous delivery,
+and cost reduction of infrastructure. Moreover, demand for an isolated
+environment adds on to the popularity of containers. Indeed, containers accelerate
+development cycles as compared to virtual machines and provide near-native performance.
+They are very lightweight, flexible, and more resource-efficient than virtual
+machines. By providing OS level virtualization they
+removes the overhead of having an extra OS layer.
+
+Although Linux Containers (LXC) and other alternatives such as Rocket were already
+available, container-based virtualization gained a lot of interest when Docker was
+introduced in 2013~\cite{gantikow2016providing}. Docker makes container's use more straightforward. However, there
+are few limitations of Docker. For example, it is not supported by shared High Performance
+Computing (HPC) environments because its default configuration runs containers
+as root. Secondly, Docker containers cannot be used for reproducibility as Docker
+images can be updated, and hence losing specific package versions required for
+reproducing scientific results. Consequently, Singularity was introduced in 2016 with the main
+goal of removing drawbacks of Docker. Singularity was developed mainly to
+support HPC environments and to provide reproducibility.
+
+No doubt containers have gained a lot of popularity after Docker, however containers tightly
+integrate with the host due to the sharing of the kernel, which raises security
+concerns. Figure \ref{fig:container-overview} provides overview of the containers architecture.
+They also share three main security threats with other virtualization
+techniques~\cite{gantikow2016providing}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\columnwidth]{Figures/container.png}
+  \caption{Architecture of Container-based
+                Virtualization.}
+  \label{fig:container-overview}
+\end{figure}
+
+\textbf{Privilege Escalation} A malicious attacker can break out of the container
+and gain control of the host system and other containers running on the same host.
+
+\textbf{Denial-of-Service} One container may end up eating all the resources of the
+host hence resulting in the starvation of the host and other containers.
+
+\textbf{Information Leak} Private data of the host and other containers could be
+leaked and can be used for further attacks.
+
+However, two features of the Linux kernel, \textit{control groups} and \textit{namespaces},
+are used by containers to mitigate these threats to a certain extent. Security
+of containers is still most concerning issue.
+Except web applications, containers are also popularly used for scientific computing
+and data science in neuroscience. In fact, Singularity was developed for scientific applications
+by keeping focus on HPC environments.
+The goal of this paper is to report all vulnerabilities that are present in
+container images, specifically used by neuroimaging field, and access their
+related risks for data analysis.
+
+The existing work on containers focuses mainly on the security of Docker
+containers.
+This focus is justified by the fact that, containers expose the host's resources
+(e.g., file system/ IPC) to the guest system. This feature raises a confidentiality
+threat for the applications running on the same host. Previous studies evaluated
+security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis},
+and have scanned vulnerabilities on Docker hub~\cite{Shu2017, gummaraju2015over}.
+Also Singularity came up with Stools, which can be used for scanning Singularity images
+for security and quality checks.
+Here, we focus on the specific context of scientific data analysis on HPC clusters, taking
+neuroimaging as an example.
+
+This paper is organized as follows: in next section, we provide description
+of materials and methods which includes summarizing a particular use case of
+containers in neuroscience, which is used for scientific computing. It involves
+usage of containers on shared HPC cluster. Additionally, in this section we
+describe all the resources that are used by this use case. We also explain
+scanning tools that we use for scanning container images to report
+vulnerabilities. Next section of this paper is about the results. Here, we
+present number and type of vulnerabilites that are present in the container images
+which are used for data analysis on shared HPC clusters, and discuss how many of them are
+critical vulnerabilities. Following section is about discussion of these results
+where we provide more insight into the risks that are caused by these vulnerabilties
+and how they can be leveraged to design attacks. Here, we also provide some such
+vulnerability examples. Finally, we conclude this paper by discussing ten simple
+rules that can be followed to secure container image for use in clusters.
 
 \section{Materials and Methods}
 
-In this section we summarize a particular use case of containers which is Canadian
+In this section we summarize a particular use case of containers, Canadian
 Open Neuroscience Platform (CONP). It is a national platform for sharing neuroscience
 research data and aims at creating an interactive interface for neuroscientists and
 clinical neuroscience. The main goal of the CONP platform is to store, process, and
 distribute massive amounts of data produced by modern neuroscience.
-Here, we summarize all the resources and software tools that are
+Here, we summarize all the resources that are
 used by CONP to function.
 
 \subsection{Compute Canada Clusters}
@@ -59,60 +150,62 @@ research institutions by providing storage, computing power, and required
 softwares to carry out research.
 It integrates with four regional partners namely ACENET, Calcul Québec, Compute
 Ontario, and WestGrid for providing local support.
-Compute Canada uses Slurm Workload Manager to schedule jobs.
-Control groups are used to limit number of resources that can be used
+Compute Canada uses Slurm Workload Manager to schedule jobs and Lustre shared
+file system to provide high bandwidth to its users.
+Control groups are used by it to limit number of resources that can be used
 by a particular user.
 Compute Canada do not support Docker as its default configuration
-runs containers as root. Whereas, Compute Canada supports Singularity
-because it removes the drawback of Docker.
-Compute Canada uses Lustre shared file system to provide high
-bandwidth to its users.
+runs containers as root. However, Compute Canada supports Singularity
+containers because it removes the drawback of Docker.
 
 \subsection{Container Engine: Singularity}
 
-Singlarity, which came in 2016, provides operating system (OS)level.
+Singularity, which is introduced in 2016, provides operating system (OS) level
+virtualization.
 It offers mobility of compute by facilitating portable environments 
-through a single image file. Once Singularity image
+through a single image file~\cite{kurtzer2016singularity}. Once Singularity image
 is created, it is hashed by using SHA256 hashing. Hence, it cannot be changed
 once it is created, consequently, it can be used for reproducing the results of
-scientific experiments. Singularity was introduced with the main goal of pro-
-viding support for multi-user environment. Main features provided by
-Singularity are mobility of compute and reproducibility.
+scientific experiments. Singularity was introduced with the main goal of
+providing support for multi-user environment. Main features provided by
+Singularity are mobility of compute and reproducibility~\cite{kurtzer2017singularity}.
 Mobility of compute is defined as creating and maintaining a workflow on
 a local machine that can be easily ported on other hosts, Linux distributions,
 and/or cloud service providers. To achieve this, Singularity packs everything
 that is required for the application to run in a distributable image. Then that
 image can be copied, archived, and shared. Moreover, Singularity containers
 are easily portable across different versions of the C library and different kernel
-implementations [16].
-Same features of Singularity, which are used for mobility of compute, facil-
-itate reproducibility as well.
+implementations.
+Same features of Singularity, which are used for mobility of compute,
+facilitate reproducibility as well~\cite{sochat2017enhancing}.
 
 \subsection{Container Image Formats}
 
 A container image is a package that contains the application alongwith its
 required dependencies and libraries.
 Nowadays, two most popular containerization tools used are Docker and Singularity.
-Both have different image format.
+Both have different image format. Below we provide description of both image
+formats.
 
 \subsubsection{Docker Image Format}
 
-There are two ways to create Docker image. The first is to use an existing
-Docker image as a base image and then build a new image from that one, by
-making changes in the filesystem, which is saved as a new layer of the
-Docker image. The second way is to build a new Docker image from scratch.
 Docker images are organized as a series of layers which are stacked on top
 of each other. Each layer consists of a filesystem diff that is introduced
 due to the changes made on the layer below it. All layers of the Docker image
 are identified by unique layerIDs. All these layers stacked together gives a
 unified and complete view of a Docker image. These layers are
 compressed into a single image and can be pushed to the Docker Hub.
+There are two ways to create Docker image. The first is to use an existing
+Docker image as a base image and then build a new image from that one, by
+making changes in the filesystem, which is saved as a new layer of the
+Docker image. The second way is to build a new Docker image from scratch.
 
 \subsubsection{Singularity Image Format}
 
 Singularity takes snapshot, locks, and archives the developed application, which
 is known as Singularity image. Due to image hashing, Singularity does not
-contain image layers, unlike Docker images. While publishing experimental
+contain image layers, unlike Docker images. So Singularity image is a single
+immutable file that can be moved around as any other file. While publishing experimental
 results, authors can also publish Singularity image along with its hash, which
 allow other researchers to verify results.
 
@@ -123,12 +216,13 @@ on HPC clusters.
 
 \subsubsection{Boutiques}
 
-Boutiques is a application sharing system. It is based on Linux containers
+Boutiques is a application sharing system~\cite{glatard2015boutiques}. It is based on Linux containers
 and can be used to publish, integrate, and execute third-party
 applications across different platforms automatically. Boutiques framework is
-employed by CONP. With Boutiques, the command-line of the application is
+employed by CONP to integrate and execute applications on CBRAIN web portal.
+With Boutiques, the command-line of the application is
 described through a flexible template, which is called descriptor. Descriptor
-describes the input that is required by the application and the output it produces.
+describes the input that is required by the application and the output it produces~\cite{glatard2018boutiques}.
 It points to a Docker or Singularity image, where the application is installed.
 Developers of the application produce Boutiques descriptor, and stores it along
 with the application. Boutiques descriptor are described in JSON format. There
@@ -136,25 +230,43 @@ is a set of core tools which help in constructing, validating and executing bou-
 tiques descriptors. During the application run-time, the execution platform
 builds a command line by using input values given by the user and boutiques
 descriptor of the application.
+Currently, Boutiques tools use 23 different container images. Out of
+which 7 are Singularity images and rest are Docker images.
 
 \subsubsection{Brain Imaging Data Structure (BIDS) Apps}
 
-BIDS Apps is a framework designed to share and execute neuroimaging
+BIDS apps~\cite{gorgolewski2017bids} is a framework designed to share and execute neuroimaging
 analysis pipelines. It improves usability, accesibility, and reproducibility
-of different operating system users as well as HPC users.
+of different operating system users as well as HPC users through containerization.
+BIDS apps share reproducibility goal with Boutiques, though they are conceptually different.
+BIDS apps main goal is to standardize application interfaces whereas Boutiques goal is to
+make application sharing and integration easier with different platforms.
+Currently, there are 27 different container images that are used by
+BIDS App. All these are Docker images.
 
 \subsubsection{ReproNim}
 
-ReproNim: A Center for Reproducible Neuroimaging Computation is a vision
-to help neuroscientists in reproducing neuroimaging research.
-
-\subsection{Container Images Used}
+ReproNim is a Center for Reproducible Neuroimaging Computation. It is a vision
+to help neuroscientists in reproducing neuroimaging research. Repronim
+uses RepronIn, BrainVerse, Neuroimaging Computation Environments Manager (NICEMAN),
+and NeuroBlast software tools for its
+functioning. ReproIn is a software that automate acquisition and conversion
+of collected MRI data to BIDS standard format with DataLad version management~\cite{kennedy2019everything}.
+BrainVerse is a cross-platform software framework and collaborative desktop application
+that helps in managing, tracking, and sharing information.
+NICEMAN is a software system that tracks and manages available computation resources
+and makes their use in a scalable and reproducible way.
+Neuroblast is a service that facilitates data sharing of existing studies, and it also
+helps users to search similar studies based on combination of analysis,
+tasks and activation patterns. There are currently 28 different Singularity
+images used by Repronim. 
 
 \subsection{Image Update Process}
 
 If there exist vulnerabilities in the container image, then there are two ways
 to proceed, either not to run that image at all, or run only after updating the
-packages that have vulnerabilities. The latter option effects the reproducibility
+image. Updating the image involves updating all software packages that are
+inside that image. However, this option effects the reproducibility
 of the image, which means that the image cannot be used to verify research
 findings of other scientists. An alternative approach can be to trim unnecessary
 packages from images, which in turn reduces the number of vulnerabilities
@@ -164,9 +276,12 @@ present in images.
 \subsection{Scanning tools used}
 
 There are various scanning tools that are available for scanning container
-images like Vuls, Clair, ClairScanner, Anchore, Dagda, etc. Out of them we
-took Anchore and Vuls for our experiments to scan container
+images like Vuls, Clair, ClairScanner, Anchore, Dagda, etc.
+Out of these we take Anchore, Vuls, and ClairScanner tools for our experiments to scan container
 images which are used by the above discussed application frameworks.
+For scanning Singularity images, Stools scanner is used, which is specifically designed
+for Singularity images. Stools internally make use of Clair-Scanner for
+scanning.
 
 \subsubsection{Anchore}
 
@@ -187,7 +302,7 @@ host and used to inspect images.
 
 Vuls is an open-source vulnerability scanner for Linux/FreeBSD, written in Go
 language. It is an agentless vulnerability scanner and uses various
-vulnerability databases listed in 4.4a. Using dynamic scanning technique, it offers
+vulnerability databases. Using dynamic scanning technique, it offers
 remote and local scan. Remote scan involves setting up only one machine, to
 which other target servers are connected via SSH. Local scan involves running
 the scan on the target server itself. Further, Vuls offer fast scan, fast root scan,
@@ -211,21 +326,41 @@ to Vuls because Anchore relies mainly on vulnerability databases published by
 Linux distributions, whereas Vuls additionally refers to another sources such as
 databases from Japan, US-CERT, etc.
 
+\subsubsection{Stools}
+
+Stools combines CoreOS's ClairScanner with the Continuous Integration (Travis and
+Circle) for scanning Singularity images for vulnerabilities.
+Initially, ClairScanner was intented to scan Docker Containers. This tool does not fit well
+to scan Singularity images because of the different image formats. Docker layers
+consist of layers, whereas Singluarity images consist of a single binary file.
+However, TravisCI and CircleCI are commonly used for testing code, and these
+services also offer running containers. So Stools combined both the concepts.
+It involves spinning a ClairScanner container during testing and building a
+Singularity image, and scanning it for filesystem before the image is finalized.
+
+
 \subsection{CBRAIN}
 
-Canadian Brain Imaging Research Platform (CBRAIN) is a web portal that is used
-by CONP to exploit services of Compute Canada. CBRAIN is a collaborative
+\href{http://github.com/aces/cbrain}{CBRAIN}~\cite{sherif2014cbrain} is a web portal that is
+used for the processing of distributed data on various storage locations of computing
+clusters. CBRAIN system deployed by Montreal Neurological Institute depends on the infrastructure
+delivered by Compute Canada~\cite{das2016mni}.
+It is also used by CONP to exploit services of Compute Canada. CBRAIN is a collaborative
 neuroimaging research platform that is active in production since 2009. CBRAIN
 provides transparent access to various distributed storage sites and computing
 resources across the world. CBRAIN’s infrastructure consists of three main
-layers, namely access layer, service layer, and infrastructure layer. The access
+layers, namely access layer, service layer, and infrastructure layer~\cite{sherif2014cbrain}. The access
 layer is for CBRAIN users, and can be accessed through any modern browser or
-RESTful API [42]. The service layer consists of CBRAIN portal, which contains
+RESTful API. The service layer consists of CBRAIN portal, which contains
 metadata and databases. It provides information about users, their permissions,
 resources etc. The infrastructure layer consists of data resources and computing
-resources, which are connected through a network.
+resources, which are connected through a network. 
+CBRAIN supports Docker, Singularity, BIDS apps, and Boutiques.
+CBRAIN users uses a portal
+account on the cluster. Users are only able to
+run pre-defined applications on the cluster through the CBRAIN portal.
 
-\bibliographystyle{plain}
+%\bibliographystyle{vancouver-authoryear}
 \bibliography{bibliography}
 
 
