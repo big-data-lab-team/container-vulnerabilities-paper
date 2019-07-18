@@ -6,7 +6,6 @@
 
 %%%% Packages %%%%
 \usepackage{siunitx}
-\usepackage{minted} % Used for JSON highlighting
 \usepackage{algpseudocode} % Algorithmic environment
 \usepackage{xspace}
 \usepackage{booktabs}
@@ -24,7 +23,7 @@
 \newcommand{\todo}[1]{\color{red}\textbf{TODO:}#1\color{black}}
 \newcommand{\note}[2]{\color{blue}Note: #1\color{black}}
 \newcommand{\reprozip}[0]{ReproZip}
-
+\newcommand{\TG}[1]{\color{blue}From Tristan: #1 \color{black}}
 
 \title{Risks of Running Vulnerable Container Images for Data Analysis on HPC
 Clusters}
@@ -69,10 +68,12 @@ as root. Secondly, Docker containers cannot be used for reproducibility as Docke
 images can be updated, and hence losing specific package versions required for
 reproducing scientific results. Consequently, Singularity was introduced in 2016 with the main
 goal of removing drawbacks of Docker. Singularity was developed mainly to
-support HPC environments and to provide reproducibility.
+support HPC environments and to provide reproducibility. \TG{The previous two paragraphs are too general. You should
+summarize them in 2-3 sharper sentences.}
 
 No doubt containers have gained a lot of popularity after Docker, however containers tightly
-integrate with the host due to the sharing of the kernel, which raises security
+integrate with the host due to the sharing of the kernel \TG{not only the kernel: 
+mounted file systems and devices too}, which raises security
 concerns. Figure \ref{fig:container-overview} provides overview of the containers architecture.
 They also share three main security threats with other virtualization
 techniques~\cite{gantikow2016providing}.
@@ -94,6 +95,8 @@ host hence resulting in the starvation of the host and other containers.
 \textbf{Information Leak} Private data of the host and other containers could be
 leaked and can be used for further attacks.
 
+\TG{Avoid bold face in papers}
+
 However, two features of the Linux kernel, \textit{control groups} and \textit{namespaces},
 are used by containers to mitigate these threats to a certain extent. Security
 of containers is still most concerning issue.
@@ -102,7 +105,7 @@ and data science in neuroscience. In fact, Singularity was developed for scienti
 by keeping focus on HPC environments.
 The goal of this paper is to report all vulnerabilities that are present in
 container images, specifically used by neuroimaging field, and access their
-related risks for data analysis.
+related risks for data analysis. \TG{You should explain the 3 questions discussed during out meeting.}
 
 The existing work on containers focuses mainly on the security of Docker
 containers.
@@ -115,6 +118,9 @@ Also Singularity came up with Stools, which can be used for scanning Singularity
 for security and quality checks.
 Here, we focus on the specific context of scientific data analysis on HPC clusters, taking
 neuroimaging as an example.
+
+\TG{Some notions that should be introduced in this section (incomplete):
+vulnerability vs malware, paper suggested by Emad Shihab.}
 
 This paper is organized as follows: in next section, we provide description
 of materials and methods which includes summarizing a particular use case of
@@ -134,7 +140,9 @@ rules that can be followed to secure container image for use in clusters.
 \section{Materials and Methods}
 
 In this section we summarize a particular use case of containers, Canadian
-Open Neuroscience Platform (CONP). It is a national platform for sharing neuroscience
+Open Neuroscience Platform (CONP) \TG{No. In this section you describe the data and tools 
+that were used in your experiments. The fact that they are used in CONP 
+is a side note}. It is a national platform for sharing neuroscience
 research data and aims at creating an interactive interface for neuroscientists and
 clinical neuroscience. The main goal of the CONP platform is to store, process, and
 distribute massive amounts of data produced by modern neuroscience.
@@ -157,6 +165,9 @@ by a particular user.
 Compute Canada do not support Docker as its default configuration
 runs containers as root. However, Compute Canada supports Singularity
 containers because it removes the drawback of Docker.
+\TG{Not sure if Compute Canada is used in the experiments. If not, remove and 
+pitch it in the introduction that containers are nowadays used in many clusters, including 
+Compute Canada. You could also refer to the full list of clusters that support singularity.}
 
 \subsection{Container Engine: Singularity}
 
@@ -179,9 +190,16 @@ implementations.
 Same features of Singularity, which are used for mobility of compute,
 facilitate reproducibility as well~\cite{sochat2017enhancing}.
 
+\TG{This paragraph is too general for a method section. You might summarize this in
+2-3 sentences for the introduction. Here you should talk about the engine,
+i.e., how images are run, focusing on security features. Use of namespaces,
+cgroups, access to devices, etc}
+
+\TG{You should add a subsection presenting Docker.}
+
 \subsection{Container Image Formats}
 
-A container image is a package that contains the application alongwith its
+A container image is a package that contains the application along with its
 required dependencies and libraries.
 Nowadays, two most popular containerization tools used are Docker and Singularity.
 Both have different image format. Below we provide description of both image
@@ -189,59 +207,57 @@ formats.
 
 \subsubsection{Docker Image Format}
 
-Docker images are organized as a series of layers which are stacked on top
-of each other. Each layer consists of a filesystem diff that is introduced
-due to the changes made on the layer below it. All layers of the Docker image
-are identified by unique layerIDs. All these layers stacked together gives a
-unified and complete view of a Docker image. These layers are
-compressed into a single image and can be pushed to the Docker Hub.
-There are two ways to create Docker image. The first is to use an existing
-Docker image as a base image and then build a new image from that one, by
-making changes in the filesystem, which is saved as a new layer of the
-Docker image. The second way is to build a new Docker image from scratch.
+Docker images are organized as a series of layers stacked on top of each
+other and identified by unique layer identifiers \TG{If a layer is reused
+in different images, for instance the top layer of a base image, will it
+have the same id across images?}. Each layer consists of a filesystem diff
+with respect to the layer below. Layers are compressed \TG{Are you
+referring to file compression similar to gzip?} into a single image and can
+be pushed to DockerHub. There are two ways to create a Docker image. The
+first is to use an existing Docker image as a base image and then build a
+new image from that one, by making changes in the filesystem, which is
+saved as a new layer of the Docker image. The second way is to build a new
+Docker image from scratch. \TG{It would be relevant to mention the file
+system used to store the images (is it squashfs?).}
 
 \subsubsection{Singularity Image Format}
 
-Singularity takes snapshot, locks, and archives the developed application, which
-is known as Singularity image. Due to image hashing, Singularity does not
-contain image layers, unlike Docker images. So Singularity image is a single
-immutable file that can be moved around as any other file. While publishing experimental
-results, authors can also publish Singularity image along with its hash, which
-allow other researchers to verify results.
+Singularity takes snapshot, locks, and archives the developed application
+\TG{what does it mean?}, which is known as Singularity image. Due to image
+hashing, Singularity does not contain image layers, unlike Docker images
+\TG{is it really due to hashing? why couldn't a hashed image have layers?}.
+So Singularity image is a single immutable file that can be moved around as
+any other file \TG{Talking about the file system used would be relevant}.
+While publishing experimental results, authors can also publish Singularity
+image along with its hash, which allow other researchers to verify results.
 
 \subsection{Application frameworks}
 
-Following are the application frameworks in neuroscience that are using containers
-on HPC clusters.
+We used containerized applications available in the Boutiques and BIDS Apps
+frameworks used in neuroscience to run analyses on HPC clusters. 
 
 \subsubsection{Boutiques}
 
-Boutiques is a application sharing system~\cite{glatard2015boutiques}. It is based on Linux containers
-and can be used to publish, integrate, and execute third-party
-applications across different platforms automatically. Boutiques framework is
-employed by CONP to integrate and execute applications on CBRAIN web portal.
-With Boutiques, the command-line of the application is
-described through a flexible template, which is called descriptor. Descriptor
-describes the input that is required by the application and the output it produces~\cite{glatard2018boutiques}.
-It points to a Docker or Singularity image, where the application is installed.
-Developers of the application produce Boutiques descriptor, and stores it along
-with the application. Boutiques descriptor are described in JSON format. There
-is a set of core tools which help in constructing, validating and executing bou-
-tiques descriptors. During the application run-time, the execution platform
-builds a command line by using input values given by the user and boutiques
-descriptor of the application.
-Currently, Boutiques tools use 23 different container images. Out of
-which 7 are Singularity images and rest are Docker images.
+Boutiques~\cite{glatard2018boutiques} is a application sharing system to
+publish, integrate, and execute command-line applications across different
+platforms. In Boutiques, the command-line of the application is described
+through a flexible JSON descriptor pointing to a Docker or a Singularity
+image where the application is installed. A set of core tools help
+construct, validate, publish and execute Boutiques descriptors. Boutiques
+applications are published on the Zenodo research repository.
+
+We used the 49 Boutiques applications published on Zenodo at the time of
+the writing. These applications use 23 different container images,
+including 7 Singularity images and 16 Docker images. \TG{You should add a
+table showing the images available in each framework, with their base
+image, DOIs, size, and number of files.}
 
 \subsubsection{Brain Imaging Data Structure (BIDS) Apps}
 
 BIDS apps~\cite{gorgolewski2017bids} is a framework designed to share and execute neuroimaging
 analysis pipelines. It improves usability, accesibility, and reproducibility
-of different operating system users as well as HPC users through containerization.
-BIDS apps share reproducibility goal with Boutiques, though they are conceptually different.
-BIDS apps main goal is to standardize application interfaces whereas Boutiques goal is to
-make application sharing and integration easier with different platforms.
-Currently, there are 27 different container images that are used by
+of different applications through containerization.
+\TG{How many BIDS apps are there? Did you use them all?} Currently, there are 27 different container images that are used by
 BIDS App. All these are Docker images.
 
 \subsubsection{ReproNim}
@@ -261,6 +277,13 @@ helps users to search similar studies based on combination of analysis,
 tasks and activation patterns. There are currently 28 different Singularity
 images used by Repronim. 
 
+\subsection{Other images}
+
+\TG{We could also use selected images from DockerHub or SingularityHub. For
+instances the ones used by AFNI or other neuroimaging tools not represented
+in Boutiques or BIDS Apps. However we wouldn't be able to shrink these
+images unless we identified specific command-lines to run.}
+
 \subsection{Image Update Process}
 
 If there exist vulnerabilities in the container image, then there are two ways
@@ -270,51 +293,58 @@ inside that image. However, this option effects the reproducibility
 of the image, which means that the image cannot be used to verify research
 findings of other scientists. An alternative approach can be to trim unnecessary
 packages from images, which in turn reduces the number of vulnerabilities
-present in images.
+present in images. \TG{Here you should describe the method you used to update the images, linking to the 
+software (script) you used to do that. 
+This paragraph is too general and doesn't belong to the methods. }
 
 
 \subsection{Scanning tools used}
 
-There are various scanning tools that are available for scanning container
-images like Vuls, Clair, ClairScanner, Anchore, Dagda, etc.
-Out of these we take Anchore, Vuls, and ClairScanner tools for our experiments to scan container
-images which are used by the above discussed application frameworks.
-For scanning Singularity images, Stools scanner is used, which is specifically designed
-for Singularity images. Stools internally make use of Clair-Scanner for
-scanning.
+Out of the various container image scanning tools, we selected Anchore,
+Vuls, Stools and ClairScanner for our experiments. \TG{Explain why you used
+more than 1 tool, and why you used these ones speifically.}
 
 \subsubsection{Anchore}
 
-Anchore is an end-to-end container security, and open-source compliance plat-
-form. Anchore is a static scanning tool that analyses container images and
-lists operating system packages,
-unofficial packages, configuration files, and language modules [58]. In other
-words, Anchore is a set of tools, which users can employ for scanning container
-images and applying custom policies to them. It provides visibility and trans-
-parency of the container environment. Anchore offers services in two ways:
-Anchore Engine and Anchore Engine Command Line Interface (CLI).
-Anchore Engine is available as a Docker image, which is available on Docker
-Hub. Anchore Engine CLI provides command line interface in addition to An-
-chore Engine REST API. Anchore Engine CLI can be installed directly on the
-host and used to inspect images.
+Anchore is an end-to-end, open-source container security platform. Anchore
+is a static \TG{You should explain static vs dynamic scanning in the intro}
+scanning tool that analyses container images and lists operating system
+packages, unofficial packages, configuration files \TG{How about files
+which are not configuration files?}, and language modules [58] \TG{Import
+reference}. \TG{What is a language module?} \TG{Does it list unknown
+packages, files or modules?} Anchore is a set of tools, which users can
+employ for scanning container images and applying custom policies to them.
+It provides visibility and transparency of the container environment.
+Anchore offers services in two ways: Anchore Engine and Anchore Engine
+Command Line Interface (CLI). Anchore Engine is available as a Docker
+image, which is available on Docker Hub. Anchore Engine CLI provides
+command line interface in addition to Anchore Engine REST API. Anchore
+Engine CLI can be installed directly on the host and used to inspect
+images.
+
+\TG{You should refer to the vulnerability databases used, and explain how
+software components, for instance files, are matched to these databases. Is
+the matching based on file checksum?}
 
 \subsubsection{Vuls}
 
-Vuls is an open-source vulnerability scanner for Linux/FreeBSD, written in Go
-language. It is an agentless vulnerability scanner and uses various
-vulnerability databases. Using dynamic scanning technique, it offers
+Vuls is an open-source vulnerability scanner for Linux and FreeBSD, written in Go
+language \TG{Why is it relevant that it's written in Go?}.
+ It is an agentless vulnerability scanner and uses various
+vulnerability databases \TG{You should list them and explain how they differ to 
+the ones used by Anchore}. Using dynamic scanning technique, it offers
 remote and local scan. Remote scan involves setting up only one machine, to
 which other target servers are connected via SSH. Local scan involves running
 the scan on the target server itself. Further, Vuls offer fast scan, fast root scan,
 and deep scan.
 Fast scan is performed without root privileges, whereas fast root scan is
-performed with root privileges. The latter also uses checkrestart utility to de-
-tect processes that are updated but not yet restarted because if they are not
+performed with root privileges. The latter also uses checkrestart utility to detect processes that are updated but not yet restarted because if they are not
 restarted, updates are not effective. So fast root scan also detects these pro-
 cesses. Both fast scan and fast root scan are performed offline without Internet
 access, and put almost no load on the scan target server. Deep scan uses
 root privileges for scanning, and is used to get a more detailed scan. It checks
-changelogs, which puts more load on the target server. As shown in Figure 4.3
+changelogs, which puts more load on the target server. As shown in Figure 4.3 \TG{There is no figure 4.3 or graph 4.5 here. Anyway it's not relevant 
+to report results in this section. This paragraph looks like a copy paste from your previous report, it needs to be edited.}
 it is clear that vulnerability detection time of Vuls is much better than An-
 chore. Vuls tool uses dynamic scanning, so the scanning time does not depend
 on the image size.
@@ -337,7 +367,7 @@ However, TravisCI and CircleCI are commonly used for testing code, and these
 services also offer running containers. So Stools combined both the concepts.
 It involves spinning a ClairScanner container during testing and building a
 Singularity image, and scanning it for filesystem before the image is finalized.
-
+\TG{Add link and/or reference.}
 
 \subsection{CBRAIN}
 
