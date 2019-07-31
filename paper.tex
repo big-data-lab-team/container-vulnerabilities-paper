@@ -72,8 +72,8 @@ support HPC environments and to provide reproducibility. \TG{The previous two pa
 summarize them in 2-3 sharper sentences.}
 
 No doubt containers have gained a lot of popularity after Docker, however containers tightly
-integrate with the host due to the sharing of the kernel \TG{not only the kernel: 
-mounted file systems and devices too}, which raises security
+integrate with the host due to the sharing of the kernel, 
+mounted file systems, and devices, which raises security
 concerns. Figure \ref{fig:container-overview} provides overview of the containers architecture.
 They also share three main security threats with other virtualization
 techniques~\cite{gantikow2016providing}.
@@ -86,26 +86,42 @@ techniques~\cite{gantikow2016providing}.
   \label{fig:container-overview}
 \end{figure}
 
-\textbf{Privilege Escalation} A malicious attacker can break out of the container
+\textit{Privilege Escalation} A malicious attacker can break out of the container
 and gain control of the host system and other containers running on the same host.
 
-\textbf{Denial-of-Service} One container may end up eating all the resources of the
+\textit{Denial-of-Service} One container may end up eating all the resources of the
 host hence resulting in the starvation of the host and other containers.
 
-\textbf{Information Leak} Private data of the host and other containers could be
+\textit{Information Leak} Private data of the host and other containers could be
 leaked and can be used for further attacks.
 
-\TG{Avoid bold face in papers}
 
 However, two features of the Linux kernel, \textit{control groups} and \textit{namespaces},
 are used by containers to mitigate these threats to a certain extent. Security
-of containers is still most concerning issue.
+of containers is still most concerning issue. According to a Forrester survey~\cite{} done in January
+2015, security is the
+biggest concern while deploying containers.
 Except web applications, containers are also popularly used for scientific computing
 and data science in neuroscience. In fact, Singularity was developed for scientific applications
-by keeping focus on HPC environments.
+by keeping focus on HPC environments. This popularity containers lead us to the
+primary research question of this work: \textit{what is the current security state of
+container images that are deployed on HPC clusters}.
+
+To answer this question, we take a real use case of containers into consideration.
 The goal of this paper is to report all vulnerabilities that are present in
 container images, specifically used by neuroimaging field, and access their
-related risks for data analysis. \TG{You should explain the 3 questions discussed during out meeting.}
+related risks for data analysis. Particularly, we aim to answer three primary
+research questions:
+
+\textit{RQ1} Are vulnerabilities present inside container images that are
+deployed on HPC clusters?
+\textit{RQ2} Can we get rid of these vulnerabilities by updating the
+images?
+\textit{RQ3} Can we get rid of these vulnerabilities by shrinking the
+size of the image?
+
+To answer those questions, we take an example of neuroscience field where
+containers are used on HPC clusters.
 
 The existing work on containers focuses mainly on the security of Docker
 containers.
@@ -208,17 +224,21 @@ formats.
 \subsubsection{Docker Image Format}
 
 Docker images are organized as a series of layers stacked on top of each
-other and identified by unique layer identifiers \TG{If a layer is reused
-in different images, for instance the top layer of a base image, will it
-have the same id across images?}. Each layer consists of a filesystem diff
+other and identified by unique layer identifiers. If a layer is reused
+in different images it will
+have the same id across images. Each layer consists of a filesystem diff
 with respect to the layer below. Layers are compressed \TG{Are you
 referring to file compression similar to gzip?} into a single image and can
 be pushed to DockerHub. There are two ways to create a Docker image. The
 first is to use an existing Docker image as a base image and then build a
 new image from that one, by making changes in the filesystem, which is
 saved as a new layer of the Docker image. The second way is to build a new
-Docker image from scratch. \TG{It would be relevant to mention the file
-system used to store the images (is it squashfs?).}
+Docker image from scratch. Docker supports several different storage drivers.
+\textit{Overlay2} is the preferred storage driver used by Docker for all currently
+supported Linux versions, whereas \textit{aufs} is preferred for Docker 18.06 and
+older, when using Ubuntu 14.04 on kernel 3.13 as it do not support \textit{overlay2}.
+Other storage drivers that are supported by Docker include \textit{devicemapper, btrfs,
+zfs, and vfs}
 
 \subsubsection{Singularity Image Format}
 
