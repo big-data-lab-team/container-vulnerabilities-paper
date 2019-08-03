@@ -23,7 +23,7 @@
 \newcommand{\todo}[1]{\color{red}\textbf{TODO:}#1\color{black}}
 \newcommand{\note}[2]{\color{blue}Note: #1\color{black}}
 \newcommand{\reprozip}[0]{ReproZip}
-\newcommand{\TG}[1]{\color{blue}From Tristan: #1 \color{black}}
+\newcommand{\TG}[1]{\color{blue}From Tristan: #1\color{black}}
 
 \title{Risks of Running Vulnerable Container Images for Data Analysis on HPC
 Clusters}
@@ -103,27 +103,41 @@ of containers is still most concerning issue. According to a Forrester survey~\c
 biggest concern while deploying containers.
 Except web applications, containers are also popularly used for scientific computing
 and data science in neuroscience. In fact, Singularity was developed for scientific applications
-by keeping focus on HPC environments. This popularity containers lead us to the
+by keeping focus on HPC environments. This popularity of containers lead us to the
 primary research question of this work: \textit{what is the current security state of
 container images that are deployed on HPC clusters}.
 
-To answer this question, we take a real use case of containers into consideration.
-The goal of this paper is to report all vulnerabilities that are present in
+To answer that question, we scan all images that are used on Compute
+Canada clusters by neuroscience field. Scanning refers to the practice of
+collecting all information about the container image, investigating it
+for vulnerabilities, and finally producing a
+report to summarize scanning results. Scanning is broadly categorized into
+two types: static scanning and dynamic scanning. The former scanning technique
+involves extracting information of an image without running it into a container,
+whereas the latter approach involves launching the container from the target image, and
+then scanning the running container.
+Here, we focus mainly on vulnerability scanning and not on malware.
+Malware is a computer software that is specially designed to attack the target computer,
+whereas vulnerability is a weakness in the developer's software that can be used
+by the attacker to perform unathorized actions on the target computer.
+In this paper, we report all vulnerabilities that are present in
 container images, specifically used by neuroimaging field, and access their
 related risks for data analysis. Particularly, we aim to answer three primary
 research questions:
 
-\textit{RQ1} Are vulnerabilities present inside container images that are
+\textit{RQ1:} Are vulnerabilities present inside container images that are
 deployed on HPC clusters?
-\textit{RQ2} Can we get rid of these vulnerabilities by updating the
+
+\textit{RQ2:} Can we get rid of these vulnerabilities by updating the
 images?
-\textit{RQ3} Can we get rid of these vulnerabilities by shrinking the
+
+\textit{RQ3:} Can we get rid of these vulnerabilities by shrinking the
 size of the image?
 
 To answer those questions, we take an example of neuroscience field where
-containers are used on HPC clusters.
-
-The existing work on containers focuses mainly on the security of Docker
+containers are used on Compute Canada HPC cluster.
+We are not the first to work on vulnerabilities inside container images but
+the existing research work on containers focuses mainly on the security of Docker
 containers.
 This focus is justified by the fact that, containers expose the host's resources
 (e.g., file system/ IPC) to the guest system. This feature raises a confidentiality
@@ -135,8 +149,8 @@ for security and quality checks.
 Here, we focus on the specific context of scientific data analysis on HPC clusters, taking
 neuroimaging as an example.
 
-\TG{Some notions that should be introduced in this section (incomplete):
-vulnerability vs malware, paper suggested by Emad Shihab.}
+
+\TG{paper suggested by Emad Shihab.}
 
 This paper is organized as follows: in next section, we provide description
 of materials and methods which includes summarizing a particular use case of
@@ -268,17 +282,21 @@ applications are published on the Zenodo research repository.
 
 We used the 49 Boutiques applications published on Zenodo at the time of
 the writing. These applications use 23 different container images,
-including 7 Singularity images and 16 Docker images. \TG{You should add a
-table showing the images available in each framework, with their base
-image, DOIs, size, and number of files.}
+including 7 Singularity images and 16 Docker images.
 
 \subsubsection{Brain Imaging Data Structure (BIDS) Apps}
 
 BIDS apps~\cite{gorgolewski2017bids} is a framework designed to share and execute neuroimaging
 analysis pipelines. It improves usability, accesibility, and reproducibility
 of different applications through containerization.
-\TG{How many BIDS apps are there? Did you use them all?} Currently, there are 27 different container images that are used by
-BIDS App. All these are Docker images.
+Currently, there are 27 BIDS apps available and all are using different Docker images.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\columnwidth]{Figures/bids_table.png}
+  \caption{All Container images used by BIDS apps.}
+  \label{fig:bids_apps}
+\end{figure}
 
 \subsubsection{ReproNim}
 
@@ -320,9 +338,12 @@ This paragraph is too general and doesn't belong to the methods. }
 
 \subsection{Scanning tools used}
 
-Out of the various container image scanning tools, we selected Anchore,
-Vuls, Stools and ClairScanner for our experiments. \TG{Explain why you used
-more than 1 tool, and why you used these ones speifically.}
+Out of the various container image scanning tools available to scan Docker images,
+we selected Anchore
+and Vuls because these are the most mature scanning tools. To scan Singularity images
+we use Stools, which is specially designed for Singularity images. This tool internally uses
+ClairScanner tool so we included ClairScanner also in our experiements to compare
+performance of both the tools.
 
 \subsubsection{Anchore}
 
@@ -342,15 +363,22 @@ command line interface in addition to Anchore Engine REST API. Anchore
 Engine CLI can be installed directly on the host and used to inspect
 images.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\columnwidth]{Figures/anchore.png}
+  \caption{Databases used by Anchore.}
+        \label{fig:anchore_db}
+\end{figure}
+
+
 \TG{You should refer to the vulnerability databases used, and explain how
 software components, for instance files, are matched to these databases. Is
 the matching based on file checksum?}
 
 \subsubsection{Vuls}
 
-Vuls is an open-source vulnerability scanner for Linux and FreeBSD, written in Go
-language \TG{Why is it relevant that it's written in Go?}.
- It is an agentless vulnerability scanner and uses various
+Vuls is an open-source vulnerability scanner for Linux and FreeBSD.
+It is an agentless vulnerability scanner and uses various
 vulnerability databases \TG{You should list them and explain how they differ to 
 the ones used by Anchore}. Using dynamic scanning technique, it offers
 remote and local scan. Remote scan involves setting up only one machine, to
@@ -358,27 +386,24 @@ which other target servers are connected via SSH. Local scan involves running
 the scan on the target server itself. Further, Vuls offer fast scan, fast root scan,
 and deep scan.
 Fast scan is performed without root privileges, whereas fast root scan is
-performed with root privileges. The latter also uses checkrestart utility to detect processes that are updated but not yet restarted because if they are not
+performed with root privileges. The latter also uses checkrestart utility to 
+detect processes that are updated but not yet restarted because if they are not
 restarted, updates are not effective. So fast root scan also detects these pro-
 cesses. Both fast scan and fast root scan are performed offline without Internet
 access, and put almost no load on the scan target server. Deep scan uses
 root privileges for scanning, and is used to get a more detailed scan. It checks
-changelogs, which puts more load on the target server. As shown in Figure 4.3 \TG{There is no figure 4.3 or graph 4.5 here. Anyway it's not relevant 
-to report results in this section. This paragraph looks like a copy paste from your previous report, it needs to be edited.}
-it is clear that vulnerability detection time of Vuls is much better than An-
-chore. Vuls tool uses dynamic scanning, so the scanning time does not depend
-on the image size.
-Graph 4.5 shows percentage of vulnerabilities that are
-covered by Vuls and Anchore tools. This graph can be explained with the help
-of List 4.4, which shows vulnerability databases that are referred, by both Vuls
-and Anchore. Anchore covers less percentage of vulnerabilities as compared
-to Vuls because Anchore relies mainly on vulnerability databases published by
-Linux distributions, whereas Vuls additionally refers to another sources such as
-databases from Japan, US-CERT, etc.
+changelogs, which puts more load on the target server.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\columnwidth]{Figures/vuls.png}
+  \caption{Databases used by Vuls.}
+	\label{fig:vuls_db}
+\end{figure}
 
 \subsubsection{Stools}
 
-Stools combines CoreOS's ClairScanner with the Continuous Integration (Travis and
+\href{https://github.com/singularityhub/stools}{Stools} combines CoreOS's ClairScanner with the Continuous Integration (Travis and
 Circle) for scanning Singularity images for vulnerabilities.
 Initially, ClairScanner was intented to scan Docker Containers. This tool does not fit well
 to scan Singularity images because of the different image formats. Docker layers
@@ -387,7 +412,6 @@ However, TravisCI and CircleCI are commonly used for testing code, and these
 services also offer running containers. So Stools combined both the concepts.
 It involves spinning a ClairScanner container during testing and building a
 Singularity image, and scanning it for filesystem before the image is finalized.
-\TG{Add link and/or reference.}
 
 \subsection{CBRAIN}
 
