@@ -1,0 +1,246 @@
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| STATUS     | CVE SEVERITY            | PACKAGE NAME | PACKAGE VERSION          | CVE DESCRIPTION                                                |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-15908   | systemd      | 232-21ubuntu5            | In systemd 223 through 235, a remote DNS server can respond    |
+|            |                         |              |                          | with a custom crafted DNS NSEC resource record to trigger      |
+|            |                         |              |                          | an infinite loop in the dns_packet_read_type_window()          |
+|            |                         |              |                          | function of the 'systemd-resolved' service                     |
+|            |                         |              |                          | and cause a DoS of the affected service.                       |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-15908   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-8816    | curl         | 7.52.1-4ubuntu1.2        | The NTLM authentication feature in curl and libcurl            |
+|            |                         |              |                          | before 7.57.0 on 32-bit platforms allows attackers             |
+|            |                         |              |                          | to cause a denial of service (integer overflow and             |
+|            |                         |              |                          | resultant buffer overflow, and application crash)              |
+|            |                         |              |                          | or possibly have unspecified other impact via                  |
+|            |                         |              |                          | vectors involving long user and password fields.               |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-8816    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-8817    | curl         | 7.52.1-4ubuntu1.2        | The FTP wildcard function in curl and libcurl before           |
+|            |                         |              |                          | 7.57.0 allows remote attackers to cause a denial               |
+|            |                         |              |                          | of service (out-of-bounds read and application                 |
+|            |                         |              |                          | crash) or possibly have unspecified other impact               |
+|            |                         |              |                          | via a string that ends with an '[' character.                  |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-8817    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-1000257 | curl         | 7.52.1-4ubuntu1.2        | An IMAP FETCH response line indicates the size of the          |
+|            |                         |              |                          | returned data, in number of bytes. When that response          |
+|            |                         |              |                          | says the data is zero bytes, libcurl would pass on that        |
+|            |                         |              |                          | (non-existing) data with a pointer and the size (zero) to      |
+|            |                         |              |                          | the deliver-data function. libcurl's deliver-data function     |
+|            |                         |              |                          | treats zero as a magic number and invokes strlen() on          |
+|            |                         |              |                          | the data to figure out the length. The strlen() is called      |
+|            |                         |              |                          | on a heap based buffer that might not be zero terminated       |
+|            |                         |              |                          | so libcurl might read beyond the end of it into whatever       |
+|            |                         |              |                          | memory lies after (or just crash) and then deliver that        |
+|            |                         |              |                          | to the application as if it was actually downloaded.           |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-1000257 |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-1000158 | python2.7    | 2.7.13-2                 | CPython (aka Python) up to 2.7.13 is vulnerable to an          |
+|            |                         |              |                          | integer overflow in the PyString_DecodeEscape function         |
+|            |                         |              |                          | in stringobject.c, resulting in heap-based buffer              |
+|            |                         |              |                          | overflow (and possible arbitrary code execution)               |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-1000158 |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-14062   | libidn       | 1.33-1                   | Integer overflow in the decode_digit function in puny_decode.c |
+|            |                         |              |                          | in Libidn2 before 2.0.4 allows remote attackers to cause a     |
+|            |                         |              |                          | denial of service or possibly have unspecified other impact.   |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-14062   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-14040   | openjpeg2    | 2.1.2-1.1                | An invalid write access was discovered in bin/jp2/convert.c    |
+|            |                         |              |                          | in OpenJPEG 2.2.0, triggering a crash in the tgatoimage        |
+|            |                         |              |                          | function. The vulnerability may lead to remote denial          |
+|            |                         |              |                          | of service or possibly unspecified other impact.               |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-14040   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-14151   | openjpeg2    | 2.1.2-1.1                | An off-by-one error was discovered in                          |
+|            |                         |              |                          | opj_tcd_code_block_enc_allocate_data in lib/openjp2/tcd.c      |
+|            |                         |              |                          | in OpenJPEG 2.2.0. The vulnerability causes an                 |
+|            |                         |              |                          | out-of-bounds write, which may lead to remote denial           |
+|            |                         |              |                          | of service (heap-based buffer overflow affecting               |
+|            |                         |              |                          | opj_mqc_flush in lib/openjp2/mqc.c and opj_t1_encode_cblk      |
+|            |                         |              |                          | in lib/openjp2/t1.c) or possibly remote code execution.        |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-14151   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-14152   | openjpeg2    | 2.1.2-1.1                | A mishandled zero case was discovered in                       |
+|            |                         |              |                          | opj_j2k_set_cinema_parameters in lib/openjp2/j2k.c in          |
+|            |                         |              |                          | OpenJPEG 2.2.0. The vulnerability causes an out-of-bounds      |
+|            |                         |              |                          | write, which may lead to remote denial of service              |
+|            |                         |              |                          | (heap-based buffer overflow affecting opj_write_bytes_LE       |
+|            |                         |              |                          | in lib/openjp2/cio.c and opj_j2k_write_sot in                  |
+|            |                         |              |                          | lib/openjp2/j2k.c) or possibly remote code execution.          |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-14152   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2016-10504   | openjpeg2    | 2.1.2-1.1                | Heap-based buffer overflow vulnerability in the                |
+|            |                         |              |                          | opj_mqc_byteout function in mqc.c in OpenJPEG before           |
+|            |                         |              |                          | 2.2.0 allows remote attackers to cause a denial of             |
+|            |                         |              |                          | service (application crash) via a crafted bmp file.            |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-10504   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-14041   | openjpeg2    | 2.1.2-1.1                | A stack-based buffer overflow was discovered in the pgxtoimage |
+|            |                         |              |                          | function in bin/jp2/convert.c in OpenJPEG 2.2.0. The           |
+|            |                         |              |                          | vulnerability causes an out-of-bounds write, which may lead to |
+|            |                         |              |                          | remote denial of service or possibly remote code execution.    |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-14041   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2016-9118    | openjpeg2    | 2.1.2-1.1                | Heap Buffer Overflow (WRITE of size 4) in function             |
+|            |                         |              |                          | pnmtoimage of convert.c:1719 in OpenJPEG 2.1.2.                |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-9118    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-14039   | openjpeg2    | 2.1.2-1.1                | A heap-based buffer overflow was discovered in the             |
+|            |                         |              |                          | opj_t2_encode_packet function in lib/openjp2/t2.c              |
+|            |                         |              |                          | in OpenJPEG 2.2.0. The vulnerability causes an                 |
+|            |                         |              |                          | out-of-bounds write, which may lead to remote denial           |
+|            |                         |              |                          | of service or possibly unspecified other impact.               |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-14039   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-14952   | icu          | 57.1-5ubuntu0.1          | Double free in i18n/zonemeta.cpp in International Components   |
+|            |                         |              |                          | for Unicode (ICU) for C/C++ through 59.1 allows remote         |
+|            |                         |              |                          | attackers to execute arbitrary code via a crafted string, aka  |
+|            |                         |              |                          | a "redundant UVector entry clean up function call" issue.      |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-14952   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-13090   | wget         | 1.18-2ubuntu1            | The retr.c:fd_read_body() function is called when processing   |
+|            |                         |              |                          | OK responses. When the response is sent chunked in wget        |
+|            |                         |              |                          | before 1.19.2, the chunk parser uses strtol() to read each     |
+|            |                         |              |                          | chunk's length, but doesn't check that the chunk length is     |
+|            |                         |              |                          | a non-negative number. The code then tries to read the chunk   |
+|            |                         |              |                          | in pieces of 8192 bytes by using the MIN() macro, but ends     |
+|            |                         |              |                          | up passing the negative chunk length to retr.c:fd_read().      |
+|            |                         |              |                          | As fd_read() takes an int argument, the high 32 bits of        |
+|            |                         |              |                          | the chunk length are discarded, leaving fd_read() with a       |
+|            |                         |              |                          | completely attacker controlled length argument. The attacker   |
+|            |                         |              |                          | can corrupt malloc metadata after the allocated buffer.        |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13090   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-1000158 | python3.5    | 3.5.3-1ubuntu0~17.04.1   | CPython (aka Python) up to 2.7.13 is vulnerable to an          |
+|            |                         |              |                          | integer overflow in the PyString_DecodeEscape function         |
+|            |                         |              |                          | in stringobject.c, resulting in heap-based buffer              |
+|            |                         |              |                          | overflow (and possible arbitrary code execution)               |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-1000158 |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-12837   | perl         | 5.24.1-2ubuntu1          | Heap-based buffer overflow in the S_regatom function in        |
+|            |                         |              |                          | regcomp.c in Perl 5 before 5.24.3-RC1 and 5.26.x before        |
+|            |                         |              |                          | 5.26.1-RC1 allows remote attackers to cause a denial of        |
+|            |                         |              |                          | service (out-of-bounds write) via a regular expression         |
+|            |                         |              |                          | with a '\N{}' escape and the case-insensitive modifier.        |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-12837   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-12883   | perl         | 5.24.1-2ubuntu1          | Buffer overflow in the S_grok_bslash_N function in regcomp.c   |
+|            |                         |              |                          | in Perl 5 before 5.24.3-RC1 and 5.26.x before 5.26.1-RC1       |
+|            |                         |              |                          | allows remote attackers to disclose sensitive information or   |
+|            |                         |              |                          | cause a denial of service (application crash) via a crafted    |
+|            |                         |              |                          | regular expression with an invalid '\N{U+...}' escape.         |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-12883   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-3736    | openssl      | 1.0.2g-1ubuntu11.2       | There is a carry propagating bug in the x86_64 Montgomery      |
+|            |                         |              |                          | squaring procedure in OpenSSL before 1.0.2m and 1.1.0 before   |
+|            |                         |              |                          | 1.1.0g. No EC algorithms are affected. Analysis suggests that  |
+|            |                         |              |                          | attacks against RSA and DSA as a result of this defect would   |
+|            |                         |              |                          | be very difficult to perform and are not believed likely.      |
+|            |                         |              |                          | Attacks against DH are considered just feasible (although      |
+|            |                         |              |                          | very difficult) because most of the work necessary to deduce   |
+|            |                         |              |                          | information about a private key may be performed offline. The  |
+|            |                         |              |                          | amount of resources required for such an attack would be very  |
+|            |                         |              |                          | significant and likely only accessible to a limited number     |
+|            |                         |              |                          | of attackers. An attacker would additionally need online       |
+|            |                         |              |                          | access to an unpatched system using the target private key     |
+|            |                         |              |                          | in a scenario with persistent DH parameters and a private key  |
+|            |                         |              |                          | that is shared between multiple clients. This only affects     |
+|            |                         |              |                          | processors that support the BMI1, BMI2 and ADX extensions      |
+|            |                         |              |                          | like Intel Broadwell (5th generation) and later or AMD Ryzen.  |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-3736    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-3737    | openssl      | 1.0.2g-1ubuntu11.2       | OpenSSL 1.0.2 (starting from version 1.0.2b) introduced        |
+|            |                         |              |                          | an "error state" mechanism. The intent was that if a fatal     |
+|            |                         |              |                          | error occurred during a handshake then OpenSSL would move      |
+|            |                         |              |                          | into the error state and would immediately fail if you         |
+|            |                         |              |                          | attempted to continue the handshake. This works as designed    |
+|            |                         |              |                          | for the explicit handshake functions (SSL_do_handshake(),      |
+|            |                         |              |                          | SSL_accept() and SSL_connect()), however due to a bug it       |
+|            |                         |              |                          | does not work correctly if SSL_read() or SSL_write() is        |
+|            |                         |              |                          | called directly. In that scenario, if the handshake fails      |
+|            |                         |              |                          | then a fatal error will be returned in the initial function    |
+|            |                         |              |                          | call. If SSL_read()/SSL_write() is subsequently called by      |
+|            |                         |              |                          | the application for the same SSL object then it will succeed   |
+|            |                         |              |                          | and the data is passed without being decrypted/encrypted       |
+|            |                         |              |                          | directly from the SSL/TLS record layer. In order to            |
+|            |                         |              |                          | exploit this issue an application bug would have to be         |
+|            |                         |              |                          | present that resulted in a call to SSL_read()/SSL_write()      |
+|            |                         |              |                          | being issued after having already received a fatal             |
+|            |                         |              |                          | error. OpenSSL version 1.0.2b-1.0.2m are affected.             |
+|            |                         |              |                          | Fixed in OpenSSL 1.0.2n. OpenSSL 1.1.0 is not affected.        |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-3737    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-10140   | db5.3        | 5.3.28-12                | Postfix before 2.11.10, 3.0.x before 3.0.10, 3.1.x             |
+|            |                         |              |                          | before 3.1.6, and 3.2.x before 3.2.2 might allow local         |
+|            |                         |              |                          | users to gain privileges by leveraging undocumented            |
+|            |                         |              |                          | functionality in Berkeley DB 2.x and later, related to         |
+|            |                         |              |                          | reading settings from DB_CONFIG in the current directory.      |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-10140   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-13089   | wget         | 1.18-2ubuntu1            | The http.c:skip_short_body() function is called in some        |
+|            |                         |              |                          | circumstances, such as when processing redirects. When         |
+|            |                         |              |                          | the response is sent chunked in wget before 1.19.2, the        |
+|            |                         |              |                          | chunk parser uses strtol() to read each chunk's length,        |
+|            |                         |              |                          | but doesn't check that the chunk length is a non-negative      |
+|            |                         |              |                          | number. The code then tries to skip the chunk in pieces        |
+|            |                         |              |                          | of 512 bytes by using the MIN() macro, but ends up             |
+|            |                         |              |                          | passing the negative chunk length to connect.c:fd_read().      |
+|            |                         |              |                          | As fd_read() takes an int argument, the high 32 bits           |
+|            |                         |              |                          | of the chunk length are discarded, leaving fd_read()           |
+|            |                         |              |                          | with a completely attacker controlled length argument.         |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13089   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2017-15412   | libxml2      | 2.9.4+dfsg1-2.2ubuntu0.1 | Use after free in libxml2 before 2.9.5, as used                |
+|            |                         |              |                          | in Google Chrome prior to 63.0.3239.84 and other               |
+|            |                         |              |                          | products, allowed a remote attacker to potentially             |
+|            |                         |              |                          | exploit heap corruption via a crafted HTML page.               |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-15412   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2017-3738       | openssl      | 1.0.2g-1ubuntu11.2       | There is an overflow bug in the AVX2 Montgomery multiplication |
+|            |                         |              |                          | procedure used in exponentiation with 1024-bit moduli. No      |
+|            |                         |              |                          | EC algorithms are affected. Analysis suggests that attacks     |
+|            |                         |              |                          | against RSA and DSA as a result of this defect would be very   |
+|            |                         |              |                          | difficult to perform and are not believed likely. Attacks      |
+|            |                         |              |                          | against DH1024 are considered just feasible, because most of   |
+|            |                         |              |                          | the work necessary to deduce information about a private key   |
+|            |                         |              |                          | may be performed offline. The amount of resources required     |
+|            |                         |              |                          | for such an attack would be significant. However, for an       |
+|            |                         |              |                          | attack on TLS to be meaningful, the server would have to       |
+|            |                         |              |                          | share the DH1024 private key among multiple clients, which     |
+|            |                         |              |                          | is no longer an option since CVE-2016-0701. This only affects  |
+|            |                         |              |                          | processors that support the AVX2 but not ADX extensions        |
+|            |                         |              |                          | like Intel Haswell (4th generation). Note: The impact from     |
+|            |                         |              |                          | this issue is similar to CVE-2017-3736, CVE-2017-3732 and      |
+|            |                         |              |                          | CVE-2015-3193. OpenSSL version 1.0.2-1.0.2m and 1.1.0-1.1.0g   |
+|            |                         |              |                          | are affected. Fixed in OpenSSL 1.0.2n. Due to the low          |
+|            |                         |              |                          | severity of this issue we are not issuing a new release        |
+|            |                         |              |                          | of OpenSSL 1.1.0 at this time. The fix will be included in     |
+|            |                         |              |                          | OpenSSL 1.1.0h when it becomes available. The fix is also      |
+|            |                         |              |                          | available in commit e502cc86d in the OpenSSL git repository.   |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-3738    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2017-3735       | openssl      | 1.0.2g-1ubuntu11.2       | While parsing an IPAddressFamily extension in an X.509         |
+|            |                         |              |                          | certificate, it is possible to do a one-byte overread.         |
+|            |                         |              |                          | This would result in an incorrect text display of the          |
+|            |                         |              |                          | certificate. This bug has been present since 2006 and is       |
+|            |                         |              |                          | present in all versions of OpenSSL before 1.0.2m and 1.1.0g.   |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-3735    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2016-7098       | wget         | 1.18-2ubuntu1            | Race condition in wget 1.17 and earlier, when used in          |
+|            |                         |              |                          | recursive or mirroring mode to download a single file,         |
+|            |                         |              |                          | might allow remote servers to bypass intended access           |
+|            |                         |              |                          | list restrictions by keeping an HTTP connection open.          |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7098    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2017-16932      | libxml2      | 2.9.4+dfsg1-2.2ubuntu0.1 | parser.c in libxml2 before 2.9.5 does not prevent              |
+|            |                         |              |                          | infinite recursion in parameter entities.                      |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-16932   |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2017-6508       | wget         | 1.18-2ubuntu1            | CRLF injection vulnerability in the url_parse                  |
+|            |                         |              |                          | function in url.c in Wget through 1.19.1 allows                |
+|            |                         |              |                          | remote attackers to inject arbitrary HTTP headers via          |
+|            |                         |              |                          | CRLF sequences in the host subcomponent of a URL.              |
+|            |                         |              |                          | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-6508    |
++------------+-------------------------+--------------+--------------------------+----------------------------------------------------------------+
