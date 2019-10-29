@@ -38,32 +38,7 @@ def default_package(listOfFiles,distro,input_file):
                 out.write(entry)
                 out.write("\n")
 
-def find_epoch(inFile,input_file):
-    with open(input_file,'r') as f:
-        lines=f.readlines()
-    new_list=list()
-    for line in lines:
-        new_list.append(line.strip())
-    with open(inFile, 'r') as file:
-      file.readline() # skip the first line
-      rows = [[str(x) for x in line.split('|')[:-1]] for line in file]
-      cols = [list(col) for col in zip(*rows)]
-    epoch_cves=list()
-    for row in rows:
-        if len(row) > 1:
-           if ":" in row[4].strip():
-               cve=row[2].split()[1]
-               if cve in new_list:
-                   epoch_cves.append(cve)
-    required_cves=list(set(epoch_cves))
-    with open('epoch.csv','w') as out:
-        for entry in required_cves:
-            out.write(entry)
-            out.write("\n")
-    file.close()
-
-
-def out_standard_support(listOfFiles,distro,input_file,clair_file):
+def find_epoch(listOfFiles,input_file,distro):
     with open(input_file,'r') as myfile:
         lines = myfile.readlines()
         condition=None
@@ -74,9 +49,76 @@ def out_standard_support(listOfFiles,distro,input_file,clair_file):
                 if elem.endswith(l):
                     with open(elem) as fp:
                          line =fp.readlines()
-                    package=find_package(clair_file,l)
                     for x in line:
-                        if distro+"_"+package+":" in x:
+                        if distro+"_" in x:
+                            splitted = x.split('(')
+                            if len(splitted) > 1:
+                                if ":" in splitted[1]:
+                                    condition=True
+                                    break
+                    if condition:
+                       # print("condition is met")
+                        cves.append(l)
+                       # with open('defaulter.csv','a') as out:
+                       #      writer = csv.writer(out)
+                       #      writer.write(l)
+                       #      #out.write(l)
+                        condition=False
+                    break
+    cves_required=list(set(cves))
+    with open('epoch.csv','w') as out:
+        for entry in cves_required:
+            out.write(entry)
+            out.write("\n")
+
+def not_affected(listOfFiles,distro,input_file):
+    with open(input_file,'r') as myfile:
+        lines = myfile.readlines()
+        condition=None
+        cves=list()
+        for l in lines:
+            l = l.strip()
+            for elem in listOfFiles:
+                if elem.endswith(l):
+                    with open(elem) as fp:
+                         line =fp.readlines()
+                    #package=find_package(clair_file,l)
+                    for x in line:
+                        if distro+"_" in x:
+                            #print("found package")
+                            if "not-affected" in x:
+                           # print("linux package")
+                               condition=True
+                               break
+                    if condition:
+                       # print("condition is met")
+                        cves.append(l)
+                       # with open('defaulter.csv','a') as out:
+                       #      writer = csv.writer(out)
+                       #      writer.write(l)
+                       #      #out.write(l)
+                        condition=False
+                    break
+    required=list(set(cves))
+    with open('Not_affected.csv','w') as out:
+            for entry in required:
+                out.write(entry)
+                out.write("\n")
+
+
+def out_standard_support(listOfFiles,distro,input_file):
+    with open(input_file,'r') as myfile:
+        lines = myfile.readlines()
+        condition=None
+        cves=list()
+        for l in lines:
+            l = l.strip()
+            for elem in listOfFiles:
+                if elem.endswith(l):
+                    with open(elem) as fp:
+                         line =fp.readlines()
+                    for x in line:
+                        if distro+"_" in x:
                             if "out of standard support" in x:
                            # print("linux package")
                                condition=True
@@ -154,11 +196,16 @@ def get_end_of_life(listOfFiles,distro,input_file):
 
 
 def main():
+    dir_name = "./"
+    test = os.listdir(dir_name)
+    for item in test:
+       if item.endswith(".csv"):
+            os.remove(os.path.join(dir_name, item))
     file1=sys.argv[1]
     file2=sys.argv[2]
     distro=sys.argv[3]
     count=0
-    listOfFiles=getListOfFiles("Downloads/Anchore_databases/ubuntu/ubuntu-cve-tracker")
+    listOfFiles=getListOfFiles("../Database/Anchore_databases/ubuntu/ubuntu-cve-tracker")
     compare(file1,file2)
     default_package(listOfFiles,distro,'A-V.csv')
     with open('A-V.csv','r') as fp1:
@@ -198,24 +245,22 @@ def main():
     print("\n")
     print('*********************************************************')
     print("\n")
-    find_epoch('V-A.csv')
-    with open('C-A.csv','r') as fp8:
-        clair=fp8.readlines()
-    count=len(clair)
-    print('C-A ',count)
+    find_epoch(listOfFiles,'V-A.csv',distro)
+    with open('V-A.csv','r') as fp8:
+        vuls=fp8.readlines()
+    count=len(vuls)
+    print('V-A ',count)
     with open('epoch.csv','r') as fp7:
         epoch=fp7.readlines()
     count=len(epoch)
     print('Epoch ',count)
     with open('After_epoch.csv','w') as fp9:
-        for cve in clair:
+        for cve in vuls:
             if cve not in epoch:
                 fp9.write(cve)
-    out_standard_support(listOfFiles,distro,'After_epoch.csv',file3)
+    out_standard_support(listOfFiles,distro,'After_epoch.csv')
     with open('After_epoch.csv','r') as fp10:
           after_epoch=fp10.readlines()
-    #count=len(after_epoch)
-    #print('after epoch ',count)
     with open('Out_of_standard.csv','r') as fp11:
          out_of_standard=fp11.readlines()
     count=len(out_of_standard)
@@ -226,21 +271,21 @@ def main():
                  fp12.write(cve)
     with open('After_out_support.csv','r') as fp13:
            after_out_standard=fp13.readlines()
-    #count=len(after_out_standard)
-    #print('After out of standard ',count)
-    #with open('C-A','r') as fp3:
-    #    clair=fp3.readlines()
-    #with open('Out_of_standard.csv','r') as fp1, open('','r') as fp2:
-    #    standard_out=fp1.readlines()
-    #    epoch=fp2.readlines()
-    #    for cve in clair:
-    #        if cve not in standard_out:
-    #            if cve not in 
-    clair_esm(listOfFiles,distro,'After_out_support.csv',file3)
-    with open('clair_remaining.csv','r') as fp14:
-        after_standard=fp14.readlines()
-    count=len(after_standard)
-    print('ignored or not in LTS ',count)
+    not_affected(listOfFiles,distro,'After_out_support.csv')
+    with open('Not_affected.csv','r') as fp14:
+        not_affect=fp14.readlines()
+    print('Not-affected ',len(not_affect))
+    with open('After_effect.csv','w') as fp15:
+        for cve in after_out_standard:
+            if cve not in not_affect:
+                fp15.write(cve)
+    with open('After_effect.csv','r') as fp16:
+         after_effect=fp16.readlines()
+    print('remaining ',len(after_effect))
+        
+
+
+
 
 
 if __name__== "__main__":

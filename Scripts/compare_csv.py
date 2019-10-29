@@ -213,12 +213,17 @@ def clair_esm(listOfFiles,distro,input_file,clair_file):
 
 
 def main():
+    dir_name = "./"
+    test = os.listdir(dir_name)
+    for item in test:
+       if item.endswith(".csv"):
+            os.remove(os.path.join(dir_name, item))
     file1=sys.argv[1]
     file2=sys.argv[2]
     file3=sys.argv[3]
     distro=sys.argv[4]
     count =0
-    listOfFiles=getListOfFiles("Downloads/Anchore_databases/ubuntu/ubuntu-cve-tracker")
+    listOfFiles=getListOfFiles("../Database/Anchore_databases/ubuntu/ubuntu-cve-tracker")
     compare(file1,file2)
     default_package(listOfFiles,distro,'A-C.csv')
     with open('A-C.csv','r') as fp1:

@@ -38,32 +38,17 @@ def get_end_of_life(listOfFiles,distro,input_file):
             l = l.strip()
             for elem in listOfFiles:
                 if elem.endswith(l):
-                   # flag=True
-                   # print("found file")
                     with open(elem) as fp:
                          line =fp.readlines()
-                    #package=find_package(clair_file,l)
-                    #print(package)
                     for x in line:
                         if distro+"_" in x:
-                            #print("found package")
                             if "reached end-of-life" in x:
-                           # print("linux package")
                                condition=True
                                break
                     if condition:
-                       # print("condition is met")
                         cves.append(l)
-                       # with open('defaulter.csv','a') as out:
-                       #      writer = csv.writer(out)
-                       #      writer.write(l)
-                       #      #out.write(l)
                         condition=False
                     break
-    #with open('End_Of_Life.csv','w') as out:
-    #        for entry in cves:
-    #            out.write(entry)
-    #            out.write("\n")
     return list(set(cves))
 
 
@@ -96,21 +81,13 @@ def not_affected(listOfFiles,distro,input_file):
                 if elem.endswith(l):
                     with open(elem) as fp:
                          line =fp.readlines()
-                    #package=find_package(clair_file,l)
                     for x in line:
                         if distro+"_" in x:
-                            #print("found package")
                             if "not-affected" in x:
-                           # print("linux package")
                                condition=True
                                break
                     if condition:
-                       # print("condition is met")
                         cves.append(l)
-                       # with open('defaulter.csv','a') as out:
-                       #      writer = csv.writer(out)
-                       #      writer.write(l)
-                       #      #out.write(l)
                         condition=False
                     break
     required=list(set(cves))
@@ -161,10 +138,6 @@ def clair_no_esm(listOfFiles,distro,input_file):
                         condition=True
                     if condition:
                         cves_remains.append(l)
-                        #with open('clair_remaining.csv','a') as out:
-                        #     writer = csv.writer(out)
-                        #     #writer.write(l)
-                        #     out.write(l)
                         condition=False
                     break
     cves_required=list(set(cves_remains))
@@ -201,10 +174,6 @@ def extra_cliar(listOfFiles,distro,input_file,clair_file):
                                    break
                     if condition:
                         cves_remains.append(l)
-                        #with open('clair_remaining.csv','a') as out:
-                        #     writer = csv.writer(out)
-                        #     #writer.write(l)
-                        #     out.write(l)
                         condition=False
                     break
     cves_required=list(set(cves_remains))
@@ -218,12 +187,17 @@ def extra_cliar(listOfFiles,distro,input_file,clair_file):
 
 
 def main():
+    dir_name = "./"
+    test = os.listdir(dir_name)
+    for item in test:
+       if item.endswith(".csv"):
+            os.remove(os.path.join(dir_name, item))
     file1=sys.argv[1]
     file2=sys.argv[2]
     file3=sys.argv[3]
     distro=sys.argv[4]
     count =0
-    listOfFiles=getListOfFiles("Downloads/Anchore_databases/ubuntu/ubuntu-cve-tracker")
+    listOfFiles=getListOfFiles("../Database/Anchore_databases/ubuntu/ubuntu-cve-tracker")
     compare(file1,file2)
     with open('V-C.csv','r') as fp1:
         vuls=fp1.readlines()
@@ -231,11 +205,6 @@ def main():
     with open('C-V.csv','r') as fp2:
         clair=fp2.readlines()
     print('C-V ',len(clair))
-    #end_life=get_end_of_life(listOfFiles,distro,'V-C.csv')
-    #with open('End-Of-Life.csv','w') as fp3:
-    #     for cve in end_life:
-    #         fp3.write(cve)
-    #         fp3.write("\n")
     not_affected(listOfFiles,distro,'V-C.csv')
     with open('Not_affected.csv','r') as fp4:
         not_affect=fp4.readlines()
