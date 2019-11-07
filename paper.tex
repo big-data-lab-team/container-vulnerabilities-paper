@@ -8,15 +8,20 @@
 \usepackage{siunitx}
 \usepackage{algpseudocode} % Algorithmic environment
 \usepackage{xspace}
+\usepackage{csvsimple}
 \usepackage{minted} % Used for JSON highlighting
+\usepackage{datatool}
 \usepackage{booktabs}
 \usepackage{xcolor}
+\usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{algorithm}
 \usepackage{caption}
+\usepackage[justification=centering]{caption}
 \usepackage{subcaption}
 \usepackage{listings}
 \usepackage{verbatim}
+\usepackage{adjustbox}
 \usepackage{makecell}
 \usepackage[flushleft]{threeparttable}
 
@@ -32,8 +37,8 @@ Clusters}
 \begin{document}
 
 \author[1]{Bhupinder Kaur}
-\author[1]{Aiman Hanna}
 \author[1]{Tristan Glatard}
+\author[1]{Aiman Hanna}
 
 \affil[1]{Department of Computer Science and Software Engineering, Concordia University, Montreal, Canada}
 
@@ -50,20 +55,20 @@ Containers, which provide operating system (OS) level virtualization, are very
 popular. This is because they are very lightweight, flexible, resource-efficient,
 provide fast development cycles, continuous delivery,
 and cost reduction of infrastructure. OS-level virtualization gained a lot of interest when Docker was
-introduced in 2013~\cite{gantikow2016providing}. However, it has security concerns due to which it
+introduced in 2013~\cite{gantikow2016providing}. However, Docker has security concerns due to which it
 is not supported by High Performance
 Computing (HPC) environments. As a result, Singularity came in 2016 with the goal of providing support
 for HPC environments. It is used in many clusters including Compute Canada.
 Table \ref{fig:cluster_list} illustrates the reported usage of Singularity on HPC clusters~\cite{kurtzer2017singularity}.
 
-
+\begin{comment}
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{Figures/cluster_list.png}
 	\caption{List of HPC clusters using Singularity~\cite{kurtzer2017singularity}.}
 	\label{fig:cluster_list}
 \end{figure}
-
+\end{comment}
 
 No doubt containers have gained a lot of popularity, however containers tightly
 integrate with the host due to the sharing of the kernel, 
@@ -72,6 +77,7 @@ concerns. Figure \ref{fig:container-overview} provides overview of the container
 They also share three main security threats with other virtualization
 techniques~\cite{gantikow2016providing}.
 
+\begin{comment}
 \begin{figure}
   \centering
   \includegraphics[width=.7\columnwidth]{Figures/container.png}
@@ -79,7 +85,7 @@ techniques~\cite{gantikow2016providing}.
                 Virtualization.}
   \label{fig:container-overview}
 \end{figure}
-
+\end{comment}
 \textit{Privilege Escalation} A malicious attacker can break out of the container
 and gain control of the host system and other containers running on the same host.
 
@@ -92,8 +98,8 @@ leaked and can be used for further attacks.
 
 However, two features of the Linux kernel, \textit{control groups} and \textit{namespaces},
 are used by containers to mitigate these threats to a certain extent. Security
-of containers is still most concerning issue. According to a Forrester survey~\cite{} done in January
-2015, security is the
+of containers is still most concerning issue. According to a Forrester survey~\cite{bettini2015vulnerability}
+done in January 2015, security is the
 biggest concern while deploying containers.
 Except web applications, containers are also popularly used for scientific computing
 and data science in neuroscience. In fact, Singularity was developed for scientific applications
@@ -110,9 +116,12 @@ two types: static scanning and dynamic scanning. The former scanning technique
 involves extracting information of an image without running it into a container,
 whereas the latter approach involves launching the container from the target image, and
 then scanning the running container.
-Here, we focus mainly on vulnerability scanning and not on malware.
+Here, we focus mainly on vulnerability scanning.
+\begin{comment}
 Malware is a computer software that is specially designed to attack the target computer,
-whereas vulnerability is a weakness in the developer's software that can be used
+whereas 
+\end{comment}
+Vulnerability is a weakness in the developer's software that can be used
 by the attacker to perform unathorized actions on the target computer.
 In this paper, we report all vulnerabilities that are present in
 container images, specifically used by neuroimaging field, and access their
@@ -130,14 +139,13 @@ size of the image?
 
 To answer those questions, we take an example of neuroscience field where
 containers are used on Compute Canada HPC cluster.
-We are not the first to work on vulnerabilities inside container images but
-the existing research work on containers focuses mainly on the security of Docker
+The existing research work on containers focuses mainly on the security of Docker
 containers.
 This focus is justified by the fact that, containers expose the host's resources
 (e.g., file system/ IPC) to the guest system. This feature raises a confidentiality
 threat for the applications running on the same host. Previous studies evaluated
 security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis},
-and have scanned vulnerabilities on Docker hub~\cite{Shu2017, gummaraju2015over}.
+and have scanned vulnerabilities on Docker hub images~\cite{Shu2017, gummaraju2015over}.
 Also Singularity came up with Stools, which can be used for scanning Singularity images
 for security and quality checks.
 Here, we focus on the specific context of scientific data analysis on HPC clusters, taking
@@ -174,7 +182,9 @@ Here, we summarize all the resources that are
 used by CONP to function.
 
 
-\subsection{Container Engine: Singularity}
+\subsection{Container Engines}
+
+\subsection{Singularity}
 
 Singularity offers mobility of compute by facilitating portable environments 
 through a single image file~\cite{kurtzer2016singularity}. Once Singularity image
@@ -272,14 +282,23 @@ BIDS apps~\cite{gorgolewski2017bids} is a framework designed to share and execut
 analysis pipelines. It improves usability, accesibility, and reproducibility
 of different applications through containerization.
 Currently, there are 27 BIDS apps available and all are using different Docker images.
+%\begin{figure}
+%\csvreader[%
+% respect all,%
+%  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+%      %\caption{Baseline GF Competition Circle Track 2014}\label{tab:baselline1}
+%      \begin{adjustbox}{max width=\columnwidth},
+%  after reading=\end{adjustbox},
+% tabular={c |c | c | c | c},
+%	table head =Image & {OS Distro} & {Vulnerabilities by Anchore} & {Vulnerabilities by Clair} & {Vulnerabilities by Vuls}\\\hline,
+% late after line= \\,
+%	late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+%]{results.csv}{}{\csvlinetotablerow}%
+%       \centering
+%	\caption{Existing number of Vulnerabilities}
+%\end{figure}
 
-\begin{figure}
-  \centering
-	\includegraphics[width=\columnwidth]{Figures/bids_table.png}
-  \caption{All Container images used by BIDS apps.}
-  \label{fig:bids_apps}
-\end{figure}
-
+\begin{comment}
 \subsubsection{ReproNim}
 
 ReproNim is a Center for Reproducible Neuroimaging Computation. It is a vision
@@ -304,6 +323,19 @@ instances the ones used by AFNI or other neuroimaging tools not represented
 in Boutiques or BIDS Apps. However we wouldn't be able to shrink these
 images unless we identified specific command-lines to run.}
 
+\end{comment}
+
+\subsection{Linux Distributions}
+
+BIDS and Boutiques images that we took for our experiment have diverse Linux
+distributions such as Ubuntu, Centos, Debian, and Alpine.
+Some Ubuntu distributions that are present inside images are old enough
+that Ubuntu has stopped providing support such as 14.04 Long Term Support (LTS), 17.04, and 17.10. These
+distributions have reached End Of Life (EOL). They are still used in images, and
+as there are no options of getting updates due to EOL, it results in vulnerable images.
+However, Extended Security Maintenance 
+(ESM) can be requested for Ubuntu 14.04 but it is not feasible to use inside images. 
+
 \subsection{Image Update Process}
 
 If there exist vulnerabilities in the container image, then there are two ways
@@ -313,77 +345,7 @@ inside that image. However, this option effects the reproducibility
 of the image, which means that the image cannot be used to verify research
 findings of other scientists. An alternative approach can be to trim unnecessary
 packages from images, which in turn reduces the number of vulnerabilities
-present in images. To update container images we used a bash script
-which is given in Figure~\ref{}.
-
-
-\begin{listing}
-\begin{minted}[frame=single,
-               framesep=3mm,
-               linenos=false,
-               xleftmargin=0pt,
-               tabsize=4]{bash}
-#!/usr/bin/env bash
-
-function die {
-	echo $1
-	exit 1
-}
-
-function find-pm {
-		(type $1 &> /dev/null && echo "> Found $1") || \
-		(echo "> $1 not found" && return 1)
-}
-
-\rm -f .updated
-find-pm yum && (yum update -y && touch .updated) 
-find-pm apt && (apt update -y && apt upgrade -y \
-&& apt autoremove -y && apt autoclean -y \
-&& touch .updated)
-test -f .updated || die "Cannot find package manager \
-or update failed"	       
-\end{minted}
-\caption{update.sh}
-\label{listing:update.sh}
-\end{listing}
-
-
-\begin{listing}
-\begin{minted}[frame=single,
-               framesep=3mm,
-               linenos=false,
-               xleftmargin=0pt,
-	       tabsize=4]{bash}
-#!/usr/bin/env bash
-
-set -ue
-
-function usage {
-	echo "$0 <image_list>"
-	exit 1
-}
-
-if [ $# -lt 1 ]
-then
-	usage
-fi
-
-for image in $*
-do
-	echo -n "Updating image ${image}... "
-	docker run -e /bin/bash -v $PWD:$PWD -w \
-	$PWD ${image} ./update.sh &>${image}.log \
-	&& echo "[ OK ]"
-	echo -n "Commiting updated image... "
-	ID=$(docker ps -a | head -2 | awk \
-	'$1!="CONTAINER" {print $1}')
-	docker commit ${ID} updated_${image} \
-	&& echo "[ OK ]"
-done
-\end{minted}
-\caption{update-images.sh}
-\label{listing:update-images.sh}
-\end{listing}
+present in images.
 
 
 \subsection{Scanning tools used}
@@ -407,21 +369,10 @@ It provides visibility and transparency of the container environment.
 Anchore offers services in two ways: Anchore Engine and Anchore Engine
 Command Line Interface (CLI). Anchore Engine is available as a Docker
 image, which is available on Docker Hub. Anchore Engine CLI provides
-command line interface in addition to Anchore Engine REST API. Anchore
-Engine CLI can be installed directly on the host and used to inspect
-images.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=.7\columnwidth]{Figures/anchore.png}
-  \caption{Databases used by Anchore.}
-        \label{fig:anchore_db}
-\end{figure}
-
-
-\TG{You should refer to the vulnerability databases used, and explain how
-software components, for instance files, are matched to these databases. Is
-the matching based on file checksum?}
+command line interface in addition to Anchore Engine REST API. It can be
+installed directly on the host and used to inspect images.
+Anchore compares package versions, which are present inside the
+image, with the vulnerability database to flag vulnerabilities.
 
 \subsubsection{Vuls}
 
@@ -441,12 +392,23 @@ access, and put almost no load on the scan target server. Deep scan uses
 root privileges for scanning, and is used to get a more detailed scan. It checks
 changelogs, which puts more load on the target server.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=.7\columnwidth]{Figures/vuls.png}
-  \caption{Databases used by Vuls.}
-	\label{fig:vuls_db}
-\end{figure}
+
+\subsection{Clair Scanner}
+
+CoreOS originally created Clair, which is a static vulnerability scanner for containers which
+currently support App Container (appc) and Docker~\cite{coreos_2019}. The main goal of the
+tool is to provide a transparent look of container’s security. Consequently, it is
+named as Clair, simply implying clear. Clair scans container images in regular
+intervals, and stores metadata of vulnerabilities, after getting from configured
+set of sources. Clair API can be used by clients to query its database to get
+the list of vulnerabilities that a particular image has. Clair sends a notification
+to alert systems that there is an updation in the vulnerability metadata. Quay
+registery uses Clair internally as the security engine. However, Clair does not 
+provide facility of comparing
+the vulnerability list of a particular image against a whitelist~\cite{arminc_2019}. So to remove
+that drawback, another tool from CoreOS, Clair Scanner can be used. It scans image, prepares the list of
+vulnerabilities, compares that list against the whitelist, and flags vulnerabilities
+that are not present in whitelist.
 
 \subsubsection{Stools}
 
@@ -481,7 +443,163 @@ CBRAIN users uses a portal
 account on the cluster. Users are only able to
 run pre-defined applications on the cluster through the CBRAIN portal.
 
-%\bibliographystyle{vancouver-authoryear}
+\section{Results}
+
+\subsection{Existing Vulnerabilities}
+
+Tables show results of scanning BIDS and Boutiques images with above discussed three scanners.
+The number of vulnerabilities reported by these scanners are drastically different from each other.
+The question arises why these scanners report different number and type of vulnerabilities.
+How their logic differs and what exactly is making these results different than each other.
+According to our investigation of these results pricisely, below are some of the reasons of
+getting different results from these scanners. These reasons include bugs in scanner 's logic,
+some scanners ignoring vulnerabilities in a particular package, referring to different databases,
+how frequently they are updating their database, etc,. We have explained these differences below in detail
+and have provided an example with each reason to make it clear.
+
+\begin{figure}
+\csvreader[%
+ respect all,%
+  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+      %\caption{Baseline GF Competition Circle Track 2014}\label{tab:baselline1}
+      \begin{adjustbox}{max width=\columnwidth},
+  after reading=\end{adjustbox},
+ tabular={c |c | c | c | c},
+        table head =Image & {OS Distro} & {Vulnerabilities by Anchore} & {Vulnerabilities by Clair} & {Vulnerabilities by Vuls}\\\hline,
+ late after line= \\,
+        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+]{results.csv}{}{\csvlinetotablerow}%
+       \centering
+        \caption{Existing number of Vulnerabilities}
+\end{figure}
+
+\begin{figure}[!htb]
+        {\includegraphics[width=\columnwidth]
+        {Figures/vulngraph.png}}
+        \caption{\label{fig:graph1} Scatterplot representing \#Packages and \#Vulnerabilities}
+      \end{figure}
+
+\subsection{Comparisons between Scanners}
+
+\subsection{V-C}
+
+V-C represents extra vulnerabilities that are shown by Vuls than Clair.
+So the next question is why they are not shown by Clair then. 
+Below are some reasons to answer that question:
+\begin{enumerate}
+
+\item\textbf{With Status as “Not-affected”-} It means these vulnerabilities are affecting Ubuntu but they are not 
+affecting particular Ubuntu release that is present inside the image. The reason why its not affecting 
+that release is also mentioned. For example, one reason can be that code which is creating issue is not 
+present in that release etc. For example CVE-2015-2305 is not affecting package cups in Trusty.
+
+\item\textbf{Ignored(reached end-of-life)-} These vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life 
+but does not exist (status as “DNE”) in Ubuntu 14.04 ESM release. As Clair is only referring Ubuntu 14.04 ESM 
+release it do not detect these vulnerabilities. For example CVE-2017-9994.
+
+\item\textbf{Not present in Ubuntu 14.04 ESM release-} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
+are not detected by Clair but they affect Ubuntu 14.04 LTS That’s why detected by Vuls. For example, CVE-2017-1375.
+
+\item\textbf{False negatives by Clair-} Clair is missing vulnerabilities that it should detect. For example CVE-2016-9082 
+is present in package cairo in Xenial release and it is not detected by Clair.
+\end{enumerate}
+
+\subsection{C-V}
+
+C-V represents extra vulnerabilities that are shown by Clair than Vuls. Following are the reasons to explain that:
+
+\begin{enumerate}
+\item \textbf{False positives by Clair-}These vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
+present inside the image but Clair is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
+Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
+\item\textbf{False Negatives by Vuls-} For example CVE-2019-5094.
+\end{enumerate}
+
+\subsection{A-C}
+
+A-C represents extra vulnerabilities shown by Anchore than Clair. Below are the reasons:
+\begin{enumerate}
+	\item Linux Package: Clair is not detecting all vulnerabilities in the source “Linux” package. 
+		For example CVE-2019-9506.
+	\item Ignored(reached end-of-life): These vulnerabilities are ignored in Ubuntu 14.04 LTS as it 
+		reached end-of-life but does not exist (DNE) in ESM release. As Clair is only referring 
+		Ubuntu 14.04 ESM release it do not detect it. For example CVE-2017-994
+	\item Database difference: Clair is using a Docker image for database. So it is not updated everyday. 
+		When I scanned images I used the latest available container. For example CVE-2019-5094 was not 
+		updated in Clair container that time.
+	\item False negatives by Clair: Clair is missing vulnerabilities that it should detect. For example 
+		CVE-2016-9082 is present in package cairo in Xenial release and it is not detected by Clair
+\end{enumerate}
+
+\subsection{C-A}
+C-A represents the vulnerabilities that are not detected by Anchore. Below are the reasons:
+\begin{enumerate}
+
+	\item\textbf{EPOCH bug-} There is a bug in the Anchore logic due to which some vulnerabilities are 
+		not detected by Anchore. This bug gets triggered when package’s version have epoch 
+		(1:3.3.9-1ubuntu2.3)  in it. For example CVE-2018-1125 in procps package
+	\item\textbf{Ignored (out of standard support) bug-} There is another bug in Anchore due to 
+		which it is not able to detect some vulnerabilities. Due to this bug Anchore does not detect 
+		vulnerabilities which have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
+		But if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
+		For example CVE-2019-13565 in Ubuntu 14.04
+	\item\textbf{Ignored (reached end-of-life)-}Some vulnerabilities have status as “ignored (reached end-of-life)” 
+		so Anchore checks the last status of these vulnerabilities whether OS package was vulnerable to the cve 
+		prior to the end-of-life. If it was vulnerable only then Anchore will report it, otherwise not. But this 
+		vulnerability is present in Ubuntu 14.04 ESM release Clair is reporting that. For example CVE-2019-9924
+\end{enumerate}
+
+\subsection{A-V}
+
+A-V represents the vulnerabilities that are detected by Anchore but not detected by Vuls. Below are the reasons 
+of these differences:
+\begin{enumerate}
+
+	\item\textbf{Linux Package-} Vuls is not detecting all vulnerabilities in the source “Linux” package. 
+		For example CVE-2019-9506
+	\item\textbf{False Negatives by Vuls-} Vuls is missing some of the vulnerabilities that it should detect. 
+		For example CVE-2019-5094
+\end{enumerate}
+
+\subsection{V-A}
+V-A represents the vulnerabilities that are detected by Vuls but not detected by Anchore. Below are the reasons:
+\begin{enumerate}
+\item\textbf{EPOCH bug-} There is a bug in the Anchore logic due to which some vulnerabilities are not detected 
+	by Anchore. This bug gets triggered when package’s version have epoch (1:3.3.9-1ubuntu2.3)  in it. 
+		For example CVE-2018-1125 in procps package
+\item\textbf{Ignored (out of standard support) bug-} There is another bug in Anchore due to which it is not 
+	able to detect some vulnerabilities. Due to this bug Anchore does not detect vulnerabilities which 
+		have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. But these vulnerabilities 
+		are detected by Vuls in Ubuntu 14.04 LTS. For example CVE-2019-13565 in Ubuntu 14.04
+\item\textbf{With status as “Not-affected”-}  It means these vulnerabilities are affecting Ubuntu but they are not 
+	affecting particular Ubuntu release that is present inside the image. The reason why its not affecting that 
+		release is also mentioned. For example, one reason can be that code which is creating issue is not 
+		present in that release etc. For example CVE-2015-2305 is not affecting package cups in Trusty.
+\item\textbf{Rejected CVEs-} There are some CVE that are rejected because they are duplicate copies of another CVEs. 
+	So Anchore is not reporting those rejected CVEs but Vuls is reporting those. For example CVE-2017-13753
+	\end{enumerate}
+
+\subsection{Effect Of Update}
+
+The next experiment involves updating all these images and then rescanning them to see how the number of
+vulnerabilities drop inside them. We used a \textit{bash} script to update these images. It will find
+package manager inside the image and then update the image according the package manager it found.
+When these images are rescanned after updation, results changed drastically. However, there are still
+vulnerabilities reported by these scanners but there are no fixes available for these vulnerabilities
+till date so there is nothing that can be done to remove these vulnerabilties. There are only two
+options either you accept those vulnerabilities and use that image, or you discard that image.
+So one thing is clear here that even if we keep our images up to date there will be still some
+vulnerabilities that we have to face.
+Below given table shows number of vulnerabilities that are detected by Anchore after updating these images.
+
+\begin{figure}[!htb]
+        {\includegraphics[width=\columnwidth]
+        {Figures/afterupdate.png}}
+        \caption{\label{fig:graph2} Scatterplot representing difference in number of vulnerabilities before and 
+	after update of image}
+      \end{figure}
+\subsection{Effect Of Size Reduction}
+
 \bibliography{bibliography}
 
 
