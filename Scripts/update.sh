@@ -12,5 +12,5 @@ function find-pm {
 
 \rm -f .updated
 find-pm yum && (yum update -y && touch .updated)
-find-pm apt && (apt update -y && apt upgrade -y && apt autoremove -y && apt autoclean -y && touch .updated)
+find-pm apt && (apt update -y && apt upgrade -y && apt-get autoremove -y && apt-get autoclean -y && touch .updated)
 test -f .updated || die "Cannot find package manager or update failed"
