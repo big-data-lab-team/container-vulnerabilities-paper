@@ -59,7 +59,7 @@ introduced in 2013~\cite{gantikow2016providing}. However, Docker has security co
 is not supported by High Performance
 Computing (HPC) environments. As a result, Singularity came in 2016 with the goal of providing support
 for HPC environments. It is used in many clusters including Compute Canada.
-Table \ref{fig:cluster_list} illustrates the reported usage of Singularity on HPC clusters~\cite{kurtzer2017singularity}.
+According to~\cite{kurtzer2017singularity}, Singularity is used in 36 research clusters.
 
 \begin{comment}
 \begin{figure}
@@ -73,7 +73,7 @@ Table \ref{fig:cluster_list} illustrates the reported usage of Singularity on HP
 No doubt containers have gained a lot of popularity, however containers tightly
 integrate with the host due to the sharing of the kernel, 
 mounted file systems, and devices, which raises security
-concerns. Figure \ref{fig:container-overview} provides overview of the containers architecture.
+concerns.
 They also share three main security threats with other virtualization
 techniques~\cite{gantikow2016providing}.
 
@@ -107,7 +107,7 @@ by keeping focus on HPC environments. This popularity of containers lead us to t
 primary research question of this work: \textit{what is the current security state of
 container images that are deployed on HPC clusters}.
 
-To answer that question, we scan all images that are used on Compute
+To answer that question, we scan images that are used on Compute
 Canada clusters by neuroscience field. Scanning refers to the practice of
 collecting all information about the container image, investigating it
 for vulnerabilities, and finally producing a
@@ -152,8 +152,6 @@ Here, we focus on the specific context of scientific data analysis on HPC cluste
 neuroimaging as an example.
 
 
-\TG{paper suggested by Emad Shihab.}
-
 This paper is organized as follows: in next section, we provide description
 of materials and methods which includes summarizing a particular use case of
 containers in neuroscience, which is used for scientific computing. It involves
@@ -184,7 +182,7 @@ used by CONP to function.
 
 \subsection{Container Engines}
 
-\subsection{Singularity}
+\subsubsection{Singularity}
 
 Singularity offers mobility of compute by facilitating portable environments 
 through a single image file~\cite{kurtzer2016singularity}. Once Singularity image
@@ -393,7 +391,7 @@ root privileges for scanning, and is used to get a more detailed scan. It checks
 changelogs, which puts more load on the target server.
 
 
-\subsection{Clair Scanner}
+\subsubsection{Clair Scanner}
 
 CoreOS originally created Clair, which is a static vulnerability scanner for containers which
 currently support App Container (appc) and Docker~\cite{coreos_2019}. The main goal of the
@@ -422,6 +420,7 @@ services also offer running containers. So Stools combined both the concepts.
 It involves spinning a ClairScanner container during testing and building a
 Singularity image, and scanning it for filesystem before the image is finalized.
 
+\begin{comment}
 \subsection{CBRAIN}
 
 \href{http://github.com/aces/cbrain}{CBRAIN}~\cite{sherif2014cbrain} is a web portal that is
@@ -442,26 +441,33 @@ CBRAIN supports Docker, Singularity, BIDS apps, and Boutiques.
 CBRAIN users uses a portal
 account on the cluster. Users are only able to
 run pre-defined applications on the cluster through the CBRAIN portal.
-
+\end{comment}
 \section{Results}
+
+In this section, we present results of three experiments that are carried out to see
+how the number of vulnerabilities vary inside images. First experiment involves scanning
+these images as it is to see how vulnerable they are. For scanning we use three different scanners
+to see if all are reporting same vulnerabilities or not. Second experiment involves updating
+all these images and then rescanning. The last experiment involves shrinking the size of the image
+meaning that removing all unnecessary packages from the image to see the effect on the number of
+vulnerabilities present inside the image.
 
 \subsection{Existing Vulnerabilities}
 
-Tables show results of scanning BIDS and Boutiques images with above discussed three scanners.
-The number of vulnerabilities reported by these scanners are drastically different from each other.
-The question arises why these scanners report different number and type of vulnerabilities.
-How their logic differs and what exactly is making these results different than each other.
-According to our investigation of these results pricisely, below are some of the reasons of
-getting different results from these scanners. These reasons include bugs in scanner 's logic,
-some scanners ignoring vulnerabilities in a particular package, referring to different databases,
-how frequently they are updating their database, etc,. We have explained these differences below in detail
-and have provided an example with each reason to make it clear.
+Table~\ref{table1} shows results of scanning BIDS and Boutiques images with three scanners namely
+Anchore, Clair, and Vuls. These scanners are taking vulnerability feed from different sources. For
+example for Ubuntu OS distribution, Anchore refers to Ubuntu launchpad database, Clair refers to
+Ubuntu CVE Tracker, whereas Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
+The interesting point in the table is that there is no OVAL data for Ubuntu 17.04 and 17.10 distribution,
+meaning that images with these distributions are impossible to scan with Vuls. Also, it is interesting to note that
+Anchore reports more number of vulnerabilities than Clair and Vuls for all images except that have Centos OS.
+Additionally, we notice that Alpine and Centos OS distributions have less number of vulnerabilities as
+compared to Ubuntu and Debian.
 
-\begin{figure}
+\begin{table}
 \csvreader[%
  respect all,%
   before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
-      %\caption{Baseline GF Competition Circle Track 2014}\label{tab:baselline1}
       \begin{adjustbox}{max width=\columnwidth},
   after reading=\end{adjustbox},
  tabular={c |c | c | c | c},
@@ -470,8 +476,8 @@ and have provided an example with each reason to make it clear.
         late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
 ]{results.csv}{}{\csvlinetotablerow}%
        \centering
-        \caption{Existing number of Vulnerabilities}
-\end{figure}
+	\caption{\label{table1}Existing number of Vulnerabilities}
+\end{table}
 
 \begin{figure}[!htb]
         {\includegraphics[width=\columnwidth]
@@ -481,17 +487,29 @@ and have provided an example with each reason to make it clear.
 
 \subsection{Comparisons between Scanners}
 
+The number and type of vulnerabilities reported by these scanners are drastically different from each other.
+The question arises why these scanners report different number and type of vulnerabilities.
+How their logic differs and what exactly is making these results different than each other.
+According to our investigation of these results precisely, below are some of the reasons of
+getting different results from these scanners. These reasons include bugs in scanner's logic,
+some scanners ignoring vulnerabilities in a particular package, referring to different databases,
+how frequently they are updating their database, etc,. We have explained these differences below in detail
+and have provided an example with each reason to make it clear.
+
 \subsection{V-C}
 
 V-C represents extra vulnerabilities that are shown by Vuls than Clair.
 So the next question is why they are not shown by Clair then. 
 Below are some reasons to answer that question:
+
+
 \begin{enumerate}
 
 \item\textbf{With Status as “Not-affected”-} It means these vulnerabilities are affecting Ubuntu but they are not 
 affecting particular Ubuntu release that is present inside the image. The reason why its not affecting 
 that release is also mentioned. For example, one reason can be that code which is creating issue is not 
-present in that release etc. For example CVE-2015-2305 is not affecting package cups in Trusty.
+present in that release etc. In other words, we can say that these are false positives by Vuls.
+For example CVE-2015-2305 is not affecting package cups in Trusty.
 
 \item\textbf{Ignored(reached end-of-life)-} These vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life 
 but does not exist (status as “DNE”) in Ubuntu 14.04 ESM release. As Clair is only referring Ubuntu 14.04 ESM 
@@ -519,34 +537,34 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
 
 A-C represents extra vulnerabilities shown by Anchore than Clair. Below are the reasons:
 \begin{enumerate}
-	\item Linux Package: Clair is not detecting all vulnerabilities in the source “Linux” package. 
+	\item\textbf{Linux Package-} Clair is not detecting all vulnerabilities in the source “Linux” package. 
 		For example CVE-2019-9506.
-	\item Ignored(reached end-of-life): These vulnerabilities are ignored in Ubuntu 14.04 LTS as it 
+	\item\textbf{Ignored(reached end-of-life)-} These vulnerabilities are ignored in Ubuntu 14.04 LTS as it 
 		reached end-of-life but does not exist (DNE) in ESM release. As Clair is only referring 
-		Ubuntu 14.04 ESM release it do not detect it. For example CVE-2017-994
-	\item Database difference: Clair is using a Docker image for database. So it is not updated everyday. 
+		Ubuntu 14.04 ESM release it do not detect it. For example CVE-2017-994.
+	\item\textbf{Database difference-} Clair is using a Docker image for database. So it is not updated everyday. 
 		When I scanned images I used the latest available container. For example CVE-2019-5094 was not 
 		updated in Clair container that time.
-	\item False negatives by Clair: Clair is missing vulnerabilities that it should detect. For example 
-		CVE-2016-9082 is present in package cairo in Xenial release and it is not detected by Clair
+	\item\textbf{False negatives by Clair-} Clair is missing vulnerabilities that it should detect. For example 
+		CVE-2016-9082 is present in package cairo in Xenial release and it is not detected by Clair.
 \end{enumerate}
 
 \subsection{C-A}
 C-A represents the vulnerabilities that are not detected by Anchore. Below are the reasons:
 \begin{enumerate}
 
-	\item\textbf{EPOCH bug-} There is a bug in the Anchore logic due to which some vulnerabilities are 
+	\item\textbf{Epoch bug-} There is a bug in the Anchore logic due to which some vulnerabilities are 
 		not detected by Anchore. This bug gets triggered when package’s version have epoch 
-		(1:3.3.9-1ubuntu2.3)  in it. For example CVE-2018-1125 in procps package
+		(1:3.3.9-1ubuntu2.3)  in it. For example CVE-2018-1125 in procps package.
 	\item\textbf{Ignored (out of standard support) bug-} There is another bug in Anchore due to 
 		which it is not able to detect some vulnerabilities. Due to this bug Anchore does not detect 
 		vulnerabilities which have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
 		But if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
-		For example CVE-2019-13565 in Ubuntu 14.04
+		For example CVE-2019-13565 in Ubuntu 14.04.
 	\item\textbf{Ignored (reached end-of-life)-}Some vulnerabilities have status as “ignored (reached end-of-life)” 
 		so Anchore checks the last status of these vulnerabilities whether OS package was vulnerable to the cve 
 		prior to the end-of-life. If it was vulnerable only then Anchore will report it, otherwise not. But this 
-		vulnerability is present in Ubuntu 14.04 ESM release Clair is reporting that. For example CVE-2019-9924
+		vulnerability is present in Ubuntu 14.04 ESM release so Clair is reporting that. For example CVE-2019-9924.
 \end{enumerate}
 
 \subsection{A-V}
@@ -564,7 +582,7 @@ of these differences:
 \subsection{V-A}
 V-A represents the vulnerabilities that are detected by Vuls but not detected by Anchore. Below are the reasons:
 \begin{enumerate}
-\item\textbf{EPOCH bug-} There is a bug in the Anchore logic due to which some vulnerabilities are not detected 
+\item\textbf{Epoch bug-} There is a bug in the Anchore logic due to which some vulnerabilities are not detected 
 	by Anchore. This bug gets triggered when package’s version have epoch (1:3.3.9-1ubuntu2.3)  in it. 
 		For example CVE-2018-1125 in procps package
 \item\textbf{Ignored (out of standard support) bug-} There is another bug in Anchore due to which it is not 
@@ -582,19 +600,21 @@ V-A represents the vulnerabilities that are detected by Vuls but not detected by
 \subsection{Effect Of Update}
 
 The next experiment involves updating all these images and then rescanning them to see how the number of
-vulnerabilities drop inside them. We used a \textit{bash} script to update these images. It will find
-package manager inside the image and then update the image according the package manager it found.
+vulnerabilities drop inside them. We used a \textit{bash} script to update these images. This script is
+present in our github repository \href{https://github.com/kaurbhupinder/Risk-to-Clusters-Paper}
+{https://github.com/kaurbhupinder/Risk-to-Clusters-Paper}. This script 
+will find package manager inside the image and then update the image according the package manager it finds.
 When these images are rescanned after updation, results changed drastically. However, there are still
 vulnerabilities reported by these scanners but there are no fixes available for these vulnerabilities
 till date so there is nothing that can be done to remove these vulnerabilties. There are only two
-options either you accept those vulnerabilities and use that image, or you discard that image.
+options, either you accept those vulnerabilities and use that image, or you discard that image.
 So one thing is clear here that even if we keep our images up to date there will be still some
 vulnerabilities that we have to face.
-Below given table shows number of vulnerabilities that are detected by Anchore after updating these images.
+Figure~\ref{fig:graph2}shows number of vulnerabilities that are detected by Anchore after updating these images.
 
 \begin{figure}[!htb]
         {\includegraphics[width=\columnwidth]
-        {Figures/afterupdate.png}}
+        {Figures/aferupdatewithpackage.png}}
         \caption{\label{fig:graph2} Scatterplot representing difference in number of vulnerabilities before and 
 	after update of image}
       \end{figure}
