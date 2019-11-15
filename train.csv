@@ -1,0 +1,39 @@
+Images,OS distribution,Vulnerabilities,Packages,CRITICAL Vulnerabilities,names,labels
+bids/example,ubuntu:14.04,838,528,19,example,a
+bids/freesurfer,ubuntu:14.04,353,298,13,freesurfer,b
+bids/ndmg,ubuntu:14.04,934,538,20,ndmg,c
+bids/fibredensityandcrosssection,ubuntu:14.04,1086,566,34,fibredensity,e
+bids/spm,ubuntu:14.04,191,349,4,spm,f
+poldracklab/mriqc:0.15.0 ,ubuntu:16.04,432,360,11,mriqc,g
+bids/cpac:v1.0.1a_22,ubuntu:16.04,698,600,18,cpac,h
+bids/hyperalignment,ubuntu:16.04,1717,815,50,hyperalignment,I
+bids/antscorticalthickness:v2.2.0-1,ubuntu:17.04,289,291,9,antscortical,w
+bids/afni_proc,ubuntu:17.10,67,277,0,afni,y
+bids/mrtrix3_connectome,ubuntu:18.04,275,347,3,mrtrix,k
+bids/rs_signal_extract:0.1,ubuntu:16.04,867,241,44,signal,l
+bids/aa:v0.2.0,ubuntu:14.04,189,353,3,aa,m
+bids/niak,ubuntu:16.04,1482,889,35,niak,n
+bids/oppni:v0.7.0-1,ubuntu:14.04,913,762,27,oppni,o
+poldracklab/fmriprep:unstable,ubuntu:16.04,516,443,12,fmriprep,p
+bids/brainiak-srm,ubuntu:16.04,897,258,46,brainiak,q
+bids/magetbrain,ubuntu:18.04,112,167,4,magetbrain,t
+bids/tracula:v6.0.0-4,ubuntu:14.04,874,530,22,tracula,u
+bids/baracus,ubuntu:14.04,172,218,3,baracus,v
+bids/dparsf:v4.3.12,ubuntu:14.04,507,506,5,dparsf,x
+gkiar/onevoxel:v0.3.0rc2,alpine:3.7.1,5,71,4,OneVoxel,af
+bids/rshrf:1.0.1,alpine:3.8.4,5,35,4,rshrf,z
+gkiar/mask2boundary:v0.1.0,alpine:3.9.0,15,61,3,mask2boundary,ak
+bids/ndmg:v0.1.0,ubuntu:14.04,934,537,20,BIDS app ndmg,aa
+bids/broccoli:v1.0.0,centos 6,79,253,54,broccoli,d
+mcin/qeeg:latest,centos 7,46,171,12,qeeg,ab
+camarasu/creaphase:0.3,centos 7,54,288,17,creaphaseCircle,ac
+bigdatalabteam/hcp-prefreesurfer:exec-centos7.freesurferbuild-centos4-latest,centos 7,70,254,32,FreeSurferPipelineBatch-CentOS7,ad
+mcin/docker-fsl:latest,centos 7,75,145,22,FLIRT,ae
+bigdatalabteam/hcp-prefreesurfer:exec-centos7-fslbuild-centos5-latest,centos 7,70,240,32,PreFreeSurferPipelineBatch,ag
+bt5e/ants:latest,centos 7,150,188,67,LaplacianThickness,ah
+poldracklab/fmriprep:1.2.3,ubuntu:16.04,591,441,15,Fmriprep:1.2.3,ai
+gkiar/dwipreproc_fsl-5.0.11_minified,ubuntu:16.04,391,269,6,FSL,aj
+mcin/ica-aroma:latest,centos 7,75,159,22,ICA_AROMA,al
+bids/mindboggle:0.0.4-1,debian:8,671,277,159,mindboggle,j
+bids/nipypelines:0.3.0,debian:8,641,157,162,nypypelines,r
+bids/hcppipelines:v3.17.0-18,debian:8,526,380,79,hcppypelines,s

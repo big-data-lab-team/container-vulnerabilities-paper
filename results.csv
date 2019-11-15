@@ -1,0 +1,39 @@
+names,OS,A ,C,V
+bids/example,ubuntu:14.04,838,663,683
+bids/freesurfer,ubuntu:14.04,353,215,192
+bids/ndmg,ubuntu:14.04,934,757,782
+bids/broccoli:v1.0.0,centos 6,79,79,117
+bids/fibredensityandcrosssection,ubuntu:14.04,1086,849,868
+bids/spm,ubuntu:14.04,191,246,235
+poldracklab/mriqc:0.15.0 ,ubuntu:16.04,432,328,332
+bids/cpac:v1.0.1a_22,ubuntu:16.04,698,524,535
+bids/hyperalignment,ubuntu:16.04,1717,1327,1433
+bids/mindboggle:0.0.4-1,debian:8,671,955,569
+bids/mrtrix3_connectome,ubuntu:18.04,275,157,158
+bids/rs_signal_extract:0.1,ubuntu:16.04,867,454,473
+bids/aa:v0.2.0,ubuntu:14.04,189,244,233
+bids/niak,ubuntu:16.04,1482,1366,1420
+bids/oppni:v0.7.0-1,ubuntu:14.04,913,698,723
+poldracklab/fmriprep:unstable,ubuntu:16.04,516,355,393
+bids/brainiak-srm,ubuntu:16.04,897,484,503
+bids/nipypelines:0.3.0,debian:8,641,878,451
+bids/hcppipelines:v3.17.0-18,debian:8,526,873,620
+bids/magetbrain,ubuntu:18.04,112,117,126
+bids/tracula:v6.0.0-4,ubuntu:14.04,874,664,683
+bids/baracus,ubuntu:14.04,172,238,216
+bids/antscorticalthickness:v2.2.0-1,ubuntu:17.04,289,27,no oval data
+bids/dparsf:v4.3.12,ubuntu:14.04,507,750,757
+bids/afni_proc,ubuntu:17.10,67,16,no oval data
+bids/rshrf:1.0.1,alpine:3.8.4,5,3,3
+bids/ndmg:v0.1.0,ubuntu 14.04,934,758,782
+mcin/qeeg:latest,centos 7,46,46,142
+camarasu/creaphase:0.3,centos 7,54,54,186
+bigdatalabteam/hcp-prefreesurfer:exec-centos7.freesurferbuild-centos4-latest,centos 7,70,76,157
+mcin/docker-fsl:latest,centos 7,75,75,201
+gkiar/onevoxel:v0.3.0rc2,alpine 3.7.1,5,2,2
+bigdatalabteam/hcp-prefreesurfer:exec-centos7-fslbuild-centos5-latest,centos 7,70,76,157
+bt5e/ants:latest,centos 7,150,156,336
+poldracklab/fmriprep:1.2.3,ubuntu 16.04,591,441,447
+gkiar/dwipreproc_fsl-5.0.11_minified,ubuntu 16.04,391,258,263
+gkiar/mask2boundary:v0.1.0,alpine 3.9.0,15,11,11
+mcin/ica-aroma:latest,centos 7,75,75,202
