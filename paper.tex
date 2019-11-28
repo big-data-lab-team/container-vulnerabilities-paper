@@ -31,8 +31,7 @@
 \newcommand{\reprozip}[0]{ReproZip}
 \newcommand{\TG}[1]{\color{blue}From Tristan: #1\color{black}}
 
-\title{Risks of Running Vulnerable Container Images for Data Analysis on HPC
-Clusters}
+\title{Vulnerability Analysis of Container Images in Neuroimaging field}
   
 \begin{document}
 
@@ -169,6 +168,7 @@ rules that can be followed to secure container image for use in clusters.
 
 \section{Materials and Methods}
 
+\begin{comment}
 As we are taking a particular use case of containers from
 neuroscience field i.e Canadian Open Neuroscoence Platform (CONP) so  
 in this section we summarize the data and tools 
@@ -178,7 +178,7 @@ clinical neuroscience. The main goal of the CONP platform is to store, process, 
 distribute massive amounts of data produced by modern neuroscience.
 Here, we summarize all the resources that are
 used by CONP to function.
-
+\end{comment}
 
 \subsection{Container Engines}
 
@@ -190,7 +190,7 @@ is created, it is hashed by using SHA256 hashing. Hence, it cannot be changed
 once it is created, consequently, it can be used for reproducing the results of
 scientific experiments. Main features provided by
 Singularity are mobility of compute and reproducibility~\cite{kurtzer2017singularity}.
-
+We used Singularity version $2.5.2$ in our experiments.
 Users can easily access files, devices, sockets, ports of the host system from
 the Singularity container. By default, Singularity bind mounts /home/\$USER, /tmp, and \$PWD
 into the running container. Additional directories can be specified with \textit{--bind}
@@ -213,15 +213,14 @@ child of this root owned daemon. As Docker users directly interact with the
 Docker daemon, it is possible to force Docker daemon to escalate privileges.
 If a user gets \textit{root} privileges, it introduces unthinkable security risks
 for multi-tenant shared enviornments. Due to this reason, Docker is not
-supported by HPC environments. However, Docker containers can be imported into
+supported by HPC environments. However, Docker images can be imported into
 Singularity and then used on HPC clusters.
 
 \subsection{Container Image Formats}
 
 A container image is a package that contains the application along with its
 required dependencies and libraries.
-Nowadays, two most popular containerization tools used are Docker and Singularity.
-Both have different image format. Below we provide description of both image
+Both, Docker and Singularity, have different image format. Below we provide description of both image
 formats.
 
 \subsubsection{Docker Image Format}
@@ -231,11 +230,11 @@ other and identified by unique layer identifiers. If a layer is reused
 in different images it will
 have the same id across images. Each layer consists of a filesystem diff
 with respect to the layer below. DockerHub uses gzip compression for
-transferring layers. There are two ways to create a Docker image. The
+transferring layers. \begin{comment}There are two ways to create a Docker image. The
 first is to use an existing Docker image as a base image and then build a
 new image from that one, by making changes in the filesystem, which is
 saved as a new layer of the Docker image. The second way is to build a new
-Docker image from scratch. Docker supports several different storage drivers.
+Docker image from scratch.\end{comment} Docker supports several different storage drivers.
 \textit{Overlay2} is the preferred storage driver used by Docker for all currently
 supported Linux versions, whereas \textit{aufs} is preferred for Docker 18.06 and
 older, when using Ubuntu 14.04 on kernel 3.13 as it do not support \textit{overlay2}.
@@ -249,7 +248,9 @@ which is known as Singularity image.
 It means that Singularity image is a single immutable file that can be moved around as
 any other file. This file can be checksummed, signed, and easily
 used for verification purposes. Singularity containers use Squashfs file format
-by default. However, it also supports two other formats i.e \textit{sandbox} format
+by default. It is read-only file system in Linux, which uses compression for files,
+inodes, and directories. However, Singularity also supports two other 
+formats i.e \textit{sandbox} format
 (which is just a chroot
 directory) and \textit{writable} format (the ext3 file system).
 While publishing experimental results, authors can also publish Singularity
@@ -325,35 +326,47 @@ images unless we identified specific command-lines to run.}
 
 \subsection{Linux Distributions}
 
-BIDS and Boutiques images that we took for our experiment have diverse Linux
-distributions such as Ubuntu, Centos, Debian, and Alpine.
-Some Ubuntu distributions that are present inside images are old enough
-that Ubuntu has stopped providing support such as 14.04 Long Term Support (LTS), 17.04, and 17.10. These
-distributions have reached End Of Life (EOL). They are still used in images, and
-as there are no options of getting updates due to EOL, it results in vulnerable images.
-However, Extended Security Maintenance 
-(ESM) can be requested for Ubuntu 14.04 but it is not feasible to use inside images. 
+BIDS app and Boutiques images that we took for our experiment have diverse Linux
+distributions such as Ubuntu, Centos, Debian, and Alpine. In case of Ubuntu, release
+can be of two types i.e regular or LTS(Long Term Support) release.
+Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
+reaches End-Of-Life(EOL), Ubuntu decides whether to provide extended security support or not, which comes
+in the form of Extended Security Maintenance(ESM) release.
+ESM is a paid service that can be requested from Ubuntu to get security 
+updates even after the EOL of a particular Ubuntu release. The ESM support period is decided by
+Ubuntu. ESM and LTS releases of a particular Ubuntu distribution have different vulnerability
+data in vulnerability databases.
+
+Some Ubuntu distributions that are present inside images have already reached EOL such as 14.04 Long Term Support (LTS),
+17.04, and 17.10. However, Ubuntu is providing ESM support for Ubuntu 14.04. The images in our experiment have Ubuntu 14.04 LTS so scanners should refer
+to LTS release only while collecting data from vulnerability databases. If scanners refer to ESM release for data it may result
+in false positives and false negatives.
+Also, if these releases with EOL are used in images, there are no chances of getting updates, hence
+resulting in vulnerable images. Additionally, even if ESM release is present for some EOL release it is
+not feasible to use inside images. 
 
 \subsection{Image Update Process}
 
-If there exist vulnerabilities in the container image, then there are two ways
-to proceed, either not to run that image at all, or run only after updating the
+If there exist vulnerabilities in the container image, then we can
+run after updating the
 image. Updating the image involves updating all software packages that are
-inside that image. However, this option effects the reproducibility
+inside that image. We used a bash script(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis}{Github}) 
+to update all images, which checks
+package manager present inside the image and then according to that it
+updates the image. However, this option effects the reproducibility
 of the image, which means that the image cannot be used to verify research
-findings of other scientists. An alternative approach can be to trim unnecessary
-packages from images, which in turn reduces the number of vulnerabilities
-present in images.
+findings of other scientists.
 
 
 \subsection{Scanning tools used}
 
 Out of the various container image scanning tools available to scan Docker images,
-we selected Anchore
-and Vuls because these are the most mature scanning tools. To scan Singularity images
+we selected Anchore~\cite{github_2019}
+and Vuls~\cite{future-architect_2019} because these are the most mature scanning tools. To scan Singularity images
 we use Stools, which is specially designed for Singularity images. This tool internally uses
-ClairScanner tool so we included ClairScanner also in our experiements to compare
-performance of both the tools.
+Clair Scanner tool so we included ClairScanner also in our experiements to compare
+performance of both the tools. So total there are three scanners for Docker images
+and one scanner for Singularity images.
 
 \subsubsection{Anchore}
 
@@ -364,14 +377,15 @@ packages, non-OS packages (Python, Java, Gem, and Npm), and files.
 Anchore is a set of tools, which users can
 employ for scanning container images and applying custom policies to them.
 It provides visibility and transparency of the container environment.
-Anchore offers services in two ways: Anchore Engine and Anchore Engine
+It offers services in two ways: Anchore Engine and Anchore Engine
 Command Line Interface (CLI). Anchore Engine is available as a Docker
 image, which is available on Docker Hub. Anchore Engine CLI provides
 command line interface in addition to Anchore Engine REST API. It can be
 installed directly on the host and used to inspect images.
 Anchore compares package versions, which are present inside the
 image, with the vulnerability database to flag vulnerabilities.
-
+To get vulnerability feed of various OS distribution, Anchore refers to
+different sources. For example Ubuntu launchpad database is used for Ubuntu. 
 \subsubsection{Vuls}
 
 Vuls is an open-source vulnerability scanner for Linux and FreeBSD.
@@ -389,14 +403,17 @@ cesses. Both fast scan and fast root scan are performed offline without Internet
 access, and put almost no load on the scan target server. Deep scan uses
 root privileges for scanning, and is used to get a more detailed scan. It checks
 changelogs, which puts more load on the target server.
+Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
+The interesting point is that there is no OVAL data for Ubuntu 17.04 and 17.10 distribution,
+meaning that images with these distributions are impossible to scan with Vuls.
+
 
 
 \subsubsection{Clair Scanner}
 
 CoreOS originally created Clair, which is a static vulnerability scanner for containers which
 currently support App Container (appc) and Docker~\cite{coreos_2019}. The main goal of the
-tool is to provide a transparent look of container’s security. Consequently, it is
-named as Clair, simply implying clear. Clair scans container images in regular
+tool is to provide a transparent look of container’s security. Clair scans container images in regular
 intervals, and stores metadata of vulnerabilities, after getting from configured
 set of sources. Clair API can be used by clients to query its database to get
 the list of vulnerabilities that a particular image has. Clair sends a notification
@@ -407,17 +424,18 @@ the vulnerability list of a particular image against a whitelist~\cite{arminc_20
 that drawback, another tool from CoreOS, Clair Scanner can be used. It scans image, prepares the list of
 vulnerabilities, compares that list against the whitelist, and flags vulnerabilities
 that are not present in whitelist.
+Clair Scanner refers to Ubuntu CVE tracker for getting Ubuntu vulnerability feed.
 
 \subsubsection{Stools}
 
-\href{https://github.com/singularityhub/stools}{Stools} combines CoreOS's ClairScanner with the Continuous Integration (Travis and
+\href{https://github.com/singularityhub/stools}{Stools} combines CoreOS's Clair Scanner with the Continuous Integration (Travis and
 Circle) for scanning Singularity images for vulnerabilities.
-Initially, ClairScanner was intented to scan Docker Containers. This tool does not fit well
+Initially, Clair Scanner was intented to scan Docker Containers. This tool does not fit well
 to scan Singularity images because of the different image formats. Docker layers
 consist of layers, whereas Singluarity images consist of a single binary file.
 However, TravisCI and CircleCI are commonly used for testing code, and these
 services also offer running containers. So Stools combined both the concepts.
-It involves spinning a ClairScanner container during testing and building a
+It involves spinning a Clair Scanner container during testing and building a
 Singularity image, and scanning it for filesystem before the image is finalized.
 
 \begin{comment}
@@ -454,16 +472,11 @@ vulnerabilities present inside the image.
 
 \subsection{Existing Vulnerabilities}
 
-Table~\ref{table1} shows results of scanning BIDS and Boutiques images with three scanners namely
-Anchore, Clair, and Vuls. These scanners are taking vulnerability feed from different sources. For
-example for Ubuntu OS distribution, Anchore refers to Ubuntu launchpad database, Clair refers to
-Ubuntu CVE Tracker, whereas Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
-The interesting point in the table is that there is no OVAL data for Ubuntu 17.04 and 17.10 distribution,
-meaning that images with these distributions are impossible to scan with Vuls. Also, it is interesting to note that
-Anchore reports more number of vulnerabilities than Clair and Vuls for all images except that have Centos OS.
+Figure~\ref{table1} shows results of scanning BIDS and Boutiques images with three scanners namely Anchore,
+Clair scanner and Vuls. Venn Diagram in Figure~\cite{fig:venn} summarizes this table. It is interesting to note that
+Anchore reports 4453 different vulnerabilities, which is way more than both Clair and Vuls.
 Additionally, we notice that Alpine and Centos OS distributions have less number of vulnerabilities as
 compared to Ubuntu and Debian.
-
 \begin{table}
 \csvreader[%
  respect all,%
@@ -480,7 +493,13 @@ compared to Ubuntu and Debian.
 \end{table}
 
 \begin{figure}[!htb]
-        {\includegraphics[width=\columnwidth]
+        {\includegraphics[scale=2.5,width=\columnwidth]
+        {Figures/vennDiagram.png}}
+        \caption{\label{fig:venn} Venn Diagram representing different scanner results}
+\end{figure}
+
+\begin{figure}[!htb]
+        {\includegraphics[scale=2,width=\columnwidth]
         {Figures/vulngraph.png}}
         \caption{\label{fig:graph1} Scatterplot representing \#Packages and \#Vulnerabilities}
       \end{figure}
@@ -491,111 +510,63 @@ The number and type of vulnerabilities reported by these scanners are drasticall
 The question arises why these scanners report different number and type of vulnerabilities.
 How their logic differs and what exactly is making these results different than each other.
 According to our investigation of these results precisely, below are some of the reasons of
-getting different results from these scanners. These reasons include bugs in scanner's logic,
+getting different results from these scanners. These reasons include bugs in scanners,
 some scanners ignoring vulnerabilities in a particular package, referring to different databases,
-how frequently they are updating their database, etc,. We have explained these differences below in detail
+how frequently they are updating their databases, etc,. We have explained these differences below in detail
 and have provided an example with each reason to make it clear.
 
-\subsection{V-C}
+Venn Diagram~\cite{fig:venn} illustrates that Anchore reports 4453 different vulnerabilities that are reported
+by Vuls and Clair. Out of this 4443 vulnerabilities are present in linux-kernel-headers. These are ignored by
+both Clair and Vuls.
 
-V-C represents extra vulnerabilities that are shown by Vuls than Clair.
-So the next question is why they are not shown by Clair then. 
-Below are some reasons to answer that question:
+\textbf{Linux Package-} Clair and Vuls are ignoring all vulnerabilities in the "Linux” package
+which is linux-kernel-headers. 4443 out of 4453 vulnerabilities difference is due to linux-kernel-headers.
+For example CVE-2019-9506 is not detected by.
 
-
-\begin{enumerate}
-
-\item\textbf{With Status as “Not-affected”-} It means these vulnerabilities are affecting Ubuntu but they are not 
+\textbf{With Status as “Not-affected”-} It means these vulnerabilities are affecting Ubuntu but they are not 
 affecting particular Ubuntu release that is present inside the image. The reason why its not affecting 
 that release is also mentioned. For example, one reason can be that code which is creating issue is not 
 present in that release etc. In other words, we can say that these are false positives by Vuls.
 For example CVE-2015-2305 is not affecting package cups in Trusty.
 
-\item\textbf{Ignored(reached end-of-life)-} These vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life 
+\textbf{Ignored(reached end-of-life)-} These vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life 
 but does not exist (status as “DNE”) in Ubuntu 14.04 ESM release. As Clair is only referring Ubuntu 14.04 ESM 
 release it do not detect these vulnerabilities. For example CVE-2017-9994.
 
-\item\textbf{Not present in Ubuntu 14.04 ESM release-} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
+\textbf{Not present in Ubuntu 14.04 ESM release-} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
 are not detected by Clair but they affect Ubuntu 14.04 LTS That’s why detected by Vuls. For example, CVE-2017-1375.
 
-\item\textbf{False negatives by Clair-} Clair is missing vulnerabilities that it should detect. For example CVE-2016-9082 
+\textbf{False negatives by Clair-} Clair is missing vulnerabilities that it should detect. For example CVE-2016-9082 
 is present in package cairo in Xenial release and it is not detected by Clair.
-\end{enumerate}
 
-\subsection{C-V}
-
-C-V represents extra vulnerabilities that are shown by Clair than Vuls. Following are the reasons to explain that:
-
-\begin{enumerate}
-\item \textbf{False positives by Clair-}These vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
+\textbf{False positives by Clair-}These vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
 present inside the image but Clair is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
 Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
-\item\textbf{False Negatives by Vuls-} For example CVE-2019-5094.
-\end{enumerate}
 
-\subsection{A-C}
-
-A-C represents extra vulnerabilities shown by Anchore than Clair. Below are the reasons:
-\begin{enumerate}
-	\item\textbf{Linux Package-} Clair is not detecting all vulnerabilities in the source “Linux” package. 
-		For example CVE-2019-9506.
-	\item\textbf{Ignored(reached end-of-life)-} These vulnerabilities are ignored in Ubuntu 14.04 LTS as it 
-		reached end-of-life but does not exist (DNE) in ESM release. As Clair is only referring 
-		Ubuntu 14.04 ESM release it do not detect it. For example CVE-2017-994.
-	\item\textbf{Database difference-} Clair is using a Docker image for database. So it is not updated everyday. 
+\textbf{Database difference-} Clair is using a Docker image for database. So it is not updated everyday. 
 		When I scanned images I used the latest available container. For example CVE-2019-5094 was not 
 		updated in Clair container that time.
-	\item\textbf{False negatives by Clair-} Clair is missing vulnerabilities that it should detect. For example 
-		CVE-2016-9082 is present in package cairo in Xenial release and it is not detected by Clair.
-\end{enumerate}
 
-\subsection{C-A}
-C-A represents the vulnerabilities that are not detected by Anchore. Below are the reasons:
-\begin{enumerate}
-
-	\item\textbf{Epoch bug-} There is a bug in the Anchore logic due to which some vulnerabilities are 
+\textbf{Epoch bug-} There is a bug in the Anchore logic due to which some vulnerabilities are 
 		not detected by Anchore. This bug gets triggered when package’s version have epoch 
 		(1:3.3.9-1ubuntu2.3)  in it. For example CVE-2018-1125 in procps package.
-	\item\textbf{Ignored (out of standard support) bug-} There is another bug in Anchore due to 
+
+\textbf{Ignored (out of standard support) bug-} There is another bug in Anchore due to 
 		which it is not able to detect some vulnerabilities. Due to this bug Anchore does not detect 
 		vulnerabilities which have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
 		But if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
 		For example CVE-2019-13565 in Ubuntu 14.04.
-	\item\textbf{Ignored (reached end-of-life)-}Some vulnerabilities have status as “ignored (reached end-of-life)” 
+
+\textbf{Ignored (reached end-of-life)-}Some vulnerabilities have status as “ignored (reached end-of-life)” 
 		so Anchore checks the last status of these vulnerabilities whether OS package was vulnerable to the cve 
 		prior to the end-of-life. If it was vulnerable only then Anchore will report it, otherwise not. But this 
 		vulnerability is present in Ubuntu 14.04 ESM release so Clair is reporting that. For example CVE-2019-9924.
-\end{enumerate}
 
-\subsection{A-V}
-
-A-V represents the vulnerabilities that are detected by Anchore but not detected by Vuls. Below are the reasons 
-of these differences:
-\begin{enumerate}
-
-	\item\textbf{Linux Package-} Vuls is not detecting all vulnerabilities in the source “Linux” package. 
-		For example CVE-2019-9506
-	\item\textbf{False Negatives by Vuls-} Vuls is missing some of the vulnerabilities that it should detect. 
+\textbf{False Negatives by Vuls-} Vuls is missing some of the vulnerabilities that it should detect. 
 		For example CVE-2019-5094
-\end{enumerate}
 
-\subsection{V-A}
-V-A represents the vulnerabilities that are detected by Vuls but not detected by Anchore. Below are the reasons:
-\begin{enumerate}
-\item\textbf{Epoch bug-} There is a bug in the Anchore logic due to which some vulnerabilities are not detected 
-	by Anchore. This bug gets triggered when package’s version have epoch (1:3.3.9-1ubuntu2.3)  in it. 
-		For example CVE-2018-1125 in procps package
-\item\textbf{Ignored (out of standard support) bug-} There is another bug in Anchore due to which it is not 
-	able to detect some vulnerabilities. Due to this bug Anchore does not detect vulnerabilities which 
-		have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. But these vulnerabilities 
-		are detected by Vuls in Ubuntu 14.04 LTS. For example CVE-2019-13565 in Ubuntu 14.04
-\item\textbf{With status as “Not-affected”-}  It means these vulnerabilities are affecting Ubuntu but they are not 
-	affecting particular Ubuntu release that is present inside the image. The reason why its not affecting that 
-		release is also mentioned. For example, one reason can be that code which is creating issue is not 
-		present in that release etc. For example CVE-2015-2305 is not affecting package cups in Trusty.
-\item\textbf{Rejected CVEs-} There are some CVE that are rejected because they are duplicate copies of another CVEs. 
+\textbf{Rejected CVEs-} There are some CVE that are rejected because they are duplicate copies of another CVEs. 
 	So Anchore is not reporting those rejected CVEs but Vuls is reporting those. For example CVE-2017-13753
-	\end{enumerate}
 
 \subsection{Effect Of Update}
 
