@@ -1,0 +1,39 @@
+names,OS,A ,C,V
+a,ubuntu:14.04,838,663,683
+b,ubuntu:14.04,353,215,192
+c,ubuntu:14.04,934,757,782
+d,centos 6,79,79,117
+e,ubuntu:14.04,1086,849,868
+f,ubuntu:14.04,191,246,235
+g,ubuntu:16.04,432,328,332
+h,ubuntu:16.04,698,524,535
+I,ubuntu:16.04,1717,1327,1433
+j,debian:8,671,955,569
+k,ubuntu:18.04,275,157,158
+l,ubuntu:16.04,867,454,473
+m,ubuntu:14.04,189,244,233
+n,ubuntu:16.04,1482,1366,1420
+o,ubuntu:14.04,913,698,723
+p,ubuntu:16.04,516,355,393
+q,ubuntu:16.04,897,484,503
+r,debian:8,641,878,451
+s,debian:8,526,873,620
+t,ubuntu:18.04,112,117,126
+u,ubuntu:14.04,874,664,683
+v,ubuntu:14.04,172,238,216
+w,ubuntu:17.04,289,27,no oval data
+x,ubuntu:14.04,507,750,757
+y,ubuntu:17.10,67,16,no oval data
+z,alpine:3.8.4,5,3,3
+aa,ubuntu 14.04,934,758,782
+ab,centos 7,46,46,142
+ac,centos 7,54,54,186
+ad,centos 7,70,76,157
+ae,centos 7,75,75,201
+af,alpine 3.7.1,5,2,2
+ag,centos 7,70,76,157
+ah,centos 7,150,156,336
+ai,ubuntu 16.04,591,441,447
+aj,ubuntu 16.04,391,258,263
+ak,alpine 3.9.0,15,11,11
+al,centos 7,75,75,202
