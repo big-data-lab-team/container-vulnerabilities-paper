@@ -425,6 +425,11 @@ that drawback, another tool from CoreOS, Clair Scanner can be used. It scans ima
 vulnerabilities, compares that list against the whitelist, and flags vulnerabilities
 that are not present in whitelist.
 Clair Scanner refers to Ubuntu CVE tracker for getting Ubuntu vulnerability feed.
+For that purpose a Docker image is maintained that contains Ubuntu CVE tracker database.
+Whenever Ubuntu updated its database, this image is also updated with the required information.
+We performed scanning on 2019-09-25 and for our experiments, we used a Docker image that was 
+latest updated i.e with the tag 2019-09-18. So it means that Clair Scanner's database was
+old by one week.
 
 \subsubsection{Stools}
 
@@ -472,11 +477,12 @@ vulnerabilities present inside the image.
 
 \subsection{Existing Vulnerabilities}
 
-Figure~\ref{table1} shows results of scanning BIDS and Boutiques images with three scanners namely Anchore,
-Clair scanner and Vuls. Venn Diagram in Figure~\cite{fig:venn} summarizes this table. It is interesting to note that
-Anchore reports 4453 different vulnerabilities, which is way more than both Clair and Vuls.
-Additionally, we notice that Alpine and Centos OS distributions have less number of vulnerabilities as
-compared to Ubuntu and Debian.
+Figure~\ref{fig:graph1} represents the number of vulnerabilities that are present inside images.
+This figure shows that as the number of packages increases in the image, the number of vulnerabilities
+also get increased for Ubuntu OS distribution. The figure also infers that Alpine distribution, being the
+light weight distribution, have least number of vulnerabilities, whereas Ubuntu contains highest number of
+vulnerabilities. Debian contains highest number of critical vulnerabilities among Ubuntu, Alpine, and Centos.
+
 \begin{table}
 \csvreader[%
  respect all,%
@@ -492,6 +498,23 @@ compared to Ubuntu and Debian.
 	\caption{\label{table1}Existing number of Vulnerabilities}
 \end{table}
 
+\begin{table}
+\csvreader[%
+ respect all,%
+  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+      \begin{adjustbox}{max width=\columnwidth},
+  after reading=\end{adjustbox},
+ tabular={c|c},
+	table head ={Image Tag} & {Image Name}\\\hline,
+ late after line= \\,
+        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+]{names.csv}{}{\csvlinetotablerow}%
+       \centering
+	\caption{\label{table2}Image names}
+\end{table}
+
+
+
 \begin{figure}[!htb]
         {\includegraphics[scale=2.5,width=\columnwidth]
         {Figures/vennDiagram.png}}
@@ -500,28 +523,35 @@ compared to Ubuntu and Debian.
 
 \begin{figure}[!htb]
         {\includegraphics[scale=2,width=\columnwidth]
-        {Figures/vulngraph.png}}
+        {Figures/vulngraph4.png}}
         \caption{\label{fig:graph1} Scatterplot representing \#Packages and \#Vulnerabilities}
       \end{figure}
 
 \subsection{Comparisons between Scanners}
 
-The number and type of vulnerabilities reported by these scanners are drastically different from each other.
+Figure~\ref{table1} shows results of scanning BIDS and Boutiques images with three scanners namely Anchore,
+Clair scanner and Vuls. Venn Diagram in Figure~\cite{fig:venn} summarizes this table. It is interesting to note that
+Anchore reports 4453 different vulnerabilities, which is way more than both Clair and Vuls.
+
+The number and type of vulnerabilities reported by three scanners are drastically different from each other.
 The question arises why these scanners report different number and type of vulnerabilities.
 How their logic differs and what exactly is making these results different than each other.
-According to our investigation of these results precisely, below are some of the reasons of
+
+According to our investigation of these results, below are some of the reasons of
 getting different results from these scanners. These reasons include bugs in scanners,
 some scanners ignoring vulnerabilities in a particular package, referring to different databases,
-how frequently they are updating their databases, etc,. We have explained these differences below in detail
+how frequently they are updating their databases, etc. 
+
+We have explained these differences below in detail
 and have provided an example with each reason to make it clear.
 
-Venn Diagram~\cite{fig:venn} illustrates that Anchore reports 4453 different vulnerabilities that are reported
+Venn Diagram~\ref{fig:venn} illustrates that Anchore reports 4453 different vulnerabilities that are reported
 by Vuls and Clair. Out of this 4443 vulnerabilities are present in linux-kernel-headers. These are ignored by
 both Clair and Vuls.
 
-\textbf{Linux Package-} Clair and Vuls are ignoring all vulnerabilities in the "Linux” package
-which is linux-kernel-headers. 4443 out of 4453 vulnerabilities difference is due to linux-kernel-headers.
-For example CVE-2019-9506 is not detected by.
+\textbf{Linux-Kernel-Headers-} Clair Scanner and Vuls are ignoring all vulnerabilities in the Linux-kernel-headers.
+4443 out of 4453 vulnerabilities difference is due to linux-kernel-headers.
+For example CVE-2019-9506 present in linux-libc-dev-4.4.0-31.50 is not detected by both Vuls and Clair Scanner
 
 \textbf{With Status as “Not-affected”-} It means these vulnerabilities are affecting Ubuntu but they are not 
 affecting particular Ubuntu release that is present inside the image. The reason why its not affecting 
@@ -529,38 +559,42 @@ that release is also mentioned. For example, one reason can be that code which i
 present in that release etc. In other words, we can say that these are false positives by Vuls.
 For example CVE-2015-2305 is not affecting package cups in Trusty.
 
-\textbf{Ignored(reached end-of-life)-} These vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life 
-but does not exist (status as “DNE”) in Ubuntu 14.04 ESM release. As Clair is only referring Ubuntu 14.04 ESM 
-release it do not detect these vulnerabilities. For example CVE-2017-9994.
+\textbf{With status as "Ignored(reached end-of-life)"-} Some vulnerabilities have status as “ignored (reached end-of-life)”.
+These vulnerabilities are "ignored" in Ubuntu 14.04 LTS as it reached end-of-life. 
+However, in Ubuntu 14.04 ESM release these vulnerabilities can be present or not.
+Anchore checks the last status of these vulnerabilities whether OS package was vulnerable to the cve
+prior to the end-of-life. If it was vulnerable only then Anchore will report it, otherwise not.
+If this kind of vulnerability is present in ESM release then Clair will report it because Clair Scanner
+only refers ESM release. On the other hand, if the vulnerability
+status in ESM release is "DNE", which means does not exist, then Clair Scanner will not report it. 
+For example CVE-2017-9994 vulnerability. As Ubuntu LTS release is present inside the images so
+Clair Scanner's reference to ESM release is wrong here.
 
-\textbf{Not present in Ubuntu 14.04 ESM release-} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
+\textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release-} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
 are not detected by Clair but they affect Ubuntu 14.04 LTS That’s why detected by Vuls. For example, CVE-2017-1375.
 
 \textbf{False negatives by Clair-} Clair is missing vulnerabilities that it should detect. For example CVE-2016-9082 
 is present in package cairo in Xenial release and it is not detected by Clair.
 
-\textbf{False positives by Clair-}These vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
+\textbf{False positives by Clair-} These vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
 present inside the image but Clair is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
 Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
 
-\textbf{Database difference-} Clair is using a Docker image for database. So it is not updated everyday. 
-		When I scanned images I used the latest available container. For example CVE-2019-5094 was not 
-		updated in Clair container that time.
+\textbf{Database difference-} As we discussed earlier that Clair Scanner's database was old by one week.
+                So some of the vulnerabilities were not updated yet. For example CVE-2019-5094, which
+		was published on 2019-09-24, was not 
+		updated in Clair Scanner's database that time. Due to which it is missed by Clair Scanner.
 
-\textbf{Epoch bug-} There is a bug in the Anchore logic due to which some vulnerabilities are 
+\textbf{Epoch bug-} There is a bug in the Anchore scanner due to which some vulnerabilities are 
 		not detected by Anchore. This bug gets triggered when package’s version have epoch 
 		(1:3.3.9-1ubuntu2.3)  in it. For example CVE-2018-1125 in procps package.
 
-\textbf{Ignored (out of standard support) bug-} There is another bug in Anchore due to 
+\textbf{with status as "Ignored (out of standard support)" bug-} There is another bug in Anchore due to 
 		which it is not able to detect some vulnerabilities. Due to this bug Anchore does not detect 
 		vulnerabilities which have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
 		But if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
 		For example CVE-2019-13565 in Ubuntu 14.04.
 
-\textbf{Ignored (reached end-of-life)-}Some vulnerabilities have status as “ignored (reached end-of-life)” 
-		so Anchore checks the last status of these vulnerabilities whether OS package was vulnerable to the cve 
-		prior to the end-of-life. If it was vulnerable only then Anchore will report it, otherwise not. But this 
-		vulnerability is present in Ubuntu 14.04 ESM release so Clair is reporting that. For example CVE-2019-9924.
 
 \textbf{False Negatives by Vuls-} Vuls is missing some of the vulnerabilities that it should detect. 
 		For example CVE-2019-5094
