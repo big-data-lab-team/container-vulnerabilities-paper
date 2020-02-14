@@ -169,12 +169,22 @@ rules that can be followed to secure container image for use in clusters.
 
 \section{Materials and Methods}
 
+\begin{comment}
+This work involves three experiments.
+First experiment involves scanning
+the images. We use three different scanners
+to see if all are reporting same vulnerabilities or not. Second experiment involves updating
+all these images and then rescanning. The last experiment involves shrinking the size of the image
+meaning that removing all unnecessary packages from the image to see the effect on the number of
+vulnerabilities present inside the image.
+\end{comment}
+
 In this section, we present our study methodology. We first
-introduce two container tools used for our experiments: Docker and
+introduce two container tools used in our experiments: Docker and
 Singularity and their image formats. Then we describe Boutiques and BIDS application frameworks
-from where we took containerized applications for our study. Later, we discuss about 
+from where we took containerized applications for our study. Later, we discuss 
 various Linux distributions and their releases. Lastly, this section
-provides the description of the scanning tools used.
+provides a description of the scanning tools used.
 
 \begin{comment}
 As we are taking a particular use case of containers from
@@ -193,8 +203,8 @@ used by CONP to function.
 Tools that are capable of packing and running an application in an isolated environment
 are known as container tools. Alongwith an application they also pack the application's dependencies,
 required libraries and configuration files for the
-application to function properly. This functioning of an application in an isolated environment
-is called a container. They directly run on the Host machine's kernel so they are lightweight.
+application to function properly. The functioning of an application in an isolated environment
+is called a container. Containers directly run on the Host machine's kernel so they are lightweight.
 Consequently, more containers can be run on a given Host machine as compared to virtual machines.
 
 \subsubsection{Docker}
@@ -212,10 +222,10 @@ to talk to the \textit{Docker Daemon}.
 \textit{Client:} It is a Command Line Interface (CLI) client which is used to interact with the \textit{Docker Daemon}.
 
 %Docker runs a software, \textit{Docker daemon}, on the host machine.
-Docker daemon runs as root, and is remotely controlled through a
-UNIX socket. As Docker Daemon is responsible for launching and managing containers,
-when a container runs, the container is spawned as a
-child process of this root owned daemon.
+Docker daemon runs as root and is remotely controlled through a
+UNIX socket. It is responsible for launching and managing containers,
+consequently, when a container runs, the container is spawned as a
+child process of this root-owned daemon.
 
 \begin{comment}
 It is responsible for launching containers, their
@@ -227,14 +237,13 @@ child of this root owned daemon.
 \end{comment}
 As Docker users directly interact with the
 Docker daemon through CLI i.e \textit{docker} command, it is possible to force Docker daemon to escalate privileges.
-If a user gets \textit{root} privileges, it introduces unthinkable security risks
-for multi-tenant shared enviornments. Due to this reason, Docker is not
-supported by HPC environments.
+???BLOCK MISSING
 
 \subsubsection{Singularity}
 
 Singularity is another tool for packing and running applications in containers. 
-
+In our experiments, we used $2.5.2$ Singularity version. 
+\begin{comment}
 Singularity offers mobility of compute by facilitating portable environments 
 through a single image file~\cite{kurtzer2017singularity}. Once Singularity image
 is created, it is hashed using SHA-256. Hence, it cannot be changed
@@ -249,6 +258,7 @@ to bind mount into the container. By defaut, Singularity uses as less as possibl
 However namespaces can be requested if required. Users cannot escalate privileges inside
 Singularty containers. This is because Singularity do not run containers as root.
 Instead, a user inside Singularity container is the same user outside the container.
+\end{comment}
 
 \subsection{Container Image Formats}
 
@@ -337,7 +347,7 @@ Out of these 27 images, we used 26 images for our experiments because QAP bids a
 on Docker hub.
 
 So we have total 38 Docker images from both BIDS Apps and Boutiques.
-	Table~\ref{table2} displays the names of all the images that we took in our experiments.
+	Table~\ref{table1} displays the names of all the images that we took in our experiments.
 %\begin{figure}
 %\csvreader[%
 % respect all,%
@@ -417,7 +427,8 @@ On the other hand, Dynamic scanning involves running a container from the image 
 dynamic behaviour of the image.
 
 \subsubsection{Scanning tools used}
-\begin{comments}
+
+\begin{comment}
 Out of the various container image scanning tools available to scan Docker images,
 we selected Anchore~\cite{github_2019}
 and Vuls~\cite{future-architect_2019} because these are the most mature scanning tools. To scan Singularity images
@@ -425,7 +436,7 @@ we use Stools, which is specially designed for Singularity images. This tool int
 Clair Scanner tool so we included ClairScanner also in our experiements to compare
 performance of both the tools. So total there are three scanners for Docker images
 and one scanner for Singularity images.
-\end{comments}
+\end{comment}
 
 We used three scanners namely Anchore~\cite{github_2019}, Vuls~\cite{future-architect_2019}, and
 Clair Scanner~\cite{arminc_2019} for scanning Docker images because these are the most
@@ -441,19 +452,19 @@ Anchore is an end-to-end, open-source container security platform. Anchore
 is a static
 scanning tool that analyses container images and lists OS
 packages, non-OS packages (Python, Java, Gem, and Npm), and files.
-\begin{comments}
+\begin{comment}
 Anchore is a set of tools, which users can
 employ for scanning container images and applying custom policies to them.
 It provides visibility and transparency of the container environment.
-\end{comments}
+\end{comment}
 Anchore Engine can be used in two ways: through Docker image or Anchore
 Command Line Interface (CLI).
-\begin{comments}
+\begin{comment}
 Anchore offers services in two ways: Anchore Engine and Anchore
 Command Line Interface (CLI). Anchore Engine is available as a Docker
 image, which is available on Docker Hub. Anchore Engine CLI provides
 command line interface in addition to Anchore Engine REST API. 
-\end{comments}
+\end{comment}
 It can be
 installed directly on the host and used to inspect images.
 In our experiments, we used a Docker image to get Anchore Engine version 0.5.0 and Engine Database
@@ -462,7 +473,77 @@ version 0.0.11.
 Anchore compares package versions, which are present inside the
 image, with the vulnerability database to flag vulnerabilities.
 To get vulnerability feed of various OS distribution, Anchore refers to
-different sources. For example Ubuntu launchpad database is used for Ubuntu. 
+different sources. For example Ubuntu launchpad database is used for Ubuntu.
+In Ubuntu launchpad database, for a given CVE, there is entry for all ubuntu releases.
+Ubuntu releases are listed with the package name
+in which vulnerability exists and are entitled a status
+(\href{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}), which is
+encoded in following form:
+\newline \\
+
+\noindent <release>\_<source-package>: <status> (<version/notes>) \\
+
+The status can be anyone of the following:
+
+\textbf{DNE:} It means 'Does Not Exist'. The package (inside the given release) does not exist in the
+		archive.
+
+\textbf{needs-triage:} The vulnerability of this package (inside the given release)
+		is not known. It needs to be evaluated.  (No version/notes)
+
+\textbf{not-affected:} The package (inside the given release), while related to the
+		CVE in some way, is not affected by the issue. Notes should
+		provide detailed information, if needed. For e.g
+		"not-affected (1.14.6-1.1)" indicates that this specific
+		package version in the given release is not affected.
+
+\textbf{needed:} The package (inside the given release) is vulnerable to the
+		CVE and needs to be fixed.
+
+\textbf{active:} The package (inside the given release) is vulnerable to the
+		CVE, needs fixing, and is actively being worked on.
+
+\textbf{ignored:} The package (inside the given release), while related to the
+		CVE in some way, is being ignored for some reason.  The
+		notes should provide that reason. For e.g "ignored (reached end-of-life)".
+		This means that this given Ubuntu release already reached
+		end-of-life so this CVE is ignored by Ubuntu. However, if there
+		is an extended security support for this release then this
+		CVE will be handled in ESM release.
+
+\textbf{pending:} The package (inside the given release) is vulnerable, and
+                  has been fixed but an update has not been yet uploaded or
+		  pushlished. The "version" indicates the package version 
+		  that contains the fix.
+
+\textbf{deferred:} The package (inside the given release) is vulnerable, but 
+                   its fix has been deferred for some reason. The notes
+		   should provide further details. If a date is mentioned eg
+		   "deferred (2015-02-02)" this date specifies the date when
+		   the CVE was deferred.
+
+\textbf{released:} The package (inside the given release) was vulnerable, but
+		an update has been already uploaded and published. The package version
+		is also mentioned. For e.g "released (1.2.3)"
+		specifies the package version in which the fix first appeared.
+
+\textbf{released-esm:} The package (inside the given release) was vulnerable and
+		an update has been already uploaded and published. However,
+		this update is published in the Ubuntu ESM release only and not in LTS.
+		The fixed version of such packages is appended by
+		+esmN or ~esmN, indicating that this package version is available
+		only via ESM.
+
+Figure~\ref{example} illustrates how the information of a CVE is represented
+in Ubuntu launchpad database.
+
+\begin{figure}[H]
+	\fbox{{\includegraphics[scale=2.5,width=\columnwidth]
+	{Figures/vulnExample2.png}}}
+        \caption{\label{example} Representation of a CVE in Ubuntu Launchpad}
+\end{figure}
+
+
 
 \subsubsection{Vuls}
 
@@ -490,12 +571,12 @@ meaning that images with these distributions are impossible to scan with Vuls.
 \subsubsection{Clair Scanner}
 
 CoreOS originally created Clair, a static vulnerability scanner for containers. 
-\begin{Comments}
+\begin{comment}
 The main goal of the
 tool is to provide a transparent look of container’s security. Clair scans container images in regular
 intervals, and stores metadata of vulnerabilities, after getting from configured
 set of sources. 
-\end{comments}	
+\end{comment}	
 Clair API can be used by clients to query its database to get
 the list of vulnerabilities that a particular image has. Clair sends a notification
 to alert the systems if there is an update in the vulnerability metadata. Quay.io, which
@@ -567,13 +648,7 @@ run pre-defined applications on the cluster through the CBRAIN portal.
 \end{comment}
 \section{Results}
 
-In this section, we present results of three experiments that are carried out to see
-how the number of vulnerabilities vary inside images. First experiment involves scanning
-the images. We use three different scanners
-to see if all are reporting same vulnerabilities or not. Second experiment involves updating
-all these images and then rescanning. The last experiment involves shrinking the size of the image
-meaning that removing all unnecessary packages from the image to see the effect on the number of
-vulnerabilities present inside the image.
+In this section, we present and compare scanning results of three scanners. 
 
 \subsection{Existing Vulnerabilities}
 
@@ -587,24 +662,25 @@ It represents the number of vulnerabilities that are present inside images.
 The overall trend of the Figure shows that as the number of packages increases in the image, the number of vulnerabilities
 also get increased.
 The figure also infers that Alpine distribution, being the
-light-weight distribution, have least number of vulnerabilities, whereas Ubuntu contains highest number of
-vulnerabilities. Debian contains highest number of critical vulnerabilities among Ubuntu, Alpine, and Centos.
+lightweight distribution, have least number of vulnerabilities, whereas Ubuntu contains highest number of
+vulnerabilities. Debian and Cnetos contain higher number of critical vulnerabilities than Ubuntu and Alpine.
 
-\begin{table}
+\begin{table*}
 \csvreader[%
  respect all,%
   before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
-      \begin{adjustbox}{max width=\columnwidth},
+      \begin{adjustbox}{max width=\textwidth},
   after reading=\end{adjustbox},
- tabular={c |c | c | c | c},
-        table head =Image & {OS Distro} & {Vulnerabilities by Anchore} & {Vulnerabilities by Clair} & {Vulnerabilities by Vuls}\\\hline,
+ tabular={c |c | c | c | c |c},
+	table head =Image Labels &{Image names} &{OS Distro} & {Vulnerabilities by Anchore} & {Vulnerabilities by Clair} & {Vulnerabilities by Vuls}\\\hline,
  late after line= \\,
         late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
 ]{results.csv}{}{\csvlinetotablerow}%
        \centering
 	\caption{\label{table1}Existing number of Vulnerabilities}
-\end{table}
+\end{table*}
 
+\begin{comment}
 \begin{table}
 \csvreader[%
  respect all,%
@@ -619,31 +695,31 @@ vulnerabilities. Debian contains highest number of critical vulnerabilities amon
        \centering
 	\caption{\label{table2}Image names}
 \end{table}
+\end{comment}
 
 
-
-\begin{figure}[!htb]
+\begin{figure}[H]
         {\includegraphics[scale=2.5,width=\columnwidth]
-        {Figures/vennDiagram.png}}
+        {Figures/vennDiagram.pdf}}
         \caption{\label{fig:venn} Venn Diagram representing different scanner results}
 \end{figure}
 
-\begin{figure}[!htb]
-        {\includegraphics[scale=2,width=\columnwidth]
-        {Figures/vulngraph4.png}}
+\begin{figure*}[!htb]
+	{\includegraphics[scale=1.5,width=\textwidth]
+	{Figures/vulngraph.pdf}}
         \caption{\label{fig:graph1} Scatterplot representing \#Packages and \#Vulnerabilities}
-      \end{figure}
+      \end{figure*}
 
 \subsection{Comparisons between Scanners}
 
-Table~\ref{table1} compares results of scanning images with three scanners.
+Table~\ref{table1} compares results of scanning images with the three scanners.
 Venn Diagram in Figure~\ref{fig:venn} summarizes this table. 
 
-We add all regions of Venn diagram
+When we add all regions of Venn diagram
 we get total 20050 vulnerabilities in Bids and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
-reported by Anchore, 673 only reported by Clair and 325 only detected by Vuls.
-
+reported by Anchore, 673 only reported by Clair, and 325 only detected by Vuls.
+libavlibavlibavlibavlibavlibavlibav
 The number and type of vulnerabilities reported by the three scanners are drastically different from each other.
 The question arises why these scanners report different number and type of vulnerabilities.
 How their logic differs and what exactly is making these results different than each other.
@@ -656,33 +732,41 @@ how frequently they are updating their databases, etc.
 We have explained these differences below in detail
 and have provided an example with each reason to make it clear.
 
+\begin{comment}
 Venn Diagram~\ref{fig:venn} illustrates that Anchore reports 4453 different vulnerabilities that are reported
 by Vuls and Clair. Out of this 4443 vulnerabilities are present in linux-kernel-headers. These are ignored by
 both Clair and Vuls.
+\end{comment}
 
-\textbf{Linux-Kernel-Headers-} Clair Scanner and Vuls are ignoring all vulnerabilities in the Linux-kernel-headers.
-4443 out of 4453 vulnerabilities difference is due to linux-kernel-headers.
-For example CVE-2019-9506 present in linux-libc-dev-4.4.0-31.50 is not detected by both Vuls and Clair Scanner
+\textbf{Linux-Kernel-Headers:} Clair Scanner and Vuls are ignoring all vulnerabilities in the Linux-kernel-headers,
+whereas Anchore reports them.
+4443 out of 4453 vulnerabilities that are only reported by Anchore are present in linux-kernel-headers.
+For example CVE-2019-9506 present in linux-libc-dev-4.4.0-31.50, which is reported by Anchore, is not
+detected by both Vuls and Clair Scanner.
 
-\textbf{With Status as “Not-affected”-} It means these vulnerabilities are affecting Ubuntu but they are not 
-affecting particular Ubuntu release that is present inside the image. The reason why its not affecting 
-that release is also mentioned. For example, one reason can be that code which is creating issue is not 
-present in that release etc. In other words, we can say that these are false positives by Vuls.
-For example CVE-2015-2305 is not affecting package cups in Trusty.
+\textbf{CVEs with Status as “Not-affected”:} Vuls is reporting vulnerabilities with status
+as "not-affected". So it means Linux distribution which is inside the image is not affected
+by the particular CVE. However, it is reported by Vuls. In other words, we can say that
+these are false positives by Vuls.
+For example, we scanned an image having Trusty release in it and Vuls is reporting CVE-2015-2305
+in the package Cups. However, if we check the vulnerability database, package Cups in Trusty is not
+is not affected by this CVE.
 
-\textbf{With status as "Ignored(reached end-of-life)"-} Some vulnerabilities have status as “ignored (reached end-of-life)”.
-These vulnerabilities are "ignored" in Ubuntu 14.04 LTS as it reached end-of-life. 
-However, in Ubuntu 14.04 ESM release these vulnerabilities can be present or not.
-Anchore checks the last status of these vulnerabilities whether OS package was vulnerable to the cve
+\textbf{With CVE status as "Ignored (reached end-of-life)":}
+Some vulnerabilities are "ignored" in Ubuntu 14.04 LTS as it reached end-of-life. 
+However, in Ubuntu 14.04 ESM release these vulnerabilities may or may not be present.
+Anchore checks the last status of these vulnerabilities whether the package was vulnerable to the CVE
 prior to the end-of-life. If it was vulnerable only then Anchore will report it, otherwise not.
-If this kind of vulnerability is present in ESM release then Clair will report it because Clair Scanner
+If this kind of vulnerability is present in ESM release then Clair Scanner will report it because Clair Scanner
 only refers ESM release. On the other hand, if the vulnerability
 status in ESM release is "DNE", which means does not exist, then Clair Scanner will not report it. 
-For example CVE-2017-9994 vulnerability. As Ubuntu LTS release is present inside the images so
-Clair Scanner's reference to ESM release is wrong here.
+For example CVE-2017-9994 vulnerability in libav package is ignored in Trusty LTS release due end-of-life.
+so it is not reported by Anchore. Whereas, this vulnerability has status as "DNE" in Trusty ESM
+release so Clair Scanner also do not report it. As Ubuntu 14.04 LTS release is present inside the images still
+Clair Scanner is referring to Ubuntu 14.04 ESM release vulnerability database.
 
 \textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release:} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
-are not detected by Clair but they affect Ubuntu 14.04 LTS That’s why detected by Vuls. For example, CVE-2017-1375.
+are not detected by Clair Scanner but they affect Ubuntu 14.04 LTS hence detected by Vuls. For example, CVE-2017-1375.
 
 \textbf{False negatives by Clair:} Clair is missing vulnerabilities that it should detect. For example CVE-2016-9082 
 is present in package cairo in Xenial release and it is not detected by Clair.
@@ -700,7 +784,7 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
 		not detected by Anchore. This bug gets triggered when package’s version have epoch 
 		(1:3.3.9-1ubuntu2.3)  in it. For example CVE-2018-1125 in procps package.
 
-\textbf{with status as "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
+\textbf{With CVE status as "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
 		which it is not able to detect some vulnerabilities. Due to this bug Anchore does not detect 
 		vulnerabilities which have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
 		But if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
@@ -726,14 +810,14 @@ till date so there is nothing that can be done to remove these vulnerabilties. T
 options, either you accept those vulnerabilities and use that image, or you discard that image.
 So one thing is clear here that even if we keep our images up to date there will be still some
 vulnerabilities that we have to face.
-Figure~\ref{fig:graph2}shows number of vulnerabilities that are detected by Anchore after updating these images.
+Figure~\ref{fig:graph2} shows number of vulnerabilities that are detected by Anchore after updating these images.
 
-\begin{figure}[!htb]
-        {\includegraphics[width=\columnwidth]
-        {Figures/aferupdatewithpackage.png}}
+\begin{figure*}[!htb]
+        {\includegraphics[width=\textwidth]
+        {Figures/afterupdatewithpackage.pdf}}
         \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and 
 	after update of the images}
-      \end{figure}
+      \end{figure*}
 \subsection{Effect Of Size Reduction}
 
 \bibliography{bibliography}
