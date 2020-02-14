@@ -1,39 +1,39 @@
-names,OS,A ,C,V
-a,ubuntu:14.04,838,663,683
-b,ubuntu:14.04,353,215,192
-c,ubuntu:14.04,934,757,782
-d,centos 6,79,79,117
-e,ubuntu:14.04,1086,849,868
-f,ubuntu:14.04,191,246,235
-g,ubuntu:16.04,432,328,332
-h,ubuntu:16.04,698,524,535
-I,ubuntu:16.04,1717,1327,1433
-j,debian:8,671,955,569
-k,ubuntu:18.04,275,157,158
-l,ubuntu:16.04,867,454,473
-m,ubuntu:14.04,189,244,233
-n,ubuntu:16.04,1482,1366,1420
-o,ubuntu:14.04,913,698,723
-p,ubuntu:16.04,516,355,393
-q,ubuntu:16.04,897,484,503
-r,debian:8,641,878,451
-s,debian:8,526,873,620
-t,ubuntu:18.04,112,117,126
-u,ubuntu:14.04,874,664,683
-v,ubuntu:14.04,172,238,216
-w,ubuntu:17.04,289,27,no oval data
-x,ubuntu:14.04,507,750,757
-y,ubuntu:17.10,67,16,no oval data
-z,alpine:3.8.4,5,3,3
-aa,ubuntu 14.04,934,758,782
-ab,centos 7,46,46,142
-ac,centos 7,54,54,186
-ad,centos 7,70,76,157
-ae,centos 7,75,75,201
-af,alpine 3.7.1,5,2,2
-ag,centos 7,70,76,157
-ah,centos 7,150,156,336
-ai,ubuntu 16.04,591,441,447
-aj,ubuntu 16.04,391,258,263
-ak,alpine 3.9.0,15,11,11
-al,centos 7,75,75,202
+Image Labels,Image Names,OS,A ,C,V
+a,bids/example,ubuntu:14.04,838,663,683
+b,bids/freesurfer,ubuntu:14.04,353,215,192
+c,bids/ndmg,ubuntu:14.04,934,757,782
+d,bids/broccoli:v1.0.0,centos 6,79,79,117
+e,bids/fibredensityandcrosssection,ubuntu:14.04,1086,849,868
+f,bids/spm,ubuntu:14.04,191,246,235
+g,poldracklab/mriqc:0.15.0 ,ubuntu:16.04,432,328,332
+h,bids/cpac:v1.0.1a_22,ubuntu:16.04,698,524,535
+I,bids/hyperalignment,ubuntu:16.04,1717,1327,1433
+j,bids/mindboggle:0.0.4-1,debian:8,671,955,569
+k,bids/mrtrix3_connectome,ubuntu:18.04,275,157,158
+l,bids/rs_signal_extract:0.1,ubuntu:16.04,867,454,473
+m,bids/aa:v0.2.0,ubuntu:14.04,189,244,233
+n,bids/niak,ubuntu:16.04,1482,1366,1420
+o,bids/oppni:v0.7.0-1,ubuntu:14.04,913,698,723
+p,poldracklab/fmriprep:unstable,ubuntu:16.04,516,355,393
+q,bids/brainiak-srm,ubuntu:16.04,897,484,503
+r,bids/nipypelines:0.3.0,debian:8,641,878,451
+s,bids/hcppipelines:v3.17.0-18,debian:8,526,873,620
+t,bids/magetbrain,ubuntu:18.04,112,117,126
+u,bids/tracula:v6.0.0-4,ubuntu:14.04,874,664,683
+v,bids/baracus,ubuntu:14.04,172,238,216
+w,bids/antscorticalthickness:v2.2.0-1,ubuntu:17.04,289,27,no oval data
+x,bids/dparsf:v4.3.12,ubuntu:14.04,507,750,757
+y,bids/afni_proc,ubuntu:17.10,67,16,no oval data
+z,bids/rshrf:1.0.1,alpine:3.8.4,5,3,3
+aa,bids/ndmg:v0.1.0,ubuntu 14.04,934,758,782
+ab,mcin/qeeg:latest,centos 7,46,46,142
+ac,camarasu/creaphase:0.3,centos 7,54,54,186
+ad,bigdatalabteam/hcp-prefreesurfer:exec-centos7.freesurferbuild-centos4-latest,centos 7,70,76,157
+ae,mcin/docker-fsl:latest,centos 7,75,75,201
+af,gkiar/onevoxel:v0.3.0rc2,alpine 3.7.1,5,2,2
+ag,bigdatalabteam/hcp-prefreesurfer:exec-centos7-fslbuild-centos5-latest,centos 7,70,76,157
+ah,bt5e/ants:latest,centos 7,150,156,336
+ai,poldracklab/fmriprep:1.2.3,ubuntu 16.04,591,441,447
+aj,gkiar/dwipreproc_fsl-5.0.11_minified,ubuntu 16.04,391,258,263
+ak,gkiar/mask2boundary:v0.1.0,alpine 3.9.0,15,11,11
+al,mcin/ica-aroma:latest,centos 7,75,75,202
