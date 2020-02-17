@@ -169,22 +169,20 @@ rules that can be followed to secure container image for use in clusters.
 
 \section{Materials and Methods}
 
-\begin{comment}
-This work involves three experiments.
+In this section, we present our study methodology.
+This study involves three image scanning experiments.
 First experiment involves scanning
-the images. We use three different scanners
-to see if all are reporting same vulnerabilities or not. Second experiment involves updating
-all these images and then rescanning. The last experiment involves shrinking the size of the image
+the images. For that purpose, we use three different scanners. Second experiment involves updating
+all these images and then rescanning them. The last experiment involves shrinking the size of the image
 meaning that removing all unnecessary packages from the image to see the effect on the number of
 vulnerabilities present inside the image.
-\end{comment}
 
-In this section, we present our study methodology. We first
+We first
 introduce two container tools used in our experiments: Docker and
 Singularity and their image formats. Then we describe Boutiques and BIDS application frameworks
 from where we took containerized applications for our study. Later, we discuss 
 various Linux distributions and their releases. Lastly, this section
-provides a description of the scanning tools used.
+provides a description of the three scanning tools used.
 
 \begin{comment}
 As we are taking a particular use case of containers from
@@ -655,7 +653,11 @@ run pre-defined applications on the cluster through the CBRAIN portal.
 \end{comment}
 \section{Results}
 
-In this section, we present and compare the scanning results of three scanners. 
+In this section,
+we first discuss the existing vulnerabilities in the images and compare
+results of the three scanners. Then we discuss the effect of the update on the
+existing vulnerabilities and lastly, this section presents the effect of image size reduction on the
+vulnerabilities.
 
 \subsection{Existing Vulnerabilities}
 
@@ -750,6 +752,11 @@ whereas Anchore reports them.
 4443 out of 4453 vulnerabilities that are only reported by Anchore are present in Linux-kernel-headers.
 For example CVE-2019-9506 present in Linux-libc-dev-4.4.0-31.50, which is reported by Anchore, is not
 detected by both Vuls and Clair Scanner.
+Linux-kernel-headers are the headers files that only provide function names, its parameters, and its
+return type.
+The actual source code of these functions is present in the Linux kernel and not inside the image.
+So, vulnerability detection in header files
+is irrelevant in this case.
 
 \textbf{CVEs with Status as “Not-affected”:} Vuls is reporting vulnerabilities with status
 as "not-affected". So it means Linux distribution which is inside the image is not affected
@@ -806,20 +813,28 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
 	So Anchore is not reporting those rejected CVEs but Vuls is reporting those. For example CVE-2017-13753.
 
 \subsection{Effect Of Update}
-
+\begin{comment}
 The next experiment involves updating all these images and then rescanning them to see how the number of
 vulnerabilities drop inside them. We used a \textit{bash} script to update these images. This script is
 present in our Github repository \href{https://github.com/kaurbhupinder/Vulnerability-Analysis}
 {https://github.com/kaurbhupinder/Risk-to-Clusters-Paper}. This script 
 will find the package manager inside the image and then update the image according to the package manager it finds.
-When these images are rescanned after the update, results changed drastically. However, there are still
+\end{comment}
+
+When the images are rescanned after the update, results changed drastically. However, there are still
 vulnerabilities reported by these scanners but there are no fixes available for these vulnerabilities
-to date. There are only two
+to date.
+\begin{comment}
+There are only two
 options, either you accept those vulnerabilities and use that image, or you discard that image.
 So one thing is clear here that even if we keep our images up to date there will be still some
 vulnerabilities that we have to face.
-Figure~\ref{fig:graph2} shows the number of vulnerabilities that are detected by Anchore after updating these images.
-
+\end{comment}
+Figure~\ref{fig:graph2} compares the number of vulnerabilities that are detected by Anchore before and after 
+the update of these images.
+After the update, the vulnerabilities mostly have \textit{Low, Negligible or Medium} severity status.
+Also, after the update, the number of vulnerabilities have a mild slope meaning that there
+are a fixed set of packages that contain vulnerabilities and have no fix yet.
 \begin{figure*}[!htb]
         {\includegraphics[width=\textwidth]
         {Figures/afterupdatewithpackage.pdf}}
