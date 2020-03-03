@@ -169,20 +169,33 @@ rules that can be followed to secure container image for use in clusters.
 
 \section{Materials and Methods}
 
-In this section, we present our study methodology.
 This study involves three image scanning experiments.
-First experiment involves scanning
-the images. For that purpose, we use three different scanners. Second experiment involves updating
-all these images and then rescanning them. The last experiment involves shrinking the size of the image
+The first experiment scans the images as is to report the existing vulnerabilities
+inside the images. The scan report of
+these images shows a large number of existing vulnerabilities which may pose
+a potential security risk. These vulnerabilities exist due to the outdated
+packages that are present inside images. So, the next step is to
+take the necessary steps to improve security in the images. Therefore, there exist
+two possible solutions.
+The first one involves updating
+all these images and then rescanning them, which constitutes the next experiment of our study. The second one
+involves shrinking the size of the image
 meaning that removing all unnecessary packages from the image to see the effect on the number of
-vulnerabilities present inside the image.
+vulnerabilities present inside the image, which will be presented as our third experiment.
 
 We first
 introduce two container tools used in our experiments: Docker and
 Singularity and their image formats. Then we describe Boutiques and BIDS application frameworks
-from where we took containerized applications for our study. Later, we discuss 
-various Linux distributions and their releases. Lastly, this section
-provides a description of the three scanning tools used.
+from where we took containerized applications for our study. 
+Later, this section
+presents two scanning techniques followed by a description of image scanners used.
+In this study, we used three different image scanners because they
+use different scanning techniques and/or refer to different vulnerability sources.
+The images used in our study have different Linux distributions/releases, which have
+different vulnerability data. Therefore, in the last, this section presents a
+description of these varying Linux distributions/releases and their
+vulnerability databases.
+
 
 \begin{comment}
 As we are taking a particular use case of containers from
@@ -198,17 +211,17 @@ used by CONP to function.
 
 \subsection{Container Tools}
 
-Tools that are capable of packing and running an application in an isolated environment
-are known as container tools. Alongwith an application, they also pack the application's dependencies,
+Container tools are capable of packing and running an application in an isolated environment that have
+the application's dependencies,
 required libraries and configuration files for the
-application to function properly. The functioning of an application in an isolated environment
-is called a container. Containers directly run on the Host machine's kernel so they are lightweight.
-Consequently, more containers can be run on a given Host machine as compared to virtual machines.
+application to function properly.
 
 \subsubsection{Docker}
 
-Docker is a tool to run containers.
-Docker containers are managed by the Docker engine, which is a client-server application and
+Docker containers are managed by the Docker engine, which is a client-server application, and
+is also known as Docker Daemon.
+
+\begin{comment}
 consists of the following three main components: 
 
 \textit{Docker Daemon:} It acts as a server. It is
@@ -218,7 +231,8 @@ a long-running process that manages all Docker images, containers, storage volum
 to talk to the \textit{Docker Daemon}.
 
 \textit{Client:} It is a Command Line Interface (CLI) client which is used to interact with the \textit{Docker Daemon}.
-
+convert english to punjabi
+\end{comment}
 %Docker runs a software, \textit{Docker daemon}, on the host machine.
 Docker daemon runs as root and is remotely controlled through a
 UNIX socket. It is responsible for launching and managing containers,
@@ -234,11 +248,17 @@ When a Docker container runs, the container process is spawned as a
 child of this root owned daemon. 
 \end{comment}
 As Docker users directly interact with the
-Docker daemon through CLI i.e \textit{docker} command, it is possible to force Docker daemon to escalate privileges.
+Docker daemon through Command Line Interface (CLI) i.e \textit{docker} command, it is possible to force Docker daemon to escalate privileges.
 If a user gets root privileges, it
 introduces unthinkable security risks for multi-tenant shared
 environments. Due to this reason, Docker is not supported by
 HPC environments.
+
+Docker images are organized as a series of layers stacked on top of each
+other and identified by unique layer identifiers. If a layer is reused
+in different images it will
+have the same id across images. Each layer consists of a filesystem diff
+with respect to the layer below.
 
 \subsubsection{Singularity}
 
@@ -246,6 +266,12 @@ Singularity is another tool for packing and running applications in containers.
 In our experiments, we used $2.5.2$ Singularity version. In contrast to Docker,
 Singularity does not run containers as root. Consequently, users cannot escalate
 privileges in Singularity containers making it suitable for HPC environments.
+
+On the other hand, a Singularity image is a single immutable file and
+does not contain layers.
+Once a Singularity image is created, it cannot be changed, consequently,
+it can be used for reproducing the results of scientific
+experiments.
 
 \begin{comment}
 Singularity offers mobility of compute by facilitating portable environments 
@@ -262,7 +288,6 @@ to bind mount into the container. By defaut, Singularity uses as less as possibl
 However namespaces can be requested if required. Users cannot escalate privileges inside
 Singularty containers. This is because Singularity do not run containers as root.
 Instead, a user inside Singularity container is the same user outside the container.
-\end{comment}
 
 \subsection{Container Image Formats}
 
@@ -278,7 +303,6 @@ other and identified by unique layer identifiers. If a layer is reused
 in different images it will
 have the same id across images. Each layer consists of a filesystem diff
 with respect to the layer below. 
-\begin{comment}
 DockerHub uses gzip compression for
 transferring layers.There are two ways to create a Docker image. The
 first is to use an existing Docker image as a base image and then build a
@@ -290,7 +314,6 @@ supported Linux versions, whereas \textit{aufs} is preferred for Docker 18.06 an
 older, when using Ubuntu 14.04 on kernel 3.13 as it do not support \textit{overlay2}.
 Other storage drivers that are supported by Docker include \textit{devicemapper, btrfs,
 zfs, and vfs}
-\end{comment}
 
 \subsubsection{Singularity Image Format}
 
@@ -299,7 +322,6 @@ does not contain layers.
 Once a Singularity image is created, it cannot be changed, consequently,
 it can be used for reproducing the results of scientific
 experiments.
-\begin{comment}
 Singularity takes snapshot, locks, and archives the developed application,
 which is known as Singularity image.
 It means that Singularity image is a single immutable file that can be moved around as
@@ -398,29 +420,6 @@ images unless we identified specific command-lines to run.}
 
 \end{comment}
 
-\subsection{Linux Distributions}
-
-BIDS app and Boutiques images that we took for our experiments have diverse Linux
-distributions such as Ubuntu, Centos, Debian, and Alpine. In the case of Ubuntu, release
-can be of two types: regular or LTS (Long Term Support).
-Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
-reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
-in the form of Extended Security Maintenance (ESM) release.
-ESM is a paid service that can be requested from Ubuntu to get security 
-updates even after the EOL of a particular Ubuntu release. The ESM support period is decided by
-Ubuntu. ESM and LTS releases of a particular Ubuntu distribution have different vulnerability
-data in vulnerability databases because after EOL of a release, a vulnerability is fixed only in packages of ESM, however, it still
-exists in LTS.
-
-Ubuntu has ended support for some releases such as 14.04 LTS,
-17.04, and 17.10, which means they have reached EOL. However, Ubuntu is providing optional extended support for Ubuntu 14.04.
-To use this extended support, users have to buy ESM release for Ubuntu 14.04.
-The images in our experiments have Ubuntu 14.04 LTS so scanners should refer
-to LTS release only while collecting data from vulnerability databases. If scanners refer to ESM release for data it may result
-in false positives and false negatives.
-Also, if ubuntu releases with ended support are used in images, there are no chances of getting updates, hence
-resulting in vulnerable images. Additionally, even if extended security is provided for some releases by Ubuntu, it is
-not feasible to use it inside images because it is a paid service. 
 
 \subsection{Scanning Images}
 
@@ -616,6 +615,30 @@ Singularity image, and scanning it for filesystem before the image is finalized.
 
 In our experiments, we used a Docker image (\href{https://hub.docker.com/r/vanessa/stools-clair}{vanessa/stools-clair:v3.2.1})
 for scanning and followed the steps mentioned in (\href{https://github.com/singularityhub/stools}{Stools Github})
+
+\subsection{Linux Distributions and Vulnerability Databases}
+
+BIDS app and Boutiques images that we took for our experiments have diverse Linux
+distributions such as Ubuntu, Centos, Debian, and Alpine. In the case of Ubuntu, release
+can be of two types: regular or LTS (Long Term Support).
+Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
+reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
+in the form of Extended Security Maintenance (ESM) release.
+ESM is a paid service that can be requested from Ubuntu to get security 
+updates even after the EOL of a particular Ubuntu release. The ESM support period is decided by
+Ubuntu. ESM and LTS releases of a particular Ubuntu distribution have different vulnerability
+data in vulnerability databases because after EOL of a release, a vulnerability is fixed only in packages of ESM, however, it still
+exists in LTS.
+
+Ubuntu has ended support for some releases such as 14.04 LTS,
+17.04, and 17.10, which means they have reached EOL. However, Ubuntu is providing optional extended support for Ubuntu 14.04.
+To use this extended support, users have to buy ESM release for Ubuntu 14.04.
+The images in our experiments have Ubuntu 14.04 LTS so scanners should refer
+to LTS release only while collecting data from vulnerability databases. If scanners refer to ESM release for data it may result
+in false positives and false negatives.
+Also, if ubuntu releases with ended support are used in images, there are no chances of getting updates, hence
+resulting in vulnerable images. Additionally, even if extended security is provided for some releases by Ubuntu, it is
+not feasible to use it inside images because it is a paid service. 
 
 \subsection{Image Update Process}
 
