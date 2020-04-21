@@ -23,6 +23,7 @@
 \usepackage{verbatim}
 \usepackage{adjustbox}
 \usepackage{makecell}
+\usepackage{titlesec}
 \usepackage[flushleft]{threeparttable}
 
 %%%% Commands %%%%
@@ -174,12 +175,12 @@ The first experiment scans the images as is to report the existing vulnerabiliti
 inside the images. The scan report of
 these images shows a large number of existing vulnerabilities which may pose
 a potential security risk. These vulnerabilities exist due to the outdated
-packages that are present inside images. So, the next step is to
+packages that are present inside the images. So, the next step is to
 take the necessary steps to improve security in the images. Therefore, there exist
 two possible solutions.
 The first one involves updating
-all these images and then rescanning them, which constitutes the next experiment of our study. The second one
-involves shrinking the size of the image
+all these images and then rescanning them, which constitutes the second experiment of our study. The next 
+experiment involves shrinking the size of the image
 meaning that removing all unnecessary packages from the image to see the effect on the number of
 vulnerabilities present inside the image, which will be presented as our third experiment.
 
@@ -218,8 +219,8 @@ application to function properly.
 
 \subsubsection{Docker}
 
-Docker uses a client-server architecture, where client containers communicate to
-the server Docker Daemon also known as Docker engine.
+Docker uses a client-server architecture, where client, containers, communicate to
+the server, Docker Daemon, which is also known as Docker engine.
 Docker Daemon is a long-running process that manages all Docker images, containers, storage volumes, and networks.
 
 \begin{comment}
@@ -434,7 +435,7 @@ different image features are extracted like installed packages, their versions, 
 On the other hand, Dynamic scanning involves running a container from the image and then scanning the
 dynamic behavior of the image.
 
-\subsubsection{Scanning tools used}
+%\subsubsection{Scanning tools used}
 
 \begin{comment}
 Out of the various container image scanning tools available to scan Docker images,
@@ -555,7 +556,7 @@ It involves spinning a Clair Scanner container during testing and building a
 Singularity image, and scanning it for filesystem before the image is finalized.
 
 In our experiments, we used a Docker image (\href{https://hub.docker.com/r/vanessa/stools-clair}{vanessa/stools-clair:v3.2.1})
-for scanning and followed the steps mentioned in (\href{https://github.com/singularityhub/stools}{Stools Github})
+for scanning and followed the steps mentioned in \href{https://github.com/singularityhub/stools}{Stools Github}.
 
 \subsection{Linux Distributions and Vulnerability Databases}
 
@@ -653,24 +654,26 @@ package manager present inside the image and then according to that it
 updates the image. However, this option affects the reproducibility
 of the image, which means that the image cannot be used to verify the research
 findings of other scientists.
-
+\linespread{0.5}
 \subsection{Image size Reduction process}
 
 If we want to reduce number of vulnerabilities without effecting the reproducibility of the image,
 image size reduction process is a good choice. In this process we reduce the number of packages
 installed in the image by deleting unnecessary packages. For that to happen, we need to first figure
-out which packages we need for the pipeline to fucntion properly. Here, we use Reprozip
-\href{https://github.com/VIDA-NYU/reprozip}{https://github.com/VIDA-NYU/reprozip}. It is a tool that
-is used to make applications reproducible~\cite{ChirigatiRSF16}. It traces operating system calls used by the
+out which packages we need for the pipeline to fucntion properly. Here, we used 
+Reprozip~\cite{rampin2016reprozip}. It is a tool that
+is used to make applications reproducible. It traces operating system calls used by the
 application while execution and then based on that it recognizes binaries, files, environment variables,
 and library dependencies that will be used by the application for future reexecution. If the OS is
 Debian or RPM based, Reprozip also
 uses available package manager to acquire a list of distribution packages from where these files come from.
-So, we got this list of packages from Reprozip that are needed for the application execution. 
+So, we got a list of packages from Reprozip that are needed for the application execution. 
 After that, we expanded this list by adding important and required packages that are essential
-for the system to function and finally figured out all the dependencies of these packages using debtree
-(\href{http://manpages.ubuntu.com/manpages/xenial/man1/debtree.1.html}{http://manpages.ubuntu.com/manpages/xenial/man1/debtree.1.html}).
-Ultimately, we kept these packages and removed remaining unnecessary packages. We used bash script
+for the system to function and finally figured out all the dependencies of these packages using Debtree
+~\cite{debtree}.
+Ultimately, we kept these packages and removed remaining unnecessary packages. We used a bash script
+(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/script.sh}{Github}) for getting
+a list of unnecessary packages. 
 
 
 \begin{comment}
@@ -769,17 +772,18 @@ Table~\ref{table1} compares the results of scanning images with the three scanne
 Venn Diagram in Figure~\ref{fig:venn} summarizes this table. 
 
 When we add all regions of Venn diagram
-we get total 20050 vulnerabilities in Bids and Boutiques images.
+we get total 20050 vulnerabilities in BIDS apps and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
-reported by Anchore, 673 only reported by Clair, and 325 only detected by Vuls.
+reported by Anchore, 673 reported only by Clair, and 325 detected only by Vuls.
 
 The number and type of vulnerabilities reported by the three scanners are drastically different from each other.
-The question arises why these scanners report different numbers and types of vulnerabilities.
-How their logic differs and what exactly is making these results different than each other.
+It was interesting to investigate the reasons of these differences.
+%these scanners report different numbers and types of vulnerabilities.
+%How their logic differs and what exactly is making these results different than each other.
 
 According to our investigation of these results, below are some of the reasons for
 getting different results from these scanners. These reasons include bugs in scanners,
-some scanners ignoring vulnerabilities in a particular package, referring to different databases,
+some scanners ignoring vulnerabilities in a Linux-Kernel header packages, referring to different databases,
 how frequently they are updating their databases, etc. 
 
 We have explained these differences below in detail
@@ -874,7 +878,7 @@ options, either you accept those vulnerabilities and use that image, or you disc
 So one thing is clear here that even if we keep our images up to date there will be still some
 vulnerabilities that we have to face.
 \end{comment}
-Figure~\ref{fig:graph2} compares the number of vulnerabilities that are detected by Anchore before and after 
+Figure~\ref{fig:graph2} represents the number of vulnerabilities that are detected by Anchore before and after 
 the update of these images.
 After the update, the vulnerabilities mostly have \textit{Low, Negligible or Medium} severity status.
 Also, after the update, the number of vulnerabilities have a mild slope meaning that there
@@ -888,7 +892,11 @@ are a fixed set of packages that contain vulnerabilities and have no fix yet.
 \subsection{Effect Of Size Reduction}
 
 Our last experiment shows deleting unnecessary packages from the image also helps to reduce
-the number of vulnerabilities by significant number.
+the number of vulnerabilities by a significant number. We started this experiment with
+\textit{bids/example} image and deleted 61 unnecessary packages out of total 528 packages, which helped
+to reduce 838 vulnerabilities to 523. Later, we also checked with \textit{bids/freesurfer} image, which allowed
+to delete 71 unnecessary packages out of total 298 packages. Consequently, reducing number of vulnerabilities
+from 353 to 101.
 \bibliography{bibliography}
 
 
