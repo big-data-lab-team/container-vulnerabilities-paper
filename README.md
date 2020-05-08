@@ -12,13 +12,18 @@ to_delete.py
 Also place the necessary list of packages that you got from
 packages in the mounted volume in required.csv
 Python 2.7.3 or greater, or 3.3 or greater is required to run ReproZip
-##Steps to install Reprozip
-###For Debian and Ubuntu
+## Steps to install Reprozip
+### 1.Get required dependencies
+#### For Debian and Ubuntu
 ```
 apt-get install python python-dev python-pip gcc libsqlite3-dev libssl-dev libffi-dev
 
-###For Fedora and CentOS
 ```
+### For Fedora and CentOS
+```
+yum install python python-devel gcc sqlite-devel openssl-devel libffi-devel
+```
+### 2. Install Reprozip
 ```
 pip install -U reprozip
 ```
