@@ -396,32 +396,32 @@ So we have a total 38 Docker images from both BIDS Apps and Boutiques.
 %	\caption{Existing number of Vulnerabilities}
 %\end{figure}
 
-\begin{comment}
-\subsubsection{ReproNim}
-
-ReproNim is a Center for Reproducible Neuroimaging Computation. It is a vision
-to help neuroscientists in reproducing neuroimaging research. Repronim
-uses RepronIn, BrainVerse, Neuroimaging Computation Environments Manager (NICEMAN),
-and NeuroBlast software tools for its
-functioning. ReproIn is a software that automate acquisition and conversion
-of collected MRI data to BIDS standard format with DataLad version management~\cite{kennedy2019everything}.
-BrainVerse is a cross-platform software framework and collaborative desktop application
-that helps in managing, tracking, and sharing information.
-NICEMAN is a software system that tracks and manages available computation resources
-and makes their use in a scalable and reproducible way.
-Neuroblast is a service that facilitates data sharing of existing studies, and it also
-helps users to search similar studies based on combination of analysis,
-tasks and activation patterns. There are currently 28 different Singularity
-images used by Repronim. 
-
-\subsection{Other images}
-
-\TG{We could also use selected images from DockerHub or SingularityHub. For
-instances the ones used by AFNI or other neuroimaging tools not represented
-in Boutiques or BIDS Apps. However we wouldn't be able to shrink these
-images unless we identified specific command-lines to run.}
-
-\end{comment}
+%\begin{comment}
+%\subsubsection{ReproNim}
+%
+%ReproNim is a Center for Reproducible Neuroimaging Computation. It is a vision
+%to help neuroscientists in reproducing neuroimaging research. Repronim
+%uses RepronIn, BrainVerse, Neuroimaging Computation Environments Manager (NICEMAN),
+%and NeuroBlast software tools for its
+%functioning. ReproIn is a software that automate acquisition and conversion
+%of collected MRI data to BIDS standard format with DataLad version management~\cite{kennedy2019everything}.
+%BrainVerse is a cross-platform software framework and collaborative desktop application
+%that helps in managing, tracking, and sharing information.
+%NICEMAN is a software system that tracks and manages available computation resources
+%and makes their use in a scalable and reproducible way.
+%Neuroblast is a service that facilitates data sharing of existing studies, and it also
+%helps users to search similar studies based on combination of analysis,
+%tasks and activation patterns. There are currently 28 different Singularity
+%images used by Repronim. 
+%
+%\subsection{Other images}
+%
+%\TG{We could also use selected images from DockerHub or SingularityHub. For
+%instances the ones used by AFNI or other neuroimaging tools not represented
+%in Boutiques or BIDS Apps. However we wouldn't be able to shrink these
+%images unless we identified specific command-lines to run.}
+%
+%\end{comment}
 
 
 \subsection{Scanning Images}
@@ -437,15 +437,15 @@ dynamic behavior of the image.
 
 %\subsubsection{Scanning tools used}
 
-\begin{comment}
-Out of the various container image scanning tools available to scan Docker images,
-we selected Anchore~\cite{github_2019}
-and Vuls~\cite{future-architect_2019} because these are the most mature scanning tools. To scan Singularity images
-we use Stools, which is specially designed for Singularity images. This tool internally uses
-Clair Scanner tool so we included ClairScanner also in our experiements to compare
-performance of both the tools. So total there are three scanners for Docker images
-and one scanner for Singularity images.
-\end{comment}
+%\begin{comment}
+%Out of the various container image scanning tools available to scan Docker images,
+%we selected Anchore~\cite{github_2019}
+%and Vuls~\cite{future-architect_2019} because these are the most mature scanning tools. To scan Singularity images
+%we use Stools, which is specially designed for Singularity images. This tool internally uses
+%Clair Scanner tool so we included ClairScanner also in our experiements to compare
+%performance of both the tools. So total there are three scanners for Docker images
+%and one scanner for Singularity images.
+%\end{comment}
 
 We used three scanners namely Anchore~\cite{github_2019}, Vuls~\cite{future-architect_2019}, and
 Clair Scanner~\cite{arminc_2019} for scanning Docker images because these are the most
@@ -654,9 +654,7 @@ package manager present inside the image and then according to that it
 updates the image. However, this option affects the reproducibility
 of the image, which means that the image cannot be used to verify the research
 findings of other scientists.
-\linespread{0.5}
 \subsection{Image size Reduction process}
-
 If we want to reduce number of vulnerabilities without effecting the reproducibility of the image,
 image size reduction process is a good choice. In this process we reduce the number of packages
 installed in the image by deleting unnecessary packages. For that to happen, we need to first figure
@@ -720,7 +718,6 @@ also get increased.
 The figure also infers that Alpine distribution, being the
 lightweight distribution, have the least number of vulnerabilities, whereas Ubuntu contains highest number of
 vulnerabilities. Debian and Centos contain a higher number of critical vulnerabilities than Ubuntu and Alpine.
-
 \begin{table*}
 \csvreader[%
  respect all,%
@@ -735,32 +732,29 @@ vulnerabilities. Debian and Centos contain a higher number of critical vulnerabi
        \centering
 	\caption{\label{table1}Existing number of Vulnerabilities}
 \end{table*}
-
-\begin{comment}
-\begin{table}
-\csvreader[%
- respect all,%
-  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
-      \begin{adjustbox}{max width=\columnwidth},
-  after reading=\end{adjustbox},
- tabular={c|c},
-	table head ={Image Tag} & {Image Name}\\\hline,
- late after line= \\,
-        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
-]{names.csv}{}{\csvlinetotablerow}%
-       \centering
-	\caption{\label{table2}Image names}
-\end{table}
-\end{comment}
-
-
+%\begin{comment}
+%\begin{table}
+%\csvreader[%
+% respect all,%
+%  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+%      \begin{adjustbox}{max width=\columnwidth},
+%  after reading=\end{adjustbox},
+% tabular={c|c},
+%	table head ={Image Tag} & {Image Name}\\\hline,
+% late after line= \\,
+%        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+%]{names.csv}{}{\csvlinetotablerow}%
+%       \centering
+%	\caption{\label{table2}Image names}
+%\end{table}
+%\end{comment}
 \begin{figure}[H]
         {\includegraphics[scale=2.5,width=\columnwidth]
         {Figures/vennDiagram.pdf}}
         \caption{\label{fig:venn} Venn Diagram representing different scanner results}
 \end{figure}
 
-\begin{figure*}[!htb]
+\begin{figure*}
 	{\includegraphics[scale=1.5,width=\textwidth]
 	{Figures/vulngraph.pdf}}
         \caption{\label{fig:graph1} Scatterplot representing \#Packages and \#Vulnerabilities}
@@ -883,9 +877,9 @@ the update of these images.
 After the update, the vulnerabilities mostly have \textit{Low, Negligible or Medium} severity status.
 Also, after the update, the number of vulnerabilities have a mild slope meaning that there
 are a fixed set of packages that contain vulnerabilities and have no fix yet.
-\begin{figure*}[!htb]
+\begin{figure*}
         {\includegraphics[width=\textwidth]
-        {Figures/afterupdatewithpackage.pdf}}
+        {Figures/vulnwithupdate.pdf}}
         \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and 
 	after update of the images}
       \end{figure*}
@@ -897,6 +891,35 @@ the number of vulnerabilities by a significant number. We started this experimen
 to reduce 838 vulnerabilities to 523. Later, we also checked with \textit{bids/freesurfer} image, which allowed
 to delete 71 unnecessary packages out of total 298 packages. Consequently, reducing number of vulnerabilities
 from 353 to 101.
+
+\begin{figure*}
+        {\includegraphics[scale=1.5,width=\textwidth]
+        {Figures/bargraph.png}}
+        \caption{\label{fig:bargraph} Bar graph representing \#Vulnerabilities by different experiments}
+      \end{figure*}
+
+
+\subsection{Discussion}
+
+None of the Boutiques and BIDS images at the time of the study are free of vulnerabilities, out of which
+some are critical vulnerabilities. Yet there is not a single image scanner on which we can reply upon for
+scanning. Additionally, we cannot update all images because some OS already reached end-of-life and are
+no longer getting updates. Futhermore, minimization of images is time consuming process. As we have to run
+the pipeline to get Reprozip trace that can take upto several hours. Also user should have proper knowledge
+of running the pipeline because it is image specific. In addition to that, Reprozip can be only installed
+in the images having Python version 2.7.3 or greater, or 3.3 or greater. Also there is no guarantee that
+the commands that you ran to get Reprozip trace covered the whole program, may be it run a particular
+branch of the program. So there should be some kind of coverage measurement.
+
+\subsection{Conclusion}
+
+In this paper, we performed various experiments to study the security state of the Docker
+and Singularity images, which are used in the neuroimaging field. We found out strong correlation
+between the number of packages and the number of vulnerabilities in the images, which implies
+that the number of vulnerabilities increases with the number of packages. We also found out that
+updating images reduces the number of vulnerabilities by a significant number, however they cannot
+be made invulnerable.
+
 \bibliography{bibliography}
 
 

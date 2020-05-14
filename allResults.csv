@@ -1,0 +1,6 @@
+Images,vuln originally,vuln after update,vuln after minification,Vuln after update and minification
+bids/example,838,181,523,181
+bids/freesurfer,353,224,101,76
+bids/ndmg,934,333,930,329
+bids/mindboggle:0.0.4-1,671,201,187,52
+poldracklab/fmriprep:1.2.3,591,352,574,338

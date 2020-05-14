@@ -4,12 +4,13 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-
+import numpy as np
 # Load the data
-d = pd.read_csv(r"../train2.csv")
+d = pd.read_csv(r"../train3.csv")
 d.head()
 df=pd.DataFrame(d)
 plt.figure(figsize=(200,20))
+plt.rcParams["axes.labelweight"] = "bold"
 colors = {'ubuntu:14.04' : '#2E37FE', 'ubuntu:16.04' : '#CAE1FF', 'ubuntu:17.04':'#5190ED','ubuntu:17.10':'#000085','ubuntu:18.04' : '#98F5FF','centos 6':'#800080','centos 7':'#b19cd9',
         'alpine:3.7.1':'#3CB371','alpine:3.8.4':'#00ff00','alpine:3.9.0':'#006400','debian:8':'#ffa500'}
 markers = {"ubuntu:14.04": "o", "ubuntu:16.04": "o",'ubuntu:17.04':'o','ubuntu:17.10':'o','ubuntu:18.04' : 'o','centos 6':'o','centos 7':'o',
@@ -25,6 +26,9 @@ leg = p1._legend
 leg.set_bbox_to_anchor([1.01, 0.04])
 leg._loc = 4
 leg.texts[12].set_text("CRITICAL \nVulnerabilities")
+z = np.polyfit(df['Packages'], df['Vulnerabilities'], 1)
+p = np.poly1d(z)
+plt.plot(df['Packages'],p(df['Packages']),"r--")
 #leg._labelspacing=10
 for idx,row in df.iterrows():
     x = row[3]

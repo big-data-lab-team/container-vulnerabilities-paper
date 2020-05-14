@@ -23,5 +23,5 @@ do
         #docker run -it --entrypoint /bin/bash ${image} ./update.sh &>${image}.log && echo "[ OK ]"
 	echo -n "Commiting updated image... "
 	ID=$(docker ps -a | head -2 | awk '$1!="CONTAINER" {print $1}')
-	docker commit ${ID} updated_${name2} && echo "[ OK ]"
+	docker commit ${ID} kaurbhupinder/updated_${name2} && echo "[ OK ]"
 done
