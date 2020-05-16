@@ -106,7 +106,7 @@ Except web applications, containers are also popularly used for scientific compu
 and data science in neuroscience. In fact, Singularity was developed for scientific applications
 by keeping focus on HPC environments. This popularity of containers lead us to the
 primary research question of this work: \textit{what is the current security state of
-container images that are deployed on HPC clusters}.
+container images that are deployed on HPC clusters?}.
 
 To answer that question, we scan images that are used on Compute
 Canada clusters by neuroscience field. Scanning refers to the practice of
@@ -118,16 +118,11 @@ involves extracting information of an image without running it into a container,
 whereas the latter approach involves launching the container from the target image, and
 then scanning the running container.
 Here, we focus mainly on vulnerability scanning.
-\begin{comment}
-Malware is a computer software that is specially designed to attack the target computer,
-whereas 
-\end{comment}
 Vulnerability is a weakness in the developer's software that can be used
 by the attacker to perform unathorized actions on the target computer.
 In this paper, we report all vulnerabilities that are present in
-container images, specifically used by neuroimaging field, and access their
-related risks for data analysis. Particularly, we aim to answer three primary
-research questions:
+container images, specifically used by neuroimaging field. Particularly,
+we aim to answer four primary research questions:
 
 \textit{RQ1:} Are vulnerabilities present inside container images that are
 deployed on HPC clusters?
@@ -137,6 +132,9 @@ images?
 
 \textit{RQ3:} Can we get rid of these vulnerabilities by shrinking the
 size of the image?
+
+\textit{RQ4:} Can we get rid of these vulnerabilities by both updating
+and shrinking image size?
 
 To answer those questions, we take an example of neuroscience field where
 containers are used on Compute Canada HPC cluster.
@@ -823,6 +821,12 @@ Clair Scanner is referring to Ubuntu 14.04 ESM release vulnerability database.
 
 \textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release:} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
 are not detected by Clair Scanner but they affect Ubuntu 14.04 LTS hence detected by Vuls. For example, CVE-2017-1375.
+\begin{figure*}[b]
+        {\includegraphics[width=\textwidth]
+        {Figures/vulnwithupdate.pdf}}
+        \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and
+        after update of the images}
+      \end{figure*}
 
 \textbf{False negatives by Clair:} Clair is missing vulnerabilities that it should detect. For example, CVE-2016-9082 
 is present in package Cairo in Xenial release and it is not detected by Clair.
@@ -835,6 +839,7 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
                 So some of the vulnerabilities were not updated yet. For example, CVE-2019-5094, which
 		was published on 2019-09-24, was not 
 		updated in Clair Scanner's database that time. Due to which it is missed by Clair Scanner.
+
 
 \textbf{Epoch bug:} There is a bug in the Anchore scanner due to which some vulnerabilities are 
 		not detected by Anchore. This bug gets triggered when a package’s version have epoch 
@@ -854,6 +859,11 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
 \textbf{Rejected CVEs:} There are some CVE that are rejected because they are duplicate copies of other CVEs. 
 	So Anchore is not reporting those rejected CVEs but Vuls is reporting those. For example CVE-2017-13753.
 
+\begin{figure*}[b]
+        {\includegraphics[scale=1.5,width=\textwidth]
+        {Figures/bargraph.png}}
+        \caption{\label{fig:bargraph} Bar graph representing \#Vulnerabilities by different experiments}
+      \end{figure*}
 \subsection{Effect Of Update}
 \begin{comment}
 The next experiment involves updating all these images and then rescanning them to see how the number of
@@ -877,26 +887,30 @@ the update of these images.
 After the update, the vulnerabilities mostly have \textit{Low, Negligible or Medium} severity status.
 Also, after the update, the number of vulnerabilities have a mild slope meaning that there
 are a fixed set of packages that contain vulnerabilities and have no fix yet.
-\begin{figure*}
-        {\includegraphics[width=\textwidth]
-        {Figures/vulnwithupdate.pdf}}
-        \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and 
-	after update of the images}
-      \end{figure*}
+%\begin{figure*}[h]
+%        {\includegraphics[width=\textwidth]
+%        {Figures/vulnwithupdate.pdf}}
+%        \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and 
+%	after update of the images}
+%      \end{figure*}
+
 \subsection{Effect Of Size Reduction}
 
-Our last experiment shows deleting unnecessary packages from the image also helps to reduce
+Our third experiment shows deleting unnecessary packages from the image also helps to reduce
 the number of vulnerabilities by a significant number. We started this experiment with
 \textit{bids/example} image and deleted 61 unnecessary packages out of total 528 packages, which helped
 to reduce 838 vulnerabilities to 523. Later, we also checked with \textit{bids/freesurfer} image, which allowed
 to delete 71 unnecessary packages out of total 298 packages. Consequently, reducing number of vulnerabilities
 from 353 to 101.
 
-\begin{figure*}
-        {\includegraphics[scale=1.5,width=\textwidth]
-        {Figures/bargraph.png}}
-        \caption{\label{fig:bargraph} Bar graph representing \#Vulnerabilities by different experiments}
-      \end{figure*}
+\subsection{Effect Of Update and Size Reduction}
+
+Our last experiment includes updating the image and then removing unnecessary packages from it.
+Our initial thought was that it will reduce the number of vulnerabilities significantly. Howver
+we analyzed that this is not always true. It depends on which packages you are deleting and how
+many vulnerabilities they contain. In particular, if a package contains a large number of vulnerabilities
+it means deleting that package will help to reduce vulnerabilities in that image by a significant number.
+Contrary 
 
 
 \subsection{Discussion}
@@ -917,8 +931,11 @@ In this paper, we performed various experiments to study the security state of t
 and Singularity images, which are used in the neuroimaging field. We found out strong correlation
 between the number of packages and the number of vulnerabilities in the images, which implies
 that the number of vulnerabilities increases with the number of packages. We also found out that
-updating images reduces the number of vulnerabilities by a significant number, however they cannot
-be made invulnerable.
+updating images reduces the number of vulnerabilities by a significant number. However, for some
+vulnerabilities there are no fixes available yet so the images cannot 
+be made totally invulnerable. Continuing with our next experiment of minification, we thought that
+it will decrease vulnerabilities by a significant number. However, we found out that this is not
+the case always.
 
 \bibliography{bibliography}
 
