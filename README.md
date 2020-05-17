@@ -1,6 +1,29 @@
 # Vulnerability-Analysis of container images
+
+Here we conducted four experiments to analyze vulnerability inside
+BIDS and Boutiques images that are used in neuroimaging field.
+
+## Experiment 1: Scanning Original images as is:
+Here simply we added all these images to scanners like Anchore,
+Vuls and Clair Scanner and got the results.
+
+## Experiment 2: Updating images and then rescanning
+Here we used a bash script to update all images. This script is
+available in scripts/update folder. 
+#### Usage 
+1. Get both scripts in scripts/update folder
+2. Run bash script update-images.sh in bash followed by a list
+of image names that you want to update. This script will
+call another bash script (update.sh) inside itself.
+```
+./update-images.sh bids/example:latest bids/freesurfer:latest
+```
+## Experiment 3: Minimizing images and then rescanning
+In this third experiment to minimize images also we used a bash script.
+This script is available in scripts/minimification folder
+
 In experiment of minimizing images we are using a bunch of scripts.
-So first of all we are taking original image and then installing
+So first of all we are taking origin{list of images that you want to update}al image and then installing
 Reprozip tool inside that image. After that we are using a bash script
 to run that image (which has Reprozip installed in it) and get
 Reprozip trace inside the image. So after that we get a list of
