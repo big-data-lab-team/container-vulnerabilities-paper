@@ -118,7 +118,7 @@ involves extracting information of an image without running it into a container,
 whereas the latter approach involves launching the container from the target image, and
 then scanning the running container.
 Here, we focus mainly on vulnerability scanning.
-Vulnerability is a weakness in the developer's software that can be used
+Vulnerability is a weakness in the developer's software that can be exploited
 by the attacker to perform unathorized actions on the target computer.
 In this paper, we report all vulnerabilities that are present in
 container images, specifically used by neuroimaging field. Particularly,
@@ -138,6 +138,7 @@ and shrinking image size?
 
 To answer those questions, we take an example of neuroscience field where
 containers are used on Compute Canada HPC cluster.
+
 The existing research work on containers focuses mainly on the security of Docker
 containers.
 This focus is justified by the fact that, containers expose the host's resources
@@ -152,23 +153,18 @@ neuroimaging as an example.
 
 
 This paper is organized as follows: in next section, we provide description
-of materials and methods which includes summarizing a particular use case of
-containers in neuroscience, which is used for scientific computing. It involves
-usage of containers on shared HPC cluster. Additionally, in this section we
-describe all the resources that are used by this use case. We also explain
+of materials and methods which summarizes our four main experiments. We also explain
 scanning tools that we use for scanning container images to report
 vulnerabilities. Next section of this paper is about the results. Here, we
-present number and type of vulnerabilites that are present in the container images
-which are used for data analysis on shared HPC clusters, and discuss how many of them are
-critical vulnerabilities. Following section is about discussion of these results
-where we provide more insight into the risks that are caused by these vulnerabilties
-and how they can be leveraged to design attacks. Here, we also provide some such
-vulnerability examples. Finally, we conclude this paper by discussing ten simple
-rules that can be followed to secure container image for use in clusters.
+present number of vulnerabilites that are present in the container images
+which are used for data analysis on shared HPC clusters. Following section is about 
+discussion of these results where we provide more insight into the problems that 
+we faced while conducting these experiments. Finally, we conclude this paper by discussing ten simple
+rules that can be followed to secure container images for use in clusters.
 
 \section{Materials and Methods}
 
-This study involves three image scanning experiments.
+This study involves four image scanning experiments.
 The first experiment scans the images as is to report the existing vulnerabilities
 inside the images. The scan report of
 these images shows a large number of existing vulnerabilities which may pose
@@ -181,8 +177,10 @@ all these images and then rescanning them, which constitutes the second experime
 experiment involves shrinking the size of the image
 meaning that removing all unnecessary packages from the image to see the effect on the number of
 vulnerabilities present inside the image, which will be presented as our third experiment.
+Lastly, our fourth experiment involves both updating and shrinking the image size and then
+rescanning for the vulnerabilities.
 
-We first
+Here, we first
 introduce two container tools used in our experiments: Docker and
 Singularity and their image formats. Then we describe Boutiques and BIDS application frameworks
 from where we took containerized applications for our study. 
@@ -196,17 +194,15 @@ description of these varying Linux distributions/releases and their
 vulnerability databases.
 
 
-\begin{comment}
-As we are taking a particular use case of containers from
-neuroscience field i.e Canadian Open Neuroscoence Platform (CONP) so  
-in this section we summarize the data and tools 
-that are used in CONP. CONP is a national platform for sharing neuroscience
-research data and aims at creating an interactive interface for neuroscientists and
-clinical neuroscience. The main goal of the CONP platform is to store, process, and
-distribute massive amounts of data produced by modern neuroscience.
-Here, we summarize all the resources that are
-used by CONP to function.
-\end{comment}
+%As we are taking a particular use case of containers from
+%neuroscience field i.e Canadian Open Neuroscoence Platform (CONP) so  
+%in this section we summarize the data and tools 
+%that are used in CONP. CONP is a national platform for sharing neuroscience
+%research data and aims at creating an interactive interface for neuroscientists and
+%clinical neuroscience. The main goal of the CONP platform is to store, process, and
+%distribute massive amounts of data produced by modern neuroscience.
+%Here, we summarize all the resources that are
+%used by CONP to function.
 
 \subsection{Container Tools}
 
@@ -221,18 +217,15 @@ Docker uses a client-server architecture, where client, containers, communicate 
 the server, Docker Daemon, which is also known as Docker engine.
 Docker Daemon is a long-running process that manages all Docker images, containers, storage volumes, and networks.
 
-\begin{comment}
-consists of the following three main components: 
-
-\textit{Docker Daemon:} It acts as a server. It is
-a long-running process that manages all Docker images, containers, storage volumes, and networks.
-
-\textit{REST API:} It acts as an interface between the server and the client, and is an API which is used by the applications
-to talk to the \textit{Docker Daemon}.
-
-\textit{Client:} It is a Command Line Interface (CLI) client which is used to interact with the \textit{Docker Daemon}.
-convert english to punjabi
-\end{comment}
+%consists of the following three main components: 
+%
+%\textit{Docker Daemon:} It acts as a server. It is
+%a long-running process that manages all Docker images, containers, storage volumes, and networks.
+%
+%\textit{REST API:} It acts as an interface between the server and the client, and is an API which is used by the applications
+%to talk to the \textit{Docker Daemon}.
+%
+%\textit{Client:} It is a Command Line Interface (CLI) client which is used to interact with the \textit{Docker Daemon}.
 %Docker runs a software, \textit{Docker daemon}, on the host machine.
 It runs as root and is remotely controlled through a
 UNIX socket. It is responsible for launching and managing containers,
@@ -274,68 +267,68 @@ Once a Singularity image is created, it cannot be changed, consequently,
 it can be used for reproducing the results of scientific
 experiments.
 
-\begin{comment}
-Singularity offers mobility of compute by facilitating portable environments 
-through a single image file~\cite{kurtzer2017singularity}. Once Singularity image
-is created, it is hashed using SHA-256. Hence, it cannot be changed
-once it is created, consequently, it can be used for reproducing the results of
-scientific experiments. Main features provided by
-Singularity are mobility of compute and reproducibility~\cite{kurtzer2017singularity}.
-We used Singularity version $2.5.2$ in our experiments.
-Users can easily access files, devices, sockets, ports of the host system from
-the Singularity container. By default, Singularity bind mounts /home/\$USER, /tmp, and \$PWD
-into the running container. Additional directories can be specified with \textit{--bind}
-to bind mount into the container. By defaut, Singularity uses as less as possible namespaces.
-However namespaces can be requested if required. Users cannot escalate privileges inside
-Singularty containers. This is because Singularity do not run containers as root.
-Instead, a user inside Singularity container is the same user outside the container.
-
-\subsection{Container Image Formats}
-
-A container image is a package that contains an application along with its
-required dependencies and libraries.
-Both, Docker and Singularity, have different image formats. Below we provide a description of both image
-formats.
-
-\subsubsection{Docker Image Format}
-
-Docker images are organized as a series of layers stacked on top of each
-other and identified by unique layer identifiers. If a layer is reused
-in different images it will
-have the same id across images. Each layer consists of a filesystem diff
-with respect to the layer below. 
-DockerHub uses gzip compression for
-transferring layers.There are two ways to create a Docker image. The
-first is to use an existing Docker image as a base image and then build a
-new image from that one, by making changes in the filesystem, which is
-saved as a new layer of the Docker image. The second way is to build a new
-Docker image from scratch.Docker supports several different storage drivers.
-\textit{Overlay2} is the preferred storage driver used by Docker for all currently
-supported Linux versions, whereas \textit{aufs} is preferred for Docker 18.06 and
-older, when using Ubuntu 14.04 on kernel 3.13 as it do not support \textit{overlay2}.
-Other storage drivers that are supported by Docker include \textit{devicemapper, btrfs,
-zfs, and vfs}
-
-\subsubsection{Singularity Image Format}
-
-On the other hand, a Singularity image is a single immutable file and 
-does not contain layers.
-Once a Singularity image is created, it cannot be changed, consequently,
-it can be used for reproducing the results of scientific
-experiments.
-Singularity takes snapshot, locks, and archives the developed application,
-which is known as Singularity image.
-It means that Singularity image is a single immutable file that can be moved around as
-any other file. This file can be checksummed, signed, and easily
-used for verification purposes. Singularity containers use Squashfs file format
-by default. It is read-only file system in Linux, which uses compression for files,
-inodes, and directories. However, Singularity also supports two other 
-formats i.e \textit{sandbox} format
-(which is just a chroot
-directory) and \textit{writable} format (the ext3 file system).
-While publishing experimental results, authors can also publish Singularity
-image along with its hash, which allow other researchers to verify results.
-\end{comment}
+%\begin{comment}
+%Singularity offers mobility of compute by facilitating portable environments 
+%through a single image file~\cite{kurtzer2017singularity}. Once Singularity image
+%is created, it is hashed using SHA-256. Hence, it cannot be changed
+%once it is created, consequently, it can be used for reproducing the results of
+%scientific experiments. Main features provided by
+%Singularity are mobility of compute and reproducibility~\cite{kurtzer2017singularity}.
+%We used Singularity version $2.5.2$ in our experiments.
+%Users can easily access files, devices, sockets, ports of the host system from
+%the Singularity container. By default, Singularity bind mounts /home/\$USER, /tmp, and \$PWD
+%into the running container. Additional directories can be specified with \textit{--bind}
+%to bind mount into the container. By defaut, Singularity uses as less as possible namespaces.
+%However namespaces can be requested if required. Users cannot escalate privileges inside
+%Singularty containers. This is because Singularity do not run containers as root.
+%Instead, a user inside Singularity container is the same user outside the container.
+%
+%\subsection{Container Image Formats}
+%
+%A container image is a package that contains an application along with its
+%required dependencies and libraries.
+%Both, Docker and Singularity, have different image formats. Below we provide a description of both image
+%formats.
+%
+%\subsubsection{Docker Image Format}
+%
+%Docker images are organized as a series of layers stacked on top of each
+%other and identified by unique layer identifiers. If a layer is reused
+%in different images it will
+%have the same id across images. Each layer consists of a filesystem diff
+%with respect to the layer below. 
+%DockerHub uses gzip compression for
+%transferring layers.There are two ways to create a Docker image. The
+%first is to use an existing Docker image as a base image and then build a
+%new image from that one, by making changes in the filesystem, which is
+%saved as a new layer of the Docker image. The second way is to build a new
+%Docker image from scratch.Docker supports several different storage drivers.
+%\textit{Overlay2} is the preferred storage driver used by Docker for all currently
+%supported Linux versions, whereas \textit{aufs} is preferred for Docker 18.06 and
+%older, when using Ubuntu 14.04 on kernel 3.13 as it do not support \textit{overlay2}.
+%Other storage drivers that are supported by Docker include \textit{devicemapper, btrfs,
+%zfs, and vfs}
+%
+%\subsubsection{Singularity Image Format}
+%
+%On the other hand, a Singularity image is a single immutable file and 
+%does not contain layers.
+%Once a Singularity image is created, it cannot be changed, consequently,
+%it can be used for reproducing the results of scientific
+%experiments.
+%Singularity takes snapshot, locks, and archives the developed application,
+%which is known as Singularity image.
+%It means that Singularity image is a single immutable file that can be moved around as
+%any other file. This file can be checksummed, signed, and easily
+%used for verification purposes. Singularity containers use Squashfs file format
+%by default. It is read-only file system in Linux, which uses compression for files,
+%inodes, and directories. However, Singularity also supports two other 
+%formats i.e \textit{sandbox} format
+%(which is just a chroot
+%directory) and \textit{writable} format (the ext3 file system).
+%While publishing experimental results, authors can also publish Singularity
+%image along with its hash, which allow other researchers to verify results.
+%\end{comment}
 \subsection{Application frameworks}
 
 We used containerized applications available in the Boutiques and BIDS Apps
@@ -357,12 +350,12 @@ publish, integrate, and execute command-line applications across different
 platforms. In Boutiques, the command-line of the application is described
 through a flexible JSON descriptor pointing to a Docker or a Singularity
 image where the application is installed. A set of core tools help
-construct, validate, publish and execute Boutiques descriptors. Boutiques
+construct, validate, publish, and execute Boutiques descriptors. Boutiques
 applications are published on the Zenodo research repository.
 
-We used the 49 Boutiques applications published on Zenodo at the time of
+We used 49 Boutiques applications published on Zenodo at the time of
 the writing. These applications use 23 different container images. Out of these images,
-3 images are not found and 2 images were already included in BIDS images.
+we could not get 3 images and 2 images were already included in BIDS images.
 Therefore we are left with a total 18 Boutiques images which include 6
 Singularity images and 12 Docker images.
 
@@ -378,6 +371,7 @@ on Docker hub.
 \end{comment}
 So we have a total 38 Docker images from both BIDS Apps and Boutiques.
 	Table~\ref{table1} displays the names of all the images that we took in our experiments.
+Table~\ref{sing} lists 6 Singularity images taken from Boutiques framework.
 %\begin{figure}
 %\csvreader[%
 % respect all,%
@@ -429,7 +423,8 @@ finally, using this information to detect vulnerabilities present inside the ima
 Scanning can be broadly categorized into two types: \rom{1}) Static Scanning and \rom{2})
 Dynamic Scanning.
 In Static scanning, an image is scanned without running it into a container. In respect to that,
-different image features are extracted like installed packages, their versions, files, etc.
+different image features are extracted like installed packages, their versions, files, etc. to list
+the vulnerabilities present inside the image.
 On the other hand, Dynamic scanning involves running a container from the image and then scanning the
 dynamic behavior of the image.
 
@@ -488,16 +483,14 @@ different sources. For example, the Ubuntu launchpad database is used for Ubuntu
         \caption{\label{example} Representation of a CVE in Ubuntu Launchpad}
 \end{figure}
 
-
-
 \subsubsection{Vuls}
 
 Vuls is an open-source vulnerability scanner for Linux and FreeBSD.
 Using a dynamic scanning technique, it offers
-remote and local scans. The remote scan involves setting up only one machine, to
+remote and local scans at the time of writing. The remote scan involves setting up only one machine, to
 which other target servers are connected via SSH. Local scan involves running
 the scan on the target server itself. Further, Vuls offer a fast scan, fast root scan,
-and deep scan.
+and deep scan mode.
 The Fast scan is performed without root privileges, whereas a fast root scan is
 performed with root privileges. The latter also uses checkrestart utility to 
 detect processes that are updated but not yet restarted because if they are not
@@ -506,12 +499,11 @@ processes. Both fast scan and fast root scan are performed offline without Inter
 access, and put almost no load on the scan target server. The Deep scan uses
 root privileges for scanning and is used to get a more detailed scan. It checks
 changelogs, which puts more load on the target server.
-Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
 
+In our experiments, we used Vuls Docker image having version v0.9.0 with fast scan mode.
+Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
 The interesting point is that there is no OVAL data for Ubuntu 17.04 and 17.10 distribution,
 meaning that images with these distributions are impossible to scan with Vuls.
-
-
 
 \subsubsection{Clair Scanner}
 
@@ -535,18 +527,17 @@ vulnerabilities, compares that list against the whitelist, and flags vulnerabili
 that are not present in the whitelist.
 Clair Scanner refers to the Ubuntu CVE tracker for getting Ubuntu vulnerability feed.
 For that purpose, a Docker image is maintained that contains the Ubuntu CVE tracker database.
-Whenever Ubuntu updated its database, this image is also updated with the required information.
+Whenever Ubuntu updates its database, this image is also updated with the required information.
 
 We performed scanning on 2019-09-25 and for our experiments, we used a Docker image that was 
 latest updated i.e with the tag 2019-09-18. So it means that Clair Scanner's database was already
 old by one week.
 
-
 \subsubsection{Stools}
 
 \href{https://github.com/singularityhub/stools}{Stools} combines CoreOS's Clair Scanner with Continuous Integration (CI)
 for scanning Singularity images for vulnerabilities.
-Initially, Clair Scanner was intended to scan Docker Containers. This tool does not fit well
+Initially, Clair Scanner was intended to scan Docker containers only. This tool does not fit well
 to scan Singularity images because of the different image formats.
 However, TravisCI and CircleCI are commonly used for testing code, and these
 services also offer running containers. So Stools combined both the concepts.
@@ -555,6 +546,21 @@ Singularity image, and scanning it for filesystem before the image is finalized.
 
 In our experiments, we used a Docker image (\href{https://hub.docker.com/r/vanessa/stools-clair}{vanessa/stools-clair:v3.2.1})
 for scanning and followed the steps mentioned in \href{https://github.com/singularityhub/stools}{Stools Github}.
+
+\begin{table}
+\csvreader[%
+ respect all,%
+  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+      \begin{adjustbox}{max width=\columnwidth},
+  after reading=\end{adjustbox},
+ tabular={c |c},
+        table head =Singularity Images & {Vulnerabilities by Stools}\\\hline,
+ late after line= \\,
+        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+]{Singularityresults.csv}{}{\csvlinetotablerow}%
+       \centering
+        \caption{\label{sing}Number of Vulnerabilities in Singularity images}
+\end{table}
 
 \subsection{Linux Distributions and Vulnerability Databases}
 
@@ -670,7 +676,6 @@ for the system to function and finally figured out all the dependencies of these
 Ultimately, we kept these packages and removed remaining unnecessary packages. We used a bash script
 (\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/script.sh}{Github}) for getting
 a list of unnecessary packages. 
-
 
 \begin{comment}
 \subsection{CBRAIN}
