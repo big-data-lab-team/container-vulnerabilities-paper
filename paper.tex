@@ -565,7 +565,9 @@ for scanning and followed the steps mentioned in \href{https://github.com/singul
 \subsection{Linux Distributions and Vulnerability Databases}
 
 BIDS app and Boutiques images that we took for our experiments have diverse Linux
-distributions such as Ubuntu, Centos, Debian, and Alpine. In the case of Ubuntu, release
+distributions such as Ubuntu, Centos, Debian, and Alpine. Further, a particular
+distribution can have different releases. As images in our experiments mostly have
+Ubuntu distribution we can take this distribution as an example. In the case of Ubuntu, release
 can be of two types: regular or LTS (Long Term Support).
 Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
 reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
@@ -603,8 +605,8 @@ The status can be any one of the following:
 
 \textbf{not-affected:} The package (inside the given release), while related to the
 		CVE in some way, is not affected by the issue. Notes should
-		provide detailed information if needed. For e.g
-		"not-affected (1.14.6-1.1)" indicates that this specific
+		provide detailed information if needed. For e.g if the given
+		status is "not-affected (1.14.6-1.1)" then it indicates that this specific
 		package version in the given release is not affected.
 
 \textbf{needed:} The package (inside the given release) is vulnerable to the
@@ -615,16 +617,16 @@ The status can be any one of the following:
 
 \textbf{ignored:} The package (inside the given release), while related to the
 		CVE in some way, is being ignored for some reason.  The
-		notes should provide that reason. For e.g "ignored (reached end-of-life)".
-		This means that this given Ubuntu release already reached
+		notes should provide that reason. For e.g if status looks  like
+		"ignored (reached end-of-life)", this means that this given Ubuntu release already reached
 		end-of-life so this CVE is ignored by Ubuntu. However, if there
 		is extended security support for this release then this
 		CVE will be handled in ESM release.
 
 \textbf{pending:} The package (inside the given release) is vulnerable and
                   has been fixed but an update has not been yet uploaded or
-		  published. The "version" indicates the package version 
-		  that contains the fix.
+		  published. The package version that contains the fix is also
+		  alongwith the status.
 
 \textbf{deferred:} The package (inside the given release) is vulnerable, but 
                    its fix has been deferred for some reason. The notes
@@ -641,7 +643,7 @@ The status can be any one of the following:
 		an update has been already uploaded and published. However,
 		this update is published in the Ubuntu ESM release only and not in LTS.
 		The fixed version of such packages is appended by
-		+esmN or ~esmN, indicating that this package version is available
+		+esmN or /~esmN, indicating that this package version is available
 		only via ESM.
 
 Figure~\ref{example} illustrates how the information of a CVE is represented
@@ -674,8 +676,17 @@ After that, we expanded this list by adding important and required packages that
 for the system to function and finally figured out all the dependencies of these packages using Debtree
 ~\cite{debtree}.
 Ultimately, we kept these packages and removed remaining unnecessary packages. We used a bash script
-(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/script.sh}{Github}) for getting
-a list of unnecessary packages. 
+(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/script.sh}{Github}) for
+the image size reduction process which installs Reprozip in the image, collects Reprozip trace, and
+finally deletes unnecessary packages.
+
+\subsection{Update and Size Reduction Together}
+
+Our final experiment involves combination of both update and size reduction process
+to lessen the number of vulnerabilities.
+So in this process we first update all the packages in the image and then deletes
+the unnecessary packages. For this process we used the same two scripts that
+we used for earlier experiments.
 
 \begin{comment}
 \subsection{CBRAIN}
@@ -704,12 +715,15 @@ run pre-defined applications on the cluster through the CBRAIN portal.
 In this section,
 we first discuss the existing vulnerabilities in the images and compare
 results of the three scanners. Then we discuss the effect of the update on the
-existing vulnerabilities and lastly, this section presents the effect of image size reduction on the
-vulnerabilities.
+existing vulnerabilities followed by the results of the image size reduction
+process. Lastly, this section presents the combined effect of update and image size reduction on the
+vulnerabilities. Here, we want to mention that after update and minification process we scanned
+images only with one scanner i.e Anchore. We selected Anchore out of three scanners at random.
 
 \subsection{Existing Vulnerabilities}
 
-Figure~\ref{fig:venn} illustrates the number of vulnerabilities detected by scanners. The
+Table~\ref{sing} shows the number of vulnerabilities present in Singularity images whereas 
+Figure~\ref{fig:venn} illustrates the number of vulnerabilities in Docker images, which are detected by the three scanners. The
 overlapping regions of the Venn diagram show the number of common vulnerabilities detected by either two or
 three scanners. In total 10691 vulnerabilities are detected by three scanners.
 There are also vulnerabilities that are detected only by one scanner.
@@ -721,6 +735,7 @@ also get increased.
 The figure also infers that Alpine distribution, being the
 lightweight distribution, have the least number of vulnerabilities, whereas Ubuntu contains highest number of
 vulnerabilities. Debian and Centos contain a higher number of critical vulnerabilities than Ubuntu and Alpine.
+Figure~\ref{sing}
 \begin{table*}
 \csvreader[%
  respect all,%
@@ -779,9 +794,9 @@ It was interesting to investigate the reasons of these differences.
 %How their logic differs and what exactly is making these results different than each other.
 
 According to our investigation of these results, below are some of the reasons for
-getting different results from these scanners. These reasons include bugs in scanners,
-some scanners ignoring vulnerabilities in a Linux-Kernel header packages, referring to different databases,
-how frequently they are updating their databases, etc. 
+getting different results from these scanners. At the time of writing, these reasons include bugs in scanners,
+some scanners ignoring vulnerabilities in Linux-Kernel header packages, scanners referring to different databases,
+and how frequently they are updating their databases, etc. 
 
 We have explained these differences below in detail
 and have provided an example with each reason to make it clear.
@@ -793,26 +808,26 @@ both Clair and Vuls.
 \end{comment}
 
 \textbf{Linux-Kernel-Headers:} Clair Scanner and Vuls are ignoring all vulnerabilities in the Linux-kernel-headers,
-whereas Anchore reports them.
+whereas Anchore reports them all.
 4443 out of 4453 vulnerabilities that are only reported by Anchore are present in Linux-kernel-headers.
 For example CVE-2019-9506 present in Linux-libc-dev-4.4.0-31.50, which is reported by Anchore, is not
 detected by both Vuls and Clair Scanner.
 Linux-kernel-headers are the headers files that only provide function names, its parameters, and its
 return type.
-The actual source code of these functions is present in the Linux kernel and not inside the image.
+The actual source code of these functions is present in the Linux kernel and is not inside the image.
 So, vulnerability detection in header files
 is irrelevant in this case.
 
-\textbf{CVEs with Status as “Not-affected”:} Vuls is reporting vulnerabilities with status
-as "not-affected". So it means Linux distribution which is inside the image is not affected
+\textbf{CVEs with Status as “Not-affected”:} Vuls is reporting vulnerabilities that have status
+as "not-affected" in the vulnerability database. So it means Linux distribution which is inside the image is not affected
 by the particular CVE. However, it is reported by Vuls. In other words, we can say that
 these are false positives by Vuls.
 For example, we scanned an image having the Trusty release in it and Vuls is reporting CVE-2015-2305
 in the package Cups. However, if we check the vulnerability database, package Cups in Trusty is not
-is not affected by this CVE.
+affected by this CVE.
 
-\textbf{With CVE status as "Ignored (reached end-of-life)":}
-Some vulnerabilities are "ignored" in Ubuntu 14.04 LTS as it reached end-of-life. 
+\textbf{CVEs with status as "Ignored (reached end-of-life)":}
+Some vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life. 
 However, in Ubuntu 14.04 ESM release these vulnerabilities may or may not be present.
 Anchore checks the last status of these vulnerabilities whether the package was vulnerable to the CVE
 prior to the end-of-life. If it was vulnerable only then Anchore will report it, otherwise not.
@@ -850,16 +865,17 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
 		not detected by Anchore. This bug gets triggered when a package’s version have epoch 
 		(1:3.3.9-1ubuntu2.3) in it. For example, CVE-2018-1125 in Procps package is not
 		detected by Anchore due to the presence of epoch in the Procps package version.
+		We reported this bug to the team through the slack channel.
 
-\textbf{With CVE status as "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
+\textbf{CVEs with status "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
 		which it is not able to detect some vulnerabilities. Due to this bug, Anchore does not detect 
 		vulnerabilities that have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
-		But if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
+		However, if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
 		For example CVE-2019-13565 in Ubuntu 14.04.
 
 
 \textbf{False Negatives by Vuls:} Vuls is missing some of the vulnerabilities that it should detect. 
-		For example CVE-2019-5094
+		For example CVE-2019-5094 vulnerability.
 
 \textbf{Rejected CVEs:} There are some CVE that are rejected because they are duplicate copies of other CVEs. 
 	So Anchore is not reporting those rejected CVEs but Vuls is reporting those. For example CVE-2017-13753.
@@ -869,29 +885,42 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
         {Figures/bargraph.png}}
         \caption{\label{fig:bargraph} Bar graph representing \#Vulnerabilities by different experiments}
       \end{figure*}
-\subsection{Effect Of Update}
-\begin{comment}
-The next experiment involves updating all these images and then rescanning them to see how the number of
-vulnerabilities drop inside them. We used a \textit{bash} script to update these images. This script is
-present in our Github repository \href{https://github.com/kaurbhupinder/Vulnerability-Analysis}
-{https://github.com/kaurbhupinder/Risk-to-Clusters-Paper}. This script 
-will find the package manager inside the image and then update the image according to the package manager it finds.
-\end{comment}
 
-When the images are rescanned after the update, results changed drastically. However, there are still
+\subsection{Effect Of Update}
+%\begin{comment}
+%The next experiment involves updating all these images and then rescanning them to see how the number of
+%vulnerabilities drop inside them. We used a \textit{bash} script to update these images. This script is
+%present in our Github repository \href{https://github.com/kaurbhupinder/Vulnerability-Analysis}
+%{https://github.com/kaurbhupinder/Risk-to-Clusters-Paper}. This script 
+%will find the package manager inside the image and then update the image according to the package manager it finds.
+%\end{comment}
+
+As the effect of update,
+scanning results changed drastically. However, there are still
 vulnerabilities reported by these scanners but there are no fixes available for these vulnerabilities
 to date.
-\begin{comment}
-There are only two
-options, either you accept those vulnerabilities and use that image, or you discard that image.
-So one thing is clear here that even if we keep our images up to date there will be still some
-vulnerabilities that we have to face.
-\end{comment}
+%\begin{comment}
+%There are only two
+%options, either you accept those vulnerabilities and use that image, or you discard that image.
+%So one thing is clear here that even if we keep our images up to date there will be still some
+%vulnerabilities that we have to face.
+%\end{comment}
 Figure~\ref{fig:graph2} represents the number of vulnerabilities that are detected by Anchore before and after 
-the update of these images.
-After the update, the vulnerabilities mostly have \textit{Low, Negligible or Medium} severity status.
-Also, after the update, the number of vulnerabilities have a mild slope meaning that there
-are a fixed set of packages that contain vulnerabilities and have no fix yet.
+the update of these images. 
+%In fact, this figure depicts an additional results of update to the original Figure~\ref{fig:graph1}.
+In fact, this image combines original results of Figure~\ref{fig:graph1} with the results of update.
+Clearly, the figure illustrates that after the update, the number of vulnerabilities reduces by a
+significant number. Furthermore, a mild slope of vulnerabilities after the update shows that
+there is a set of packages that contain vulnerabilities and have no fix yet. Also, these
+vulnerabilities mostly have \textit{Low, Negligible, or Medium} severity status meaning that
+critical vulnerability are patched with high priority.
+Besides that, it is also interesting to note that some images in the Figure~\ref{fig:graph2}
+do not have update results. This is because some Linux distributions reached end-of-life and
+are not getting updates anymore.
+
+%After the update, the vulnerabilities mostly have \textit{Low, Negligible or Medium} severity status.
+%Also, after the update, the number of vulnerabilities have a mild slope meaning that there
+%are a fixed set of packages that contain vulnerabilities and have no fix yet.
 %\begin{figure*}[h]
 %        {\includegraphics[width=\textwidth]
 %        {Figures/vulnwithupdate.pdf}}
@@ -899,34 +928,62 @@ are a fixed set of packages that contain vulnerabilities and have no fix yet.
 %	after update of the images}
 %      \end{figure*}
 
+\begin{figure}[H]
+        \fbox{{\includegraphics[scale=2.5,width=\columnwidth]
+        {Figures/graphwithdeletedpackages.pdf}}}
+	\caption{\label{deleted}\#Deleted Packages vs \#Reduced Vulnerabilities}
+\end{figure}
+
 \subsection{Effect Of Size Reduction}
 
-Our third experiment shows deleting unnecessary packages from the image also helps to reduce
-the number of vulnerabilities by a significant number. We started this experiment with
-\textit{bids/example} image and deleted 61 unnecessary packages out of total 528 packages, which helped
-to reduce 838 vulnerabilities to 523. Later, we also checked with \textit{bids/freesurfer} image, which allowed
-to delete 71 unnecessary packages out of total 298 packages. Consequently, reducing number of vulnerabilities
-from 353 to 101.
+Our third experiment involves deleting unnecessary packages from the images.
+We did this experiment only on five images because reduction process takes a
+while. We selected these five images at random. We noticed that
+after the size reduction process, the scanning results deviate a little from our initial belief.
+At first, we thought that we will have notable effect of size reduction on
+vulnerabilities. However, this is not the case always. The bar graph shown in
+the Figure~\ref{fig:bargraph} illustrates that images \textit{bids/ndmg} and
+\textit{poldracklab/fmriprep:1.2.3} have insignificant effect of size reduction.
+According to our analyzes here, this can be due to two reasons: \rom{1}) number
+of unnecessary packages that we deleted and \rom{2}) type of packages that we deleted. In other
+words, if we delete a low number of packages then vulnerabilities do not get decreased as expected.
+In contrast, if the number of deleted packages are high, reduction
+in vulnerabilities also becomes high. For instance, we were able to delete only 21 and 25 packages for 
+\textit{bids/ndmg} and \textit{poldracklab/fmriprep:1.2.3} images. Consequently, vulnerabilities
+reduced only by 4 and 17 respectively. Furthermore, this can be illustrated by Figure~\ref{deleted}.
+Also, if we delete packages that contain a lot of vulnerabilites, it helps in reducing
+vulnerabilities by a significant number. For instance, in case of our experiments
+deleting compilers and Linux-kernel-header packages helped to minimize vulnerabilities
+by a significant number in \textit{bids/example, bids/freesurfer, and bids/mindboggle:0.0.4-1}. 
+%Our third experiment shows that deleting unnecessary packages from the image also helps to reduce
+%the number of vulnerabilities by a significant number. We started this experiment with
+%\textit{bids/example} image and deleted 61 unnecessary packages out of total 528 packages, which helped
+%to reduce 838 vulnerabilities to 523. Later, we also checked with \textit{bids/freesurfer} image, which allowed
+%to delete 71 unnecessary packages out of total 298 packages. Consequently, reducing number of vulnerabilities
+%from 353 to 101.
 
 \subsection{Effect Of Update and Size Reduction}
 
 Our last experiment includes updating the image and then removing unnecessary packages from it.
-Our initial thought was that it will reduce the number of vulnerabilities significantly. Howver
-we analyzed that this is not always true. It depends on which packages you are deleting and how
-many vulnerabilities they contain. In particular, if a package contains a large number of vulnerabilities
-it means deleting that package will help to reduce vulnerabilities in that image by a significant number.
-Contrary 
-
+Figure~\ref{fig:bargraph} displays the results. 
+Our initial thought was that with the update and size reduction process together, we will be able to
+reduce vulnerabilities even more. However
+we analyzed that this is not always true. Again, it depends on which packages you are deleting and how
+many vulnerabilities they contained. To illustrate, \textit{bids/example} image in the Figure~\ref{fig:bargraph}
+shows no effect of size reduction alongwith update. It has 181 vulnerabilities for both experiments 2 and 4.
+Meaning that packages, which we deleted after updating the image, were already vulnerability free. Therefore,
+scanning results did not change.
 
 \subsection{Discussion}
 
-None of the Boutiques and BIDS images at the time of the study are free of vulnerabilities, out of which
-some are critical vulnerabilities. Yet there is not a single image scanner on which we can reply upon for
-scanning. Additionally, we cannot update all images because some OS already reached end-of-life and are
+As we noticed that none of the Boutiques and BIDS images at the time of the study are free of vulnerabilities, out of which
+some have critical vulnerabilities as well. Yet there is not a single image scanner on which we can reply upon for
+scanning. Additionally, we cannot update all images because some OS releases, which are used inside images, 
+already reached end-of-life and are
 no longer getting updates. Futhermore, minimization of images is time consuming process. As we have to run
-the pipeline to get Reprozip trace that can take upto several hours. Also user should have proper knowledge
+the pipeline to get Reprozip trace that can take upto several hours. Also, user should have proper knowledge
 of running the pipeline because it is image specific. In addition to that, Reprozip can be only installed
-in the images having Python version 2.7.3 or greater, or 3.3 or greater. Also there is no guarantee that
+in the images having Python version 2.7.3 or greater, or 3.3 or greater. Above all, there is no guarantee that
 the commands that you ran to get Reprozip trace covered the whole program, may be it run a particular
 branch of the program. So there should be some kind of coverage measurement.
 
