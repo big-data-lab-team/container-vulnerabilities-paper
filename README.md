@@ -25,7 +25,15 @@ This script takes two parameters. First one is the full path of
 the dataset that is needed to run pipeline and second one full image name
 that you want to run.
 Others scripts in scripts/minification folder should be placed in scripts folder
-in dataset that you mounted in image.
+in dataset that you mounted in image. Nohup can be used to run this script because
+pipeline can take sveral hours to finish. For example:
+
+```
+nohup ./run_script.sh /home/bhupinder_kaur/BMB_1/ bids/freesurfer:latest > nohup.out &
+
+```
+Here, you need to change commands like cmd1, cmd2, and cmd3 to some commands that are specific to your
+image.
 
 <!--
 In experiment of minimizing images we are using a bunch of scripts.
