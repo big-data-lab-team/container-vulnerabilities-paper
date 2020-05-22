@@ -46,14 +46,14 @@
 \maketitle
 
 \begin{keywords}
-Containers; Security; Docker; Singularity; Neuroimaging.
+Containers; Vulnerabilities; Docker; Singularity; Neuroimaging.
 \end{keywords}
 
 
 \section{Introduction}
 
-Containers, which provide operating system (OS) level virtualization, are very
-popular. This is because they are very lightweight, flexible, resource-efficient,
+Containers, which provide an operating system (OS) level virtualization, are
+popular. This is because they are lightweight, flexible, resource-efficient,
 provide fast development cycles, continuous delivery,
 and cost reduction of infrastructure. OS-level virtualization gained a lot of interest when Docker was
 introduced in 2013~\cite{gantikow2016providing}. However, Docker has security concerns due to which it
@@ -97,55 +97,52 @@ host hence resulting in the starvation of the host and other containers.
 leaked and can be used for further attacks.
 
 
-However, two features of the Linux kernel, \textit{control groups} and \textit{namespaces},
-are used by containers to mitigate these threats to a certain extent. Security
-of containers is still most concerning issue. According to a Forrester survey~\cite{bettini2015vulnerability}
+However, two features of the Linux kernel,\textit{control groups} and \textit{namespaces},
+are used by containers to mitigate these threats to a certain extent. The security
+of containers is still the most concerning issue. According to a Forrester survey~\cite{bettini2015vulnerability}
 done in January 2015, security is the
 biggest concern while deploying containers.
-Except web applications, containers are also popularly used for scientific computing
+Besides web applications, containers are also popularly used for scientific computing
 and data science in neuroscience. In fact, Singularity was developed for scientific applications
-by keeping focus on HPC environments. This popularity of containers lead us to the
+by keeping the focus on HPC environments. This popularity of containers leads us to the
 primary research question of this work: \textit{what is the current security state of
-container images that are deployed on HPC clusters}.
+container images that are deployed on HPC clusters?}.
 
 To answer that question, we scan images that are used on Compute
-Canada clusters by neuroscience field. Scanning refers to the practice of
+Canada clusters by the Neuroscience field. Scanning refers to the practice of
 collecting all information about the container image, investigating it
 for vulnerabilities, and finally producing a
 report to summarize scanning results. It is broadly categorized into
-two types: static scanning and dynamic scanning. The former scanning technique
+two types: Static scanning and Dynamic scanning. The former scanning technique
 involves extracting information of an image without running it into a container,
 whereas the latter approach involves launching the container from the target image, and
 then scanning the running container.
 Here, we focus mainly on vulnerability scanning.
-\begin{comment}
-Malware is a computer software that is specially designed to attack the target computer,
-whereas 
-\end{comment}
-Vulnerability is a weakness in the developer's software that can be used
-by the attacker to perform unathorized actions on the target computer.
+Vulnerability is a weakness in the developer's software that can be exploited
+by the attacker to perform unauthorized actions on the target computer.
 In this paper, we report all vulnerabilities that are present in
-container images, specifically used by neuroimaging field, and access their
-related risks for data analysis. Particularly, we aim to answer three primary
-research questions:
+container images, specifically used by neuroimaging field. Particularly,
+we aim to answer four primary research questions:
 
 \textit{RQ1:} Are vulnerabilities present inside container images that are
 deployed on HPC clusters?
 
-\textit{RQ2:} Can we get rid of these vulnerabilities by updating the
-images?
+\textit{RQ2:} Can these vulnerabilities be reduced by updating the images?
 
-\textit{RQ3:} Can we get rid of these vulnerabilities by shrinking the
-size of the image?
+\textit{RQ3:} Can these vulnerabilities be reduced by shrinking the size of the images?
+
+\textit{RQ4:} What is the effect of both updating
+and shrinking image size on vulnerabilities?
 
 To answer those questions, we take an example of neuroscience field where
 containers are used on Compute Canada HPC cluster.
+
 The existing research work on containers focuses mainly on the security of Docker
 containers.
 This focus is justified by the fact that, containers expose the host's resources
 (e.g., file system/ IPC) to the guest system. This feature raises a confidentiality
 threat for the applications running on the same host. Previous studies evaluated
-security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis},
+the security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis},
 and have scanned vulnerabilities on Docker hub images~\cite{Shu2017, gummaraju2015over}.
 Also Singularity came up with Stools, which can be used for scanning Singularity images
 for security and quality checks.
@@ -153,24 +150,19 @@ Here, we focus on the specific context of scientific data analysis on HPC cluste
 neuroimaging as an example.
 
 
-This paper is organized as follows: in next section, we provide description
-of materials and methods which includes summarizing a particular use case of
-containers in neuroscience, which is used for scientific computing. It involves
-usage of containers on shared HPC cluster. Additionally, in this section we
-describe all the resources that are used by this use case. We also explain
+This paper is organized as follows: in the next section, we provide description
+of materials and methods which summarize our four main experiments. We also explain
 scanning tools that we use for scanning container images to report
-vulnerabilities. Next section of this paper is about the results. Here, we
-present number and type of vulnerabilites that are present in the container images
-which are used for data analysis on shared HPC clusters, and discuss how many of them are
-critical vulnerabilities. Following section is about discussion of these results
-where we provide more insight into the risks that are caused by these vulnerabilties
-and how they can be leveraged to design attacks. Here, we also provide some such
-vulnerability examples. Finally, we conclude this paper by discussing ten simple
-rules that can be followed to secure container image for use in clusters.
+vulnerabilities. The next section of this paper is about the results. Here, we
+present a number of vulnerabilities that are present in the container images
+which are used for data analysis on shared HPC clusters. Following section is about 
+the discussion of these results where we provide more insight into the problems that 
+we faced while conducting these experiments. Finally, we conclude this paper by discussing ten simple
+rules that can be followed to secure container images for use in clusters.
 
 \section{Materials and Methods}
 
-This study involves three image scanning experiments.
+This study involves four image scanning experiments.
 The first experiment scans the images as is to report the existing vulnerabilities
 inside the images. The scan report of
 these images shows a large number of existing vulnerabilities which may pose
@@ -183,8 +175,10 @@ all these images and then rescanning them, which constitutes the second experime
 experiment involves shrinking the size of the image
 meaning that removing all unnecessary packages from the image to see the effect on the number of
 vulnerabilities present inside the image, which will be presented as our third experiment.
+Lastly, our fourth experiment involves both updating and shrinking the image size and then
+rescanning for the vulnerabilities.
 
-We first
+Here, we first
 introduce two container tools used in our experiments: Docker and
 Singularity and their image formats. Then we describe Boutiques and BIDS application frameworks
 from where we took containerized applications for our study. 
@@ -198,43 +192,38 @@ description of these varying Linux distributions/releases and their
 vulnerability databases.
 
 
-\begin{comment}
-As we are taking a particular use case of containers from
-neuroscience field i.e Canadian Open Neuroscoence Platform (CONP) so  
-in this section we summarize the data and tools 
-that are used in CONP. CONP is a national platform for sharing neuroscience
-research data and aims at creating an interactive interface for neuroscientists and
-clinical neuroscience. The main goal of the CONP platform is to store, process, and
-distribute massive amounts of data produced by modern neuroscience.
-Here, we summarize all the resources that are
-used by CONP to function.
-\end{comment}
+%As we are taking a particular use case of containers from
+%neuroscience field i.e Canadian Open Neuroscoence Platform (CONP) so  
+%in this section we summarize the data and tools 
+%that are used in CONP. CONP is a national platform for sharing neuroscience
+%research data and aims at creating an interactive interface for neuroscientists and
+%clinical neuroscience. The main goal of the CONP platform is to store, process, and
+%distribute massive amounts of data produced by modern neuroscience.
+%Here, we summarize all the resources that are
+%used by CONP to function.
 
 \subsection{Container Tools}
 
-Container tools are capable of packing and running an application in an isolated environment that have
+Container tools are capable of packing and running an application in an isolated environment that has
 the application's dependencies,
-required libraries and configuration files for the
+required libraries, and configuration files for the
 application to function properly.
 
 \subsubsection{Docker}
 
 Docker uses a client-server architecture, where client, containers, communicate to
-the server, Docker Daemon, which is also known as Docker engine.
+the server, Docker Daemon, which is also known as the Docker engine.
 Docker Daemon is a long-running process that manages all Docker images, containers, storage volumes, and networks.
 
-\begin{comment}
-consists of the following three main components: 
-
-\textit{Docker Daemon:} It acts as a server. It is
-a long-running process that manages all Docker images, containers, storage volumes, and networks.
-
-\textit{REST API:} It acts as an interface between the server and the client, and is an API which is used by the applications
-to talk to the \textit{Docker Daemon}.
-
-\textit{Client:} It is a Command Line Interface (CLI) client which is used to interact with the \textit{Docker Daemon}.
-convert english to punjabi
-\end{comment}
+%consists of the following three main components: 
+%
+%\textit{Docker Daemon:} It acts as a server. It is
+%a long-running process that manages all Docker images, containers, storage volumes, and networks.
+%
+%\textit{REST API:} It acts as an interface between the server and the client, and is an API which is used by the applications
+%to talk to the \textit{Docker Daemon}.
+%
+%\textit{Client:} It is a Command Line Interface (CLI) client which is used to interact with the \textit{Docker Daemon}.
 %Docker runs a software, \textit{Docker daemon}, on the host machine.
 It runs as root and is remotely controlled through a
 UNIX socket. It is responsible for launching and managing containers,
@@ -264,7 +253,7 @@ with respect to the layer below.
 
 \subsubsection{Singularity}
 
-As Docker is not suitable for HPC systems therefore, Singularity came up with a new approach
+As Docker is not suitable for HPC systems, therefore, Singularity came up with a new approach
 of packing and running applications in containers. 
 In contrast to Docker,
 Singularity does not run containers as root. Consequently, users cannot escalate
@@ -276,68 +265,68 @@ Once a Singularity image is created, it cannot be changed, consequently,
 it can be used for reproducing the results of scientific
 experiments.
 
-\begin{comment}
-Singularity offers mobility of compute by facilitating portable environments 
-through a single image file~\cite{kurtzer2017singularity}. Once Singularity image
-is created, it is hashed using SHA-256. Hence, it cannot be changed
-once it is created, consequently, it can be used for reproducing the results of
-scientific experiments. Main features provided by
-Singularity are mobility of compute and reproducibility~\cite{kurtzer2017singularity}.
-We used Singularity version $2.5.2$ in our experiments.
-Users can easily access files, devices, sockets, ports of the host system from
-the Singularity container. By default, Singularity bind mounts /home/\$USER, /tmp, and \$PWD
-into the running container. Additional directories can be specified with \textit{--bind}
-to bind mount into the container. By defaut, Singularity uses as less as possible namespaces.
-However namespaces can be requested if required. Users cannot escalate privileges inside
-Singularty containers. This is because Singularity do not run containers as root.
-Instead, a user inside Singularity container is the same user outside the container.
-
-\subsection{Container Image Formats}
-
-A container image is a package that contains an application along with its
-required dependencies and libraries.
-Both, Docker and Singularity, have different image formats. Below we provide a description of both image
-formats.
-
-\subsubsection{Docker Image Format}
-
-Docker images are organized as a series of layers stacked on top of each
-other and identified by unique layer identifiers. If a layer is reused
-in different images it will
-have the same id across images. Each layer consists of a filesystem diff
-with respect to the layer below. 
-DockerHub uses gzip compression for
-transferring layers.There are two ways to create a Docker image. The
-first is to use an existing Docker image as a base image and then build a
-new image from that one, by making changes in the filesystem, which is
-saved as a new layer of the Docker image. The second way is to build a new
-Docker image from scratch.Docker supports several different storage drivers.
-\textit{Overlay2} is the preferred storage driver used by Docker for all currently
-supported Linux versions, whereas \textit{aufs} is preferred for Docker 18.06 and
-older, when using Ubuntu 14.04 on kernel 3.13 as it do not support \textit{overlay2}.
-Other storage drivers that are supported by Docker include \textit{devicemapper, btrfs,
-zfs, and vfs}
-
-\subsubsection{Singularity Image Format}
-
-On the other hand, a Singularity image is a single immutable file and 
-does not contain layers.
-Once a Singularity image is created, it cannot be changed, consequently,
-it can be used for reproducing the results of scientific
-experiments.
-Singularity takes snapshot, locks, and archives the developed application,
-which is known as Singularity image.
-It means that Singularity image is a single immutable file that can be moved around as
-any other file. This file can be checksummed, signed, and easily
-used for verification purposes. Singularity containers use Squashfs file format
-by default. It is read-only file system in Linux, which uses compression for files,
-inodes, and directories. However, Singularity also supports two other 
-formats i.e \textit{sandbox} format
-(which is just a chroot
-directory) and \textit{writable} format (the ext3 file system).
-While publishing experimental results, authors can also publish Singularity
-image along with its hash, which allow other researchers to verify results.
-\end{comment}
+%\begin{comment}
+%Singularity offers mobility of compute by facilitating portable environments 
+%through a single image file~\cite{kurtzer2017singularity}. Once Singularity image
+%is created, it is hashed using SHA-256. Hence, it cannot be changed
+%once it is created, consequently, it can be used for reproducing the results of
+%scientific experiments. Main features provided by
+%Singularity are mobility of compute and reproducibility~\cite{kurtzer2017singularity}.
+%We used Singularity version $2.5.2$ in our experiments.
+%Users can easily access files, devices, sockets, ports of the host system from
+%the Singularity container. By default, Singularity bind mounts /home/\$USER, /tmp, and \$PWD
+%into the running container. Additional directories can be specified with \textit{--bind}
+%to bind mount into the container. By defaut, Singularity uses as less as possible namespaces.
+%However namespaces can be requested if required. Users cannot escalate privileges inside
+%Singularty containers. This is because Singularity do not run containers as root.
+%Instead, a user inside Singularity container is the same user outside the container.
+%
+%\subsection{Container Image Formats}
+%
+%A container image is a package that contains an application along with its
+%required dependencies and libraries.
+%Both, Docker and Singularity, have different image formats. Below we provide a description of both image
+%formats.
+%
+%\subsubsection{Docker Image Format}
+%
+%Docker images are organized as a series of layers stacked on top of each
+%other and identified by unique layer identifiers. If a layer is reused
+%in different images it will
+%have the same id across images. Each layer consists of a filesystem diff
+%with respect to the layer below. 
+%DockerHub uses gzip compression for
+%transferring layers.There are two ways to create a Docker image. The
+%first is to use an existing Docker image as a base image and then build a
+%new image from that one, by making changes in the filesystem, which is
+%saved as a new layer of the Docker image. The second way is to build a new
+%Docker image from scratch.Docker supports several different storage drivers.
+%\textit{Overlay2} is the preferred storage driver used by Docker for all currently
+%supported Linux versions, whereas \textit{aufs} is preferred for Docker 18.06 and
+%older, when using Ubuntu 14.04 on kernel 3.13 as it do not support \textit{overlay2}.
+%Other storage drivers that are supported by Docker include \textit{devicemapper, btrfs,
+%zfs, and vfs}
+%
+%\subsubsection{Singularity Image Format}
+%
+%On the other hand, a Singularity image is a single immutable file and 
+%does not contain layers.
+%Once a Singularity image is created, it cannot be changed, consequently,
+%it can be used for reproducing the results of scientific
+%experiments.
+%Singularity takes snapshot, locks, and archives the developed application,
+%which is known as Singularity image.
+%It means that Singularity image is a single immutable file that can be moved around as
+%any other file. This file can be checksummed, signed, and easily
+%used for verification purposes. Singularity containers use Squashfs file format
+%by default. It is read-only file system in Linux, which uses compression for files,
+%inodes, and directories. However, Singularity also supports two other 
+%formats i.e \textit{sandbox} format
+%(which is just a chroot
+%directory) and \textit{writable} format (the ext3 file system).
+%While publishing experimental results, authors can also publish Singularity
+%image along with its hash, which allow other researchers to verify results.
+%\end{comment}
 \subsection{Application frameworks}
 
 We used containerized applications available in the Boutiques and BIDS Apps
@@ -359,13 +348,13 @@ publish, integrate, and execute command-line applications across different
 platforms. In Boutiques, the command-line of the application is described
 through a flexible JSON descriptor pointing to a Docker or a Singularity
 image where the application is installed. A set of core tools help
-construct, validate, publish and execute Boutiques descriptors. Boutiques
+construct, validate, publish, and execute Boutiques descriptors. Boutiques
 applications are published on the Zenodo research repository.
 
-We used the 49 Boutiques applications published on Zenodo at the time of
+We used 49 Boutiques applications published on Zenodo at the time of
 the writing. These applications use 23 different container images. Out of these images,
-3 images are not found and 2 images were already included in BIDS images.
-Therefore we are left with a total 18 Boutiques images which include 6
+we could not get 3 images and 2 images were already included in BIDS images.
+Therefore we are left with a total of 18 Boutiques images which include 6
 Singularity images and 12 Docker images.
 
 \begin{comment}
@@ -378,8 +367,9 @@ At the time of this study, there were 27 BIDS apps available and all are using d
 Out of these 27 images, we used 26 images for our experiments because the QAP bids app was not available
 on Docker hub.
 \end{comment}
-So we have a total 38 Docker images from both BIDS Apps and Boutiques.
+So we have a total of 38 Docker images from both BIDS Apps and Boutiques.
 	Table~\ref{table1} displays the names of all the images that we took in our experiments.
+Table~\ref{sing} lists 6 Singularity images taken from the Boutiques framework.
 %\begin{figure}
 %\csvreader[%
 % respect all,%
@@ -396,32 +386,32 @@ So we have a total 38 Docker images from both BIDS Apps and Boutiques.
 %	\caption{Existing number of Vulnerabilities}
 %\end{figure}
 
-\begin{comment}
-\subsubsection{ReproNim}
-
-ReproNim is a Center for Reproducible Neuroimaging Computation. It is a vision
-to help neuroscientists in reproducing neuroimaging research. Repronim
-uses RepronIn, BrainVerse, Neuroimaging Computation Environments Manager (NICEMAN),
-and NeuroBlast software tools for its
-functioning. ReproIn is a software that automate acquisition and conversion
-of collected MRI data to BIDS standard format with DataLad version management~\cite{kennedy2019everything}.
-BrainVerse is a cross-platform software framework and collaborative desktop application
-that helps in managing, tracking, and sharing information.
-NICEMAN is a software system that tracks and manages available computation resources
-and makes their use in a scalable and reproducible way.
-Neuroblast is a service that facilitates data sharing of existing studies, and it also
-helps users to search similar studies based on combination of analysis,
-tasks and activation patterns. There are currently 28 different Singularity
-images used by Repronim. 
-
-\subsection{Other images}
-
-\TG{We could also use selected images from DockerHub or SingularityHub. For
-instances the ones used by AFNI or other neuroimaging tools not represented
-in Boutiques or BIDS Apps. However we wouldn't be able to shrink these
-images unless we identified specific command-lines to run.}
-
-\end{comment}
+%\begin{comment}
+%\subsubsection{ReproNim}
+%
+%ReproNim is a Center for Reproducible Neuroimaging Computation. It is a vision
+%to help neuroscientists in reproducing neuroimaging research. Repronim
+%uses RepronIn, BrainVerse, Neuroimaging Computation Environments Manager (NICEMAN),
+%and NeuroBlast software tools for its
+%functioning. ReproIn is a software that automate acquisition and conversion
+%of collected MRI data to BIDS standard format with DataLad version management~\cite{kennedy2019everything}.
+%BrainVerse is a cross-platform software framework and collaborative desktop application
+%that helps in managing, tracking, and sharing information.
+%NICEMAN is a software system that tracks and manages available computation resources
+%and makes their use in a scalable and reproducible way.
+%Neuroblast is a service that facilitates data sharing of existing studies, and it also
+%helps users to search similar studies based on combination of analysis,
+%tasks and activation patterns. There are currently 28 different Singularity
+%images used by Repronim. 
+%
+%\subsection{Other images}
+%
+%\TG{We could also use selected images from DockerHub or SingularityHub. For
+%instances the ones used by AFNI or other neuroimaging tools not represented
+%in Boutiques or BIDS Apps. However we wouldn't be able to shrink these
+%images unless we identified specific command-lines to run.}
+%
+%\end{comment}
 
 
 \subsection{Scanning Images}
@@ -431,21 +421,22 @@ finally, using this information to detect vulnerabilities present inside the ima
 Scanning can be broadly categorized into two types: \rom{1}) Static Scanning and \rom{2})
 Dynamic Scanning.
 In Static scanning, an image is scanned without running it into a container. In respect to that,
-different image features are extracted like installed packages, their versions, files, etc.
+different image features are extracted like installed packages, their versions, files, etc. to list
+the vulnerabilities present inside the image.
 On the other hand, Dynamic scanning involves running a container from the image and then scanning the
 dynamic behavior of the image.
 
 %\subsubsection{Scanning tools used}
 
-\begin{comment}
-Out of the various container image scanning tools available to scan Docker images,
-we selected Anchore~\cite{github_2019}
-and Vuls~\cite{future-architect_2019} because these are the most mature scanning tools. To scan Singularity images
-we use Stools, which is specially designed for Singularity images. This tool internally uses
-Clair Scanner tool so we included ClairScanner also in our experiements to compare
-performance of both the tools. So total there are three scanners for Docker images
-and one scanner for Singularity images.
-\end{comment}
+%\begin{comment}
+%Out of the various container image scanning tools available to scan Docker images,
+%we selected Anchore~\cite{github_2019}
+%and Vuls~\cite{future-architect_2019} because these are the most mature scanning tools. To scan Singularity images
+%we use Stools, which is specially designed for Singularity images. This tool internally uses
+%Clair Scanner tool so we included ClairScanner also in our experiements to compare
+%performance of both the tools. So total there are three scanners for Docker images
+%and one scanner for Singularity images.
+%\end{comment}
 
 We used three scanners namely Anchore~\cite{github_2019}, Vuls~\cite{future-architect_2019}, and
 Clair Scanner~\cite{arminc_2019} for scanning Docker images because these are the most
@@ -484,22 +475,20 @@ image, with the vulnerability database to flag vulnerabilities.
 To get a vulnerability feed of various OS distribution, Anchore refers to
 different sources. For example, the Ubuntu launchpad database is used for Ubuntu.
 
-\begin{figure}[H]
+\begin{figure}
 	\fbox{{\includegraphics[scale=2.5,width=\columnwidth]
 	{Figures/vulnExample2.png}}}
         \caption{\label{example} Representation of a CVE in Ubuntu Launchpad}
 \end{figure}
 
-
-
 \subsubsection{Vuls}
 
 Vuls is an open-source vulnerability scanner for Linux and FreeBSD.
 Using a dynamic scanning technique, it offers
-remote and local scans. The remote scan involves setting up only one machine, to
+remote and local scans at the time of writing. The remote scan involves setting up only one machine, to
 which other target servers are connected via SSH. Local scan involves running
 the scan on the target server itself. Further, Vuls offer a fast scan, fast root scan,
-and deep scan.
+and deep scan mode.
 The Fast scan is performed without root privileges, whereas a fast root scan is
 performed with root privileges. The latter also uses checkrestart utility to 
 detect processes that are updated but not yet restarted because if they are not
@@ -508,12 +497,11 @@ processes. Both fast scan and fast root scan are performed offline without Inter
 access, and put almost no load on the scan target server. The Deep scan uses
 root privileges for scanning and is used to get a more detailed scan. It checks
 changelogs, which puts more load on the target server.
-Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
 
+In our experiments, we used Vuls Docker image having version v0.9.0 with fast scan mode.
+Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
 The interesting point is that there is no OVAL data for Ubuntu 17.04 and 17.10 distribution,
 meaning that images with these distributions are impossible to scan with Vuls.
-
-
 
 \subsubsection{Clair Scanner}
 
@@ -537,18 +525,17 @@ vulnerabilities, compares that list against the whitelist, and flags vulnerabili
 that are not present in the whitelist.
 Clair Scanner refers to the Ubuntu CVE tracker for getting Ubuntu vulnerability feed.
 For that purpose, a Docker image is maintained that contains the Ubuntu CVE tracker database.
-Whenever Ubuntu updated its database, this image is also updated with the required information.
+Whenever Ubuntu updates its database, this image is also updated with the required information.
 
 We performed scanning on 2019-09-25 and for our experiments, we used a Docker image that was 
 latest updated i.e with the tag 2019-09-18. So it means that Clair Scanner's database was already
 old by one week.
 
-
 \subsubsection{Stools}
 
 \href{https://github.com/singularityhub/stools}{Stools} combines CoreOS's Clair Scanner with Continuous Integration (CI)
 for scanning Singularity images for vulnerabilities.
-Initially, Clair Scanner was intended to scan Docker Containers. This tool does not fit well
+Initially, Clair Scanner was intended to scan Docker containers only. This tool does not fit well
 to scan Singularity images because of the different image formats.
 However, TravisCI and CircleCI are commonly used for testing code, and these
 services also offer running containers. So Stools combined both the concepts.
@@ -558,10 +545,27 @@ Singularity image, and scanning it for filesystem before the image is finalized.
 In our experiments, we used a Docker image (\href{https://hub.docker.com/r/vanessa/stools-clair}{vanessa/stools-clair:v3.2.1})
 for scanning and followed the steps mentioned in \href{https://github.com/singularityhub/stools}{Stools Github}.
 
+\begin{table}
+\csvreader[%
+ respect all,%
+  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+      \begin{adjustbox}{max width=\columnwidth},
+  after reading=\end{adjustbox},
+ tabular={c |c},
+        table head =Singularity Images & {Vulnerabilities by Stools}\\\hline,
+ late after line= \\,
+        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+]{Singularityresults.csv}{}{\csvlinetotablerow}%
+       \centering
+        \caption{\label{sing}Number of Vulnerabilities in Singularity images}
+\end{table}
+
 \subsection{Linux Distributions and Vulnerability Databases}
 
 BIDS app and Boutiques images that we took for our experiments have diverse Linux
-distributions such as Ubuntu, Centos, Debian, and Alpine. In the case of Ubuntu, release
+distributions such as Ubuntu, Centos, Debian, and Alpine. Further, a particular
+distribution can have different releases. As images in our experiments mostly have
+Ubuntu distribution we can take this distribution as an example. In the case of Ubuntu, release
 can be of two types: regular or LTS (Long Term Support).
 Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
 reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
@@ -578,10 +582,10 @@ To use this extended support, users have to buy ESM release for Ubuntu 14.04.
 The images in our experiments have Ubuntu 14.04 LTS so scanners should refer
 to LTS release only while collecting data from vulnerability databases. If scanners refer to ESM release for data it may result
 in false positives and false negatives.
-Also, if ubuntu releases with ended support are used in images, there are no chances of getting updates, hence
+Also, if ubuntu release with ended support is used in images, there are no chances of getting updates, hence
 resulting in vulnerable images. 
 
-Ubuntu maintains its vulnerability database in Ubuntu launchpad or Ubuntu CVE tracker. For a given CVE, there is an entry for all ubuntu releases.
+Ubuntu maintains its vulnerability database in the Ubuntu Launchpad or the Ubuntu CVE Tracker. For a given CVE, there is an entry for all ubuntu releases.
 Ubuntu releases are listed with the package name
 in which vulnerability exists and are entitled a status
 (\href{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}), which is
@@ -599,8 +603,8 @@ The status can be any one of the following:
 
 \textbf{not-affected:} The package (inside the given release), while related to the
 		CVE in some way, is not affected by the issue. Notes should
-		provide detailed information if needed. For e.g
-		"not-affected (1.14.6-1.1)" indicates that this specific
+		provide detailed information if needed. For e.g if the given
+		status is "not-affected (1.14.6-1.1)" then it indicates that this specific
 		package version in the given release is not affected.
 
 \textbf{needed:} The package (inside the given release) is vulnerable to the
@@ -611,16 +615,16 @@ The status can be any one of the following:
 
 \textbf{ignored:} The package (inside the given release), while related to the
 		CVE in some way, is being ignored for some reason.  The
-		notes should provide that reason. For e.g "ignored (reached end-of-life)".
-		This means that this given Ubuntu release already reached
+		notes should provide that reason. For e.g if status looks  like
+		"ignored (reached end-of-life)", this means that this given Ubuntu release already reached
 		end-of-life so this CVE is ignored by Ubuntu. However, if there
 		is extended security support for this release then this
 		CVE will be handled in ESM release.
 
 \textbf{pending:} The package (inside the given release) is vulnerable and
                   has been fixed but an update has not been yet uploaded or
-		  published. The "version" indicates the package version 
-		  that contains the fix.
+		  published. The package version that contains the fix is also
+		  along with the status.
 
 \textbf{deferred:} The package (inside the given release) is vulnerable, but 
                    its fix has been deferred for some reason. The notes
@@ -637,7 +641,7 @@ The status can be any one of the following:
 		an update has been already uploaded and published. However,
 		this update is published in the Ubuntu ESM release only and not in LTS.
 		The fixed version of such packages is appended by
-		+esmN or ~esmN, indicating that this package version is available
+		+esmN or \char`\~esm, indicating that this package version is available
 		only via ESM.
 
 Figure~\ref{example} illustrates how the information of a CVE is represented
@@ -654,27 +658,34 @@ package manager present inside the image and then according to that it
 updates the image. However, this option affects the reproducibility
 of the image, which means that the image cannot be used to verify the research
 findings of other scientists.
-\linespread{0.5}
-\subsection{Image size Reduction process}
 
-If we want to reduce number of vulnerabilities without effecting the reproducibility of the image,
-image size reduction process is a good choice. In this process we reduce the number of packages
+\subsection{Image size Reduction process}
+If we want to reduce the number of vulnerabilities without effecting the reproducibility of the image,
+image size reduction process is a good choice. In this process, we reduce the number of packages
 installed in the image by deleting unnecessary packages. For that to happen, we need to first figure
-out which packages we need for the pipeline to fucntion properly. Here, we used 
+out which packages we need for the pipeline to function properly. Here, we used 
 Reprozip~\cite{rampin2016reprozip}. It is a tool that
 is used to make applications reproducible. It traces operating system calls used by the
 application while execution and then based on that it recognizes binaries, files, environment variables,
-and library dependencies that will be used by the application for future reexecution. If the OS is
-Debian or RPM based, Reprozip also
-uses available package manager to acquire a list of distribution packages from where these files come from.
+and library dependencies that will be used by the application for future re-execution. If the OS is
+Debian or RPM-based, Reprozip also
+uses an available package manager to acquire a list of distribution packages from where these files come from.
 So, we got a list of packages from Reprozip that are needed for the application execution. 
 After that, we expanded this list by adding important and required packages that are essential
 for the system to function and finally figured out all the dependencies of these packages using Debtree
 ~\cite{debtree}.
 Ultimately, we kept these packages and removed remaining unnecessary packages. We used a bash script
-(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/script.sh}{Github}) for getting
-a list of unnecessary packages. 
+(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/script.sh}{Github}) for
+the image size reduction process which installs Reprozip in the image, collects Reprozip trace, and
+finally deletes unnecessary packages.
 
+\subsection{Update and Size Reduction Together}
+
+Our final experiment involves a combination of both update and size reduction process
+to lessen the number of vulnerabilities.
+So in this process we first update all the packages in the image and then deletes
+the unnecessary packages. For this process we used the same two scripts that
+we used for earlier experiments.
 
 \begin{comment}
 \subsection{CBRAIN}
@@ -701,14 +712,17 @@ run pre-defined applications on the cluster through the CBRAIN portal.
 \section{Results}
 
 In this section,
-we first discuss the existing vulnerabilities in the images and compare
+we first discuss the existing vulnerabilities in the images and compare the
 results of the three scanners. Then we discuss the effect of the update on the
-existing vulnerabilities and lastly, this section presents the effect of image size reduction on the
-vulnerabilities.
+existing vulnerabilities followed by the results of the image size reduction
+process. Lastly, this section presents the combined effect of update and image size reduction on the
+vulnerabilities. Here, we want to mention that after the update and minification process we scanned
+images only with one scanner i.e Anchore. We selected Anchore out of three scanners at random.
 
 \subsection{Existing Vulnerabilities}
 
-Figure~\ref{fig:venn} illustrates the number of vulnerabilities detected by scanners. The
+Table~\ref{sing} shows the number of vulnerabilities present in Singularity images whereas 
+Figure~\ref{fig:venn} illustrates the number of vulnerabilities in Docker images, which are detected by the three scanners. The
 overlapping regions of the Venn diagram show the number of common vulnerabilities detected by either two or
 three scanners. In total 10691 vulnerabilities are detected by three scanners.
 There are also vulnerabilities that are detected only by one scanner.
@@ -718,9 +732,9 @@ It represents the number of vulnerabilities that are present inside images.
 The overall trend of the Figure shows that as the number of packages increases in the image, the number of vulnerabilities
 also get increased.
 The figure also infers that Alpine distribution, being the
-lightweight distribution, have the least number of vulnerabilities, whereas Ubuntu contains highest number of
+lightweight distribution, have the least number of vulnerabilities, whereas Ubuntu contains the highest number of
 vulnerabilities. Debian and Centos contain a higher number of critical vulnerabilities than Ubuntu and Alpine.
-
+Similarly, Figure~\ref{sing} illustrates the number of vulnerabilities in Singularity images used in Boutiques images.
 \begin{table*}
 \csvreader[%
  respect all,%
@@ -735,35 +749,39 @@ vulnerabilities. Debian and Centos contain a higher number of critical vulnerabi
        \centering
 	\caption{\label{table1}Existing number of Vulnerabilities}
 \end{table*}
-
-\begin{comment}
-\begin{table}
-\csvreader[%
- respect all,%
-  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
-      \begin{adjustbox}{max width=\columnwidth},
-  after reading=\end{adjustbox},
- tabular={c|c},
-	table head ={Image Tag} & {Image Name}\\\hline,
- late after line= \\,
-        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
-]{names.csv}{}{\csvlinetotablerow}%
-       \centering
-	\caption{\label{table2}Image names}
-\end{table}
-\end{comment}
-
-
-\begin{figure}[H]
+%\begin{comment}
+%\begin{table}
+%\csvreader[%
+% respect all,%
+%  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+%      \begin{adjustbox}{max width=\columnwidth},
+%  after reading=\end{adjustbox},
+% tabular={c|c},
+%	table head ={Image Tag} & {Image Name}\\\hline,
+% late after line= \\,
+%        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+%]{names.csv}{}{\csvlinetotablerow}%
+%       \centering
+%	\caption{\label{table2}Image names}
+%\end{table}
+%\end{comment}
+\begin{figure}
         {\includegraphics[scale=2.5,width=\columnwidth]
         {Figures/vennDiagram.pdf}}
         \caption{\label{fig:venn} Venn Diagram representing different scanner results}
 \end{figure}
 
-\begin{figure*}[!htb]
+\begin{figure*}[t]
 	{\includegraphics[scale=1.5,width=\textwidth]
 	{Figures/vulngraph.pdf}}
         \caption{\label{fig:graph1} Scatterplot representing \#Packages and \#Vulnerabilities}
+      \end{figure*}
+
+\begin{figure*}[b]
+        {\includegraphics[width=\textwidth]
+        {Figures/vulnwithupdate.pdf}}
+        \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and
+        after update of the images}
       \end{figure*}
 
 \subsection{Comparisons between Scanners}
@@ -777,14 +795,14 @@ It is interesting to note that out of these vulnerabilities, 4453 vulnerabilitie
 reported by Anchore, 673 reported only by Clair, and 325 detected only by Vuls.
 
 The number and type of vulnerabilities reported by the three scanners are drastically different from each other.
-It was interesting to investigate the reasons of these differences.
+It was interesting to investigate the reasons for these differences.
 %these scanners report different numbers and types of vulnerabilities.
 %How their logic differs and what exactly is making these results different than each other.
 
 According to our investigation of these results, below are some of the reasons for
-getting different results from these scanners. These reasons include bugs in scanners,
-some scanners ignoring vulnerabilities in a Linux-Kernel header packages, referring to different databases,
-how frequently they are updating their databases, etc. 
+getting different results from these scanners. At the time of writing, these reasons include bugs in scanners,
+some scanners ignoring vulnerabilities in Linux-Kernel header packages, scanners referring to different databases,
+and how frequently they are updating their databases, etc. 
 
 We have explained these differences below in detail
 and have provided an example with each reason to make it clear.
@@ -796,26 +814,26 @@ both Clair and Vuls.
 \end{comment}
 
 \textbf{Linux-Kernel-Headers:} Clair Scanner and Vuls are ignoring all vulnerabilities in the Linux-kernel-headers,
-whereas Anchore reports them.
+whereas Anchore reports them all.
 4443 out of 4453 vulnerabilities that are only reported by Anchore are present in Linux-kernel-headers.
 For example CVE-2019-9506 present in Linux-libc-dev-4.4.0-31.50, which is reported by Anchore, is not
 detected by both Vuls and Clair Scanner.
 Linux-kernel-headers are the headers files that only provide function names, its parameters, and its
 return type.
-The actual source code of these functions is present in the Linux kernel and not inside the image.
+The actual source code of these functions is present in the Linux kernel and is not inside the image.
 So, vulnerability detection in header files
 is irrelevant in this case.
 
-\textbf{CVEs with Status as “Not-affected”:} Vuls is reporting vulnerabilities with status
-as "not-affected". So it means Linux distribution which is inside the image is not affected
+\textbf{CVEs with Status as “Not-affected”:} Vuls is reporting vulnerabilities that have status
+as "not-affected" in the vulnerability database. So it means Linux distribution which is inside the image is not affected
 by the particular CVE. However, it is reported by Vuls. In other words, we can say that
 these are false positives by Vuls.
 For example, we scanned an image having the Trusty release in it and Vuls is reporting CVE-2015-2305
 in the package Cups. However, if we check the vulnerability database, package Cups in Trusty is not
-is not affected by this CVE.
+affected by this CVE.
 
-\textbf{With CVE status as "Ignored (reached end-of-life)":}
-Some vulnerabilities are "ignored" in Ubuntu 14.04 LTS as it reached end-of-life. 
+\textbf{CVEs with status as "Ignored (reached end-of-life)":}
+Some vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life. 
 However, in Ubuntu 14.04 ESM release these vulnerabilities may or may not be present.
 Anchore checks the last status of these vulnerabilities whether the package was vulnerable to the CVE
 prior to the end-of-life. If it was vulnerable only then Anchore will report it, otherwise not.
@@ -827,6 +845,11 @@ so it is not reported by Anchore. Whereas, this vulnerability has status as "DNE
 release so Clair Scanner also does not report it. As Ubuntu 14.04 LTS release is present inside the images still
 Clair Scanner is referring to Ubuntu 14.04 ESM release vulnerability database.
 
+\begin{figure*}[b]
+        {\includegraphics[scale=1.5,width=\textwidth]
+        {Figures/bargraph.png}}
+        \caption{\label{fig:bargraph} Bar graph representing \#Vulnerabilities by different experiments}
+      \end{figure*}
 \textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release:} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
 are not detected by Clair Scanner but they affect Ubuntu 14.04 LTS hence detected by Vuls. For example, CVE-2017-1375.
 
@@ -840,63 +863,155 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
 \textbf{Database difference:} As we discussed earlier that Clair Scanner's database was old by one week.
                 So some of the vulnerabilities were not updated yet. For example, CVE-2019-5094, which
 		was published on 2019-09-24, was not 
-		updated in Clair Scanner's database that time. Due to which it is missed by Clair Scanner.
+		updated in Clair Scanner's database at that time. Due to which it is missed by Clair Scanner.
+
 
 \textbf{Epoch bug:} There is a bug in the Anchore scanner due to which some vulnerabilities are 
 		not detected by Anchore. This bug gets triggered when a package’s version have epoch 
 		(1:3.3.9-1ubuntu2.3) in it. For example, CVE-2018-1125 in Procps package is not
 		detected by Anchore due to the presence of epoch in the Procps package version.
+		We reported this bug to the team through the slack channel.
 
-\textbf{With CVE status as "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
+\textbf{CVEs with status "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
 		which it is not able to detect some vulnerabilities. Due to this bug, Anchore does not detect 
 		vulnerabilities that have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
-		But if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
+		However, if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
 		For example CVE-2019-13565 in Ubuntu 14.04.
 
 
 \textbf{False Negatives by Vuls:} Vuls is missing some of the vulnerabilities that it should detect. 
-		For example CVE-2019-5094
+		For example CVE-2019-5094 vulnerability.
 
 \textbf{Rejected CVEs:} There are some CVE that are rejected because they are duplicate copies of other CVEs. 
 	So Anchore is not reporting those rejected CVEs but Vuls is reporting those. For example CVE-2017-13753.
 
-\subsection{Effect Of Update}
-\begin{comment}
-The next experiment involves updating all these images and then rescanning them to see how the number of
-vulnerabilities drop inside them. We used a \textit{bash} script to update these images. This script is
-present in our Github repository \href{https://github.com/kaurbhupinder/Vulnerability-Analysis}
-{https://github.com/kaurbhupinder/Risk-to-Clusters-Paper}. This script 
-will find the package manager inside the image and then update the image according to the package manager it finds.
-\end{comment}
 
-When the images are rescanned after the update, results changed drastically. However, there are still
+\subsection{Effect Of Update}
+%\begin{comment}
+%The next experiment involves updating all these images and then rescanning them to see how the number of
+%vulnerabilities drop inside them. We used a \textit{bash} script to update these images. This script is
+%present in our Github repository \href{https://github.com/kaurbhupinder/Vulnerability-Analysis}
+%{https://github.com/kaurbhupinder/Risk-to-Clusters-Paper}. This script 
+%will find the package manager inside the image and then update the image according to the package manager it finds.
+%\end{comment}
+
+As the effect of update,
+scanning results changed drastically. However, there are still
 vulnerabilities reported by these scanners but there are no fixes available for these vulnerabilities
 to date.
-\begin{comment}
-There are only two
-options, either you accept those vulnerabilities and use that image, or you discard that image.
-So one thing is clear here that even if we keep our images up to date there will be still some
-vulnerabilities that we have to face.
-\end{comment}
+%\begin{comment}
+%There are only two
+%options, either you accept those vulnerabilities and use that image, or you discard that image.
+%So one thing is clear here that even if we keep our images up to date there will be still some
+%vulnerabilities that we have to face.
+%\end{comment}
 Figure~\ref{fig:graph2} represents the number of vulnerabilities that are detected by Anchore before and after 
-the update of these images.
-After the update, the vulnerabilities mostly have \textit{Low, Negligible or Medium} severity status.
-Also, after the update, the number of vulnerabilities have a mild slope meaning that there
-are a fixed set of packages that contain vulnerabilities and have no fix yet.
-\begin{figure*}[!htb]
-        {\includegraphics[width=\textwidth]
-        {Figures/afterupdatewithpackage.pdf}}
-        \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and 
-	after update of the images}
-      \end{figure*}
+the update of these images. 
+%In fact, this figure depicts an additional results of update to the original Figure~\ref{fig:graph1}.
+In fact, this image combines the original results of Figure~\ref{fig:graph1} with the results of the update
+experiment.
+Clearly, the figure illustrates that after the update, the number of vulnerabilities reduces by a
+significant number. Furthermore, a mild slope of vulnerabilities after the update shows that
+there is a set of packages that contain vulnerabilities and have no fix yet. Also, these
+vulnerabilities mostly have \textit{Low, Negligible, or Medium} severity status meaning that
+critical vulnerabilities are patched with high priority.
+Besides that, it is also interesting to note that some images in Figure~\ref{fig:graph2}
+do not have update results. This is because some Linux distributions reached end-of-life and
+are not getting updates anymore.
+
+%After the update, the vulnerabilities mostly have \textit{Low, Negligible or Medium} severity status.
+%Also, after the update, the number of vulnerabilities have a mild slope meaning that there
+%are a fixed set of packages that contain vulnerabilities and have no fix yet.
+%\begin{figure*}[h]
+%        {\includegraphics[width=\textwidth]
+%        {Figures/vulnwithupdate.pdf}}
+%        \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and 
+%	after update of the images}
+%      \end{figure*}
+
+\begin{figure*}
+        {\includegraphics[scale=1.5,width=\textwidth]
+        {Figures/graphwithdeletedpackages.pdf}}
+	\caption{\label{deleted}\#Deleted Packages vs \#Reduced Vulnerabilities}
+\end{figure*}
+
 \subsection{Effect Of Size Reduction}
 
-Our last experiment shows deleting unnecessary packages from the image also helps to reduce
-the number of vulnerabilities by a significant number. We started this experiment with
-\textit{bids/example} image and deleted 61 unnecessary packages out of total 528 packages, which helped
-to reduce 838 vulnerabilities to 523. Later, we also checked with \textit{bids/freesurfer} image, which allowed
-to delete 71 unnecessary packages out of total 298 packages. Consequently, reducing number of vulnerabilities
-from 353 to 101.
+Our third experiment involves deleting unnecessary packages from the images.
+We did this experiment only on five images because the reduction process takes a
+while. We selected these five images at random. We noticed that
+after the size reduction process, the scanning results deviate a little from our initial belief.
+At first, we thought that we will have a notable effect of size reduction on
+vulnerabilities. However, this is not the case always. The bar graph shown in
+Figure~\ref{fig:bargraph} illustrates that images \textit{bids/ndmg} and
+\textit{poldracklab/fmriprep:1.2.3} have an insignificant effect of size reduction.
+According to our analyzes here, this can be due to two reasons: \rom{1}) the number
+and \rom{2}) the kind of packages that we deleted. In other
+words, if we delete a low number of packages then vulnerabilities do not get decreased as expected.
+In contrast, if the number of deleted packages are high, reduction
+in vulnerabilities also becomes high. For instance, we were able to delete only 21 and 25 packages for 
+\textit{bids/ndmg} and \textit{poldracklab/fmriprep:1.2.3} images. Consequently, vulnerabilities
+reduced only by 4 and 17 respectively. Furthermore, this is illustrated in Figure~\ref{deleted}.
+Also, if we delete packages that contain a lot of vulnerabilities, it helps in reducing
+vulnerabilities by a significant number. For instance, in case of our experiments
+deleting compilers and Linux-kernel-header packages helped to minimize vulnerabilities
+by a significant number in \textit{bids/example, bids/freesurfer, and bids/mindboggle:0.0.4-1}. 
+%Our third experiment shows that deleting unnecessary packages from the image also helps to reduce
+%the number of vulnerabilities by a significant number. We started this experiment with
+%\textit{bids/example} image and deleted 61 unnecessary packages out of total 528 packages, which helped
+%to reduce 838 vulnerabilities to 523. Later, we also checked with \textit{bids/freesurfer} image, which allowed
+%to delete 71 unnecessary packages out of total 298 packages. Consequently, reducing number of vulnerabilities
+%from 353 to 101.
+
+\subsection{Effect Of Update and Size Reduction}
+
+Our last experiment includes updating the image and then removing unnecessary packages from it.
+Figure~\ref{fig:bargraph} displays the results. 
+Our initial thought was that with the update and size reduction process together, we will be able to
+reduce vulnerabilities even more. However
+we analyzed that this is not always true. Again, it depends on which packages you are deleting and how
+many vulnerabilities they contained. To illustrate, \textit{bids/example} image in Figure~\ref{fig:bargraph}
+shows no effect of size reduction along with update process. It has 181 vulnerabilities for both experiments 2 and 4.
+Meaning that packages, which we deleted after updating the image, were already vulnerability free. Therefore,
+scanning results did not change.
+
+\subsection{Discussion}
+
+As we noticed that none of the Boutiques and BIDS images at the time of the study are free of vulnerabilities, out of which
+some have critical vulnerabilities as well. Yet there is not a single image scanner on which we can rely upon for
+scanning. Additionally, we cannot update all images because some OS releases, which are used inside images, 
+already reached end-of-life and are
+no longer getting updates. Furthermore, the minimization of images is a time consuming process. As we have to run
+the pipeline to get Reprozip trace that can take up to several hours. Also, the user should have proper knowledge
+of running the pipeline because it is image specific. In addition to that, Reprozip can be only installed
+in the images having Python version 2.7.3 or greater, or 3.3 or greater. Above all, there is no guarantee that
+the commands that you ran to get Reprozip trace covered the whole program, maybe it runs a particular
+branch of the program. So there should be some kind of coverage measurement.
+
+\subsection{Conclusion}
+
+In this paper, we performed various experiments to study the security state of the Docker
+and Singularity images, which are used in the neuroimaging field. We found out strong correlation
+between the number of packages and the number of vulnerabilities in the images, which implies
+that the number of vulnerabilities increases with the number of packages. We also found out that
+updating images reduces the number of vulnerabilities by a significant number. However, for some
+vulnerabilities there are no fixes available yet so the images cannot 
+be made totally invulnerable. Continuing with our next two experiments, we analyzed that the
+image size reduction process also reduces vulnerabilities a lot. However, we found out that this is not
+always true. It depends on two factors: kind and the number of packages that we are
+deleting. Therefore, we conclude this paper by suggesting ten simple rules that can be
+followed to keep container images safe.
+\newline 1. Update packages regularly.
+\newline 2. Remove unnecessary packages.
+\newline 3. Mind your base OS image.
+\newline 4. Run image scanning tools in CI scripts. For instance Anchore.
+\newline 5. Mind your GitHub/DockerHub credentials.
+\newline 6. Minimize dependencies.
+\newline 7. Avoid static linking because it obfuscates vulnerability scanning.
+\newline 8. Use the package manager to facilitate vulnerability detection.
+\newline 9. Use OS releases that have LTS support.
+\newline 10. Sign your images.
+
 \bibliography{bibliography}
 
 
