@@ -1,5 +1,8 @@
 #!/bin/bash
 
+cd /scripts/
+shopt -s extglob
+rm -v !("required.csv"|"to_delete.py"|"check_virtuality.py"|"script.sh"|"run_repro_script.sh")
 apt list --installed | awk -F/ '{print $1}' | tail -n +2 > all-packages.csv
 apt-get update
 apt-get install -y debtree

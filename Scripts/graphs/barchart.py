@@ -46,8 +46,8 @@ alpha=opacity,
 color='c',
 label='After update and minification')
 
-plt.xlabel('Images', fontweight='bold')
-plt.ylabel('#Vulnerabilities', fontweight='bold')
+plt.xlabel('Images', fontsize=15,fontweight='bold')
+plt.ylabel('#Vulnerabilities',fontsize=15, fontweight='bold')
 #plt.title('Vulnerabilities by experiments')
 plt.xticks(index + bar_width, imageID)
 plt.legend()

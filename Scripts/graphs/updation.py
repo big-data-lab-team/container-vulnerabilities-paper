@@ -11,6 +11,7 @@ d.head()
 df=pd.DataFrame(d)
 plt.figure(figsize=(200,20))
 plt.rcParams["axes.labelweight"] = "bold"
+plt.rcParams.update({'font.size': 15})
 colors = {'ubuntu:14.04' : '#2E37FE', 'ubuntu:16.04' : '#CAE1FF', 'ubuntu:17.04':'#5190ED','ubuntu:17.10':'#000085','ubuntu:18.04' : '#98F5FF','centos 6':'#800080','centos 7':'#b19cd9',
         'alpine:3.7.1':'#3CB371','alpine:3.8.4':'#00ff00','alpine:3.9.0':'#006400','debian:8':'#ffa500'}
 markers = {"ubuntu:14.04": "o", "ubuntu:16.04": "o",'ubuntu:17.04':'o','ubuntu:17.10':'o','ubuntu:18.04' : 'o','centos 6':'o','centos 7':'o',

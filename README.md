@@ -20,8 +20,14 @@ call another bash script (update.sh) inside itself.
 ```
 ## Experiment 3: Minimizing images and then rescanning
 In this third experiment to minimize images also we used a bash script.
-This script is available in scripts/minimification folder
+This script is available in scripts/minimification folder names as run\_script.sh.
+This script takes two parameters. First one is the full path of
+the dataset that is needed to run pipeline and second one full image name
+that you want to run.
+Others scripts in scripts/minification folder should be placed in scripts folder
+in dataset that you mounted in image.
 
+<!--
 In experiment of minimizing images we are using a bunch of scripts.
 So first of all we are taking origin{list of images that you want to update}al image and then installing
 Reprozip tool inside that image. After that we are using a bash script
@@ -61,3 +67,4 @@ echo "its done"
 
 ```
 Now the reprozip trace is generated and it can be found inside image in ./reprozip-trace/config.yaml
+-->

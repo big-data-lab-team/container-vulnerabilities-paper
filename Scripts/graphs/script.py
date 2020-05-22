@@ -28,7 +28,7 @@ leg._loc = 4
 leg.texts[12].set_text("CRITICAL \nVulnerabilities")
 z = np.polyfit(df['Packages'], df['Vulnerabilities'], 1)
 p = np.poly1d(z)
-plt.plot(df['Packages'],p(df['Packages']),"r--")
+plt.plot(df['Packages'],p(df['Packages']),"k--")
 #leg._labelspacing=10
 for idx,row in df.iterrows():
     x = row[3]

@@ -30,4 +30,3 @@ out = open(f3,'w')
 for line in virtual:
     out.write(line)
     out.write("\n")
-
