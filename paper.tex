@@ -28,7 +28,7 @@
 
 %%%% Commands %%%%
 \newcommand{\todo}[1]{\color{red}\textbf{TODO:}#1\color{black}}
-\newcommand{\note}[2]{\color{blue}Note: #1\color{black}}
+\newcommand{\change}[2]{\color{cyan}Changes: #1\color{black}}
 \newcommand{\reprozip}[0]{ReproZip}
 \newcommand{\rom}[1]{\lowercase\expandafter{\romannumeral #1\relax}}
 \newcommand{\tristan}[1]{\color{blue}From Tristan: #1\color{black}}
@@ -77,7 +77,7 @@ integrate with the host due to the sharing of the kernel,
 mounted file systems, and devices, which raises security
 concerns.
 They also share three main security threats with other virtualization
-techniques~\cite{gantikow2016providing}.
+techniques~\cite{gantikow2016providing}:
 
 \begin{comment}
 \begin{figure}
@@ -98,7 +98,7 @@ host hence resulting in the starvation of the host and other containers.
 leaked and can be used for further attacks.
 
 
-However, two features of the Linux kernel,\textit{control groups} and \textit{namespaces},
+However, two features of the Linux kernel, \textit{control groups} and \textit{namespaces},
 are used by containers to mitigate these threats to a certain extent. The security
 of containers is still the most concerning issue. According to a Forrester survey~\cite{bettini2015vulnerability}
 done in January 2015, security is the
@@ -107,7 +107,7 @@ Besides web applications, containers are also popularly used for scientific comp
 and data science in neuroscience. In fact, Singularity was developed for scientific applications
 by keeping the focus on HPC environments. This popularity of containers leads us to the
 primary research question of this work: \textit{what is the current security state of
-container images that are deployed on HPC clusters?}.
+container images that are deployed on HPC clusters?}
 
 To answer that question, we scan images that are used on Compute
 Canada clusters by the Neuroscience field. Scanning refers to the practice of
@@ -121,7 +121,7 @@ then scanning the running container.
 Here, we focus mainly on vulnerability scanning.
 Vulnerability is a weakness in the developer's software that can be exploited
 by the attacker to perform unauthorized actions on the target computer.
-In this paper, we report all vulnerabilities that are present in
+In this paper, we report vulnerabilities that are present in
 container images, specifically used by neuroimaging field. Particularly,
 we aim to answer four primary research questions:
 
@@ -150,12 +150,12 @@ containers are used on Compute Canada HPC cluster.
 
 The existing research work on containers focuses mainly on the security of Docker
 containers.
-This focus is justified by the fact that, containers expose the host's resources
+This focus is justified by the fact that containers expose the host's resources
 (e.g., file system/ IPC) to the guest system. This feature raises a confidentiality
 threat for the applications running on the same host. Previous studies evaluated
 the security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis},
 and have scanned vulnerabilities on Docker hub images~\cite{Shu2017, gummaraju2015over}.
-Also Singularity came up with Stools, which can be used for scanning Singularity images
+Also, Singularity came up with Stools \href{https://github.com/singularityhub/stools}{(https://github.com/singularityhub/stools)}, which can be used for scanning Singularity images
 for security and quality checks.
 Here, we focus on the specific context of scientific data analysis on HPC clusters, taking
 neuroimaging as an example.
@@ -164,44 +164,34 @@ neuroimaging as an example.
 This paper is organized as follows: in the next section, we provide description
 of materials and methods which summarize our four main experiments. We also explain
 scanning tools that we use for scanning container images to report
-vulnerabilities. The next section of this paper is about the results. Here, we
-present a number of vulnerabilities that are present in the container images
-which are used for data analysis on shared HPC clusters. Following section is about 
-the discussion of these results where we provide more insight into the problems that 
-we faced while conducting these experiments. Finally, we conclude this paper by discussing ten simple
-rules that can be followed to secure container images for use in clusters.
+vulnerabilities. The next section of this paper provides the results, where we
+present a number of existing vulnerabilities in the container images
+used for data analysis on shared HPC clusters. We then proceed in the following section with 
+discussion and analysis of these results, where we provide more insight into the problems that 
+we faced while conducting these experiments. Finally, we conclude this paper by proposing some
+particular rules that can be followed to secure container images for use in clusters.
 
 \section{Materials and Methods}
 
-This study involves four image scanning experiments.
-The first experiment scans the images as is to report the existing vulnerabilities
-inside the images. The scan report of
-these images shows a large number of existing vulnerabilities which may pose
-a potential security risk. These vulnerabilities exist due to the outdated
-packages that are present inside the images. So, the next step is to
-take the necessary steps to improve security in the images. Therefore, there exist
-two possible solutions.
-The first one involves updating
-all these images and then rescanning them, which constitutes the second experiment of our study. The next 
-experiment involves shrinking the size of the image
-meaning that removing all unnecessary packages from the image to see the effect on the number of
-vulnerabilities present inside the image, which will be presented as our third experiment.
-Lastly, our fourth experiment involves both updating and shrinking the image size and then
-rescanning for the vulnerabilities. \tristan{Content of this paragraph is fine, but writing is very convoluted.}
+\change{This study involves several image scanning experiments. To begin with,
+we scan the images as is to report the existing vulnerabilities
+inside the images. Updating these images is likely to play a role in vulnerabilities. Therefore, we
+update the images and then rescan all these
+images.
+Subsequently, we shrink the size of the images
+meaning that remove unnecessary packages from the images to see the effect on the number of
+vulnerabilities in the images.
+Lastly, we update and shrink the image size together and then
+rescan for the vulnerabilities.
 
-Here, we first
+In this section, we first
 introduce two container tools used in our experiments: Docker and
-Singularity and their image formats. Then we describe Boutiques and BIDS application frameworks
-from where we took containerized applications for our study. 
-Later, this section
-presents two scanning techniques followed by a description of image scanners used.
-In this study, we used three different image scanners because they
-use different scanning techniques and/or refer to different vulnerability sources.
-The images used in our study have different Linux distributions/releases, which have
-different vulnerability data. Therefore, in the last, this section presents a
+Singularity and their image formats. Then we provide more insight
+into the container images and the image scanners that we used in our study.
+The image scanners are going to report different results due to different Linux
+distributions/releases, which have different vulnerability data. Therefore, in the last, this section presents a
 description of these varying Linux distributions/releases and their
-vulnerability databases.
-
+vulnerability databases.}
 
 %As we are taking a particular use case of containers from
 %neuroscience field i.e Canadian Open Neuroscoence Platform (CONP) so  
@@ -345,8 +335,9 @@ experiments.
 We scanned a total of 44 container images taken from the BIDS
 apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques}
 frameworks, two containerization frameworks used in neuroscience to share
-and re-use applications. Among the 27 BIDS apps available at the time of
-the study \tristan{mention link where the apps are listed}, we studied 26
+and re-use applications. Among the 27 BIDS apps \href{https://bids-apps.neuroimaging.io/apps/}
+{(https://bids-apps.neuroimaging.io/apps/)} available at the time of
+the study, we studied 26
 unique Docker images as one wasn't available on DockerHub. Among the 49
 Boutiques applications available at the time of the study, listed using
 Boutiques \texttt{bosh search} command, 23 unique container images were
@@ -427,9 +418,9 @@ completing this sentence.}
 
 We used four popular image scanners, namely Anchore~\cite{github_2019},
 Vuls~\cite{future-architect_2019}, Clair Scanner~\cite{arminc_2019} and
-Stools~\cite{refneeded}. Anchore, Vuls and Clair Scanner support Docker
-images while Stools supports Singularity. Vuls is dynamic and the other
-ones are static. To avoid discrepancies, we froze the vulnerability
+Stools~\cite{stools}. Anchore, Vuls and Clair Scanner support Docker
+images while Stools supports Singularity. Vuls is a dynamic scanner, while the others
+are static scanners. To avoid discrepancies, we froze the vulnerability
 databases for these scanners on September 25, 2019.
 
 
@@ -441,26 +432,26 @@ Anchore is an end-to-end, open-source container security platform. Anchore
 is a static
 scanning tool that analyses container images and lists OS
 packages, non-OS packages (Python, Java, Gem, and Npm), and files.
-\begin{comment}
-Anchore is a set of tools, which users can
-employ for scanning container images and applying custom policies to them.
-It provides visibility and transparency of the container environment.
-\end{comment}
+%\begin{comment}
+%Anchore is a set of tools, which users can
+%employ for scanning container images and applying custom policies to them.
+%It provides visibility and transparency of the container environment.
+%\end{comment}
 Anchore Engine can be used in two ways: through Docker image or Anchore
 Command Line Interface (CLI).
-\begin{comment}
-Anchore offers services in two ways: Anchore Engine and Anchore
-Command Line Interface (CLI). Anchore Engine is available as a Docker
-image, which is available on Docker Hub. Anchore Engine CLI provides
-command line interface in addition to Anchore Engine REST API. 
-\end{comment}
+%\begin{comment}
+%Anchore offers services in two ways: Anchore Engine and Anchore
+%Command Line Interface (CLI). Anchore Engine is available as a Docker
+%image, which is available on Docker Hub. Anchore Engine CLI provides
+%command line interface in addition to Anchore Engine REST API. 
+%\end{comment}
 It can be
 installed directly on the host and used to inspect images.
 In our experiments, we used a Docker image to get Anchore Engine version 0.5.0 and Engine Database
 version 0.0.11.
 
 Anchore compares package versions, which are present inside the
-image, with the vulnerability database to flag vulnerabilities.
+image, with the vulnerability database in order to flag vulnerabilities.
 To get a vulnerability feed of various OS distribution, Anchore refers to
 different sources. For example, the Ubuntu launchpad database is used for Ubuntu.
 
@@ -481,13 +472,13 @@ and deep scan mode.
 The Fast scan is performed without root privileges, whereas a fast root scan is
 performed with root privileges. The latter also uses checkrestart utility to 
 detect processes that are updated but not yet restarted because if they are not
-restarted, updates are not effective. So fast root scan also detects these
+restarted, updates are not effective. Fast root scan also detects these
 processes. Both fast scan and fast root scan are performed offline without Internet
 access, and put almost no load on the scan target server. The Deep scan uses
 root privileges for scanning and is used to get a more detailed scan. It checks
 changelogs, which puts more load on the target server.
 
-In our experiments, we used Vuls Docker image having version v0.9.0 with fast scan mode.
+In our experiments, we used Vuls Docker image having version 0.9.0 with fast scan mode.
 Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
 The interesting point is that there is no OVAL data for Ubuntu 17.04 and 17.10 distribution,
 meaning that images with these distributions are impossible to scan with Vuls.
@@ -510,7 +501,7 @@ the vulnerability list of a particular image against a whitelist of vulnerabilit
 want to ignore~\cite{arminc_2019}. 
 So, to remove
 that drawback, another tool from CoreOS, Clair Scanner can be used. It scans the image, prepares the list of
-vulnerabilities, compares that list against the whitelist, and flags vulnerabilities
+vulnerabilities, compares that list against a whitelist, and flags vulnerabilities
 that are not present in the whitelist.
 Clair Scanner refers to the Ubuntu CVE tracker for getting Ubuntu vulnerability feed.
 For that purpose, a Docker image is maintained that contains the Ubuntu CVE tracker database.
@@ -522,12 +513,12 @@ old by one week.
 
 \subsubsection{Stools}
 
-\href{https://github.com/singularityhub/stools}{Stools} combines CoreOS's Clair Scanner with Continuous Integration (CI)
+Stools combines CoreOS's Clair Scanner with Continuous Integration (CI)
 for scanning Singularity images for vulnerabilities.
 Initially, Clair Scanner was intended to scan Docker containers only. This tool does not fit well
 to scan Singularity images because of the different image formats.
 However, TravisCI and CircleCI are commonly used for testing code, and these
-services also offer running containers. So Stools combined both the concepts.
+services also offer running containers. Stools combined both these concepts.
 It involves spinning a Clair Scanner container during testing and building a
 Singularity image, and scanning it for filesystem before the image is finalized.
 
@@ -558,23 +549,23 @@ Also, is there a similar scheme in CentOS? }
 BIDS app and Boutiques images that we took for our experiments have diverse Linux
 distributions such as Ubuntu, Centos, Debian, and Alpine. Further, a particular
 distribution can have different releases. As images in our experiments mostly have
-Ubuntu distribution we can take this distribution as an example \tristan{of what?}. In the case of Ubuntu, release
-can be of two types: regular or LTS (Long Term Support).
+Ubuntu distribution, we can take this distribution as an example \tristan{of what?}. In the case of Ubuntu, release
+can be of two types: Regular or Long Term Support (LTS).
 Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
 reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
 in the form of Extended Security Maintenance (ESM) release.
 ESM is a paid service that can be requested from Ubuntu to get security 
 updates even after the EOL of a particular Ubuntu release. The ESM support period is decided by
 Ubuntu. ESM and LTS releases of a particular Ubuntu distribution have different vulnerability
-data in vulnerability databases because after EOL of a release, a vulnerability is fixed only in packages of ESM, however, it still
+data in vulnerability databases, because after EOL of a release, a vulnerability is fixed only in packages of ESM, however, it still
 exists in LTS.
 
 Ubuntu has ended support for some releases such as 14.04 LTS,
 17.04, and 17.10, which means they have reached EOL. However, Ubuntu is providing optional extended support for Ubuntu 14.04.
 To use this extended support, users have to buy ESM release for Ubuntu 14.04.
 The images in our experiments have Ubuntu 14.04 LTS so scanners should refer
-to LTS release only while collecting data from vulnerability databases. If scanners refer to ESM release for data it may result
-in false positives and false negatives.
+to LTS release only while collecting data from vulnerability databases. If scanners refer to ESM release for 
+vulnerability data, it may lead to discrepancies in results.
 Also, if ubuntu release with ended support is used in images, there are no chances of getting updates, hence
 resulting in vulnerable images. 
 
@@ -659,20 +650,20 @@ findings of other scientists.
 If we want to reduce the number of vulnerabilities without effecting the reproducibility of the image,
 image size reduction process is a good choice. In this process, we reduce the number of packages
 installed in the image by deleting unnecessary packages. For that to happen, we need to first figure
-out which packages we need for the pipeline to function properly. Here, we used 
+out which packages we need for the pipeline to function properly. Here, we use
 Reprozip~\cite{rampin2016reprozip}. It is a tool that
 is used to make applications reproducible. It traces operating system calls used by the
 application while execution and then based on that it recognizes binaries, files, environment variables,
 and library dependencies that will be used by the application for future re-execution. If the OS is
 Debian or RPM-based, Reprozip also
 uses an available package manager to acquire a list of distribution packages from where these files come from.
-So, we got a list of packages from Reprozip that are needed for the application execution. 
-After that, we expanded this list by adding important and required packages that are essential
-for the system to function and finally figured out all the dependencies of these packages using Debtree
+So, we get a list of packages from Reprozip that are needed for the application execution. 
+After that, we expand this list by adding important and required packages that are essential
+for the system to function and finally figure out all the dependencies of these packages using Debtree
 ~\cite{debtree}.
-Ultimately, we kept these packages and removed remaining unnecessary packages. We used a bash script
+Ultimately, we keep these packages and remove remaining unnecessary packages. We use a bash script
 (\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/script.sh}{Github} \tristan{Link is broken}) for
-the image size reduction process which installs Reprozip in the image, collects Reprozip trace, and
+the image size reduction process, which installs Reprozip in the image, collects Reprozip trace, and
 finally deletes unnecessary packages.
 
 \tristan{You should explain why you didn't use Neurodocker as it's the obvious way to do this.}
@@ -713,11 +704,11 @@ run pre-defined applications on the cluster through the CBRAIN portal.
 
 In this section,
 we first discuss the existing vulnerabilities in the images and compare the
-results of the three scanners. Then we discuss the effect of the update on the
+results of the three scanners. We then discuss the effect of the update on the
 existing vulnerabilities followed by the results of the image size reduction
 process. Lastly, this section presents the combined effect of update and image size reduction on the
-vulnerabilities. Here, we want to mention that after the update and minification process we scanned
-images only with one scanner i.e Anchore. We selected Anchore out of three scanners at random \tristan{Probably not really at random... 
+vulnerabilities.
+\tristan{Probably not really at random... 
 No need to mention anything if it was completely arbitrary. You should mention that just in the experiments themselves, it's giving this comment too much importance to put it here.}. 
 
 \subsection{Existing Vulnerabilities}
@@ -781,19 +772,19 @@ are grouped together and sorted by increasing version?}
 \begin{figure}
         {\includegraphics[scale=2.5,width=\columnwidth]
         {Figures/vennDiagram.pdf}}
-        \caption{\label{fig:venn} Venn Diagram representing different scanner results}
+        \caption{\label{fig:venn} Scanner results}
 \end{figure}
 
 \begin{figure*}[t]
 	{\includegraphics[scale=1.5,width=\textwidth]
 	{Figures/vulngraph.pdf}}
-        \caption{\label{fig:graph1} Scatterplot representing \#Packages and \#Vulnerabilities}
+        \caption{\label{fig:graph1} Number of vulnerabilities by packages}
       \end{figure*}
 
 \begin{figure*}[b]
         {\includegraphics[width=\textwidth]
         {Figures/vulnwithupdate.pdf}}
-        \caption{\label{fig:graph2} Scatterplot representing the number of vulnerabilities before and
+        \caption{\label{fig:graph2} Numner of vulnerabilities before and
         after update of the images}
       \end{figure*}
 
@@ -813,12 +804,12 @@ It was interesting to investigate the reasons for these differences.
 %How their logic differs and what exactly is making these results different than each other.
 
 According to our investigation of these results, below are some of the reasons for
-getting different results from these scanners. At the time of writing, these reasons include bugs in scanners,
+getting different results from these scanners. At the time of writing, these reasons include
 some scanners ignoring vulnerabilities in Linux-Kernel header packages, scanners referring to different databases,
-and how frequently they are updating their databases, etc. 
+how frequently they are updating their databases, and bugs in scanners, etc. 
 
-We have explained these differences below in detail
-and have provided an example with each reason to make it clear.
+We explain these differences below in detail
+and provide an example with each reason to make it clear.
 
 \begin{comment}
 Venn Diagram~\ref{fig:venn} illustrates that Anchore reports 4453 different vulnerabilities that are reported
@@ -861,7 +852,7 @@ Clair Scanner is referring to Ubuntu 14.04 ESM release vulnerability database.
 \begin{figure*}[b]
         {\includegraphics[scale=1.5,width=\textwidth]
         {Figures/bargraph.png}}
-        \caption{\label{fig:bargraph} Bar graph representing \#Vulnerabilities by different experiments}
+        \caption{\label{fig:bargraph} Vulnerabilities by different experiments}
       \end{figure*}
 \textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release:} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
 are not detected by Clair Scanner but they affect Ubuntu 14.04 LTS hence detected by Vuls. For example, CVE-2017-1375.
@@ -952,8 +943,8 @@ are not getting updates anymore.
 \subsection{Effect Of Size Reduction}
 
 Our third experiment involves deleting unnecessary packages from the images.
-We did this experiment only on five images because the reduction process takes a
-while \tristan{This is not a good argument, it is vague, and it is not complete. Size reduction also requires 
+We did this experiment only on five images because the reduction process takes
+several hours.\tristan{This is not a good argument, it is vague, and it is not complete. Size reduction also requires 
 to run a pipeline in the image.}. We selected these five images at random \tristan{really? I don't think so.}. We noticed that
 after the size reduction process, the scanning results deviate a little from our initial belief \tristan{what do you mean?}.
 At first, we thought that we will have a notable effect of size reduction on
