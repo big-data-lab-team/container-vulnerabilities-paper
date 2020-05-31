@@ -15,6 +15,8 @@
 \usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{array}
 \usepackage{algorithm}
 \usepackage{caption}
 \usepackage[justification=centering]{caption}
@@ -344,9 +346,6 @@ Boutiques \texttt{bosh search} command, 23 unique container images were
 listed including 3 that couldn't be retrieved and 2 that were already
 included in BIDS apps. The resulting 18 images included 12 Docker images
 and 6 Singularity images.
-\tristan{I rewrote this paragraph to focus it on the information of relevance for the reader. 
-You could take it as an example for other sections of the paper.}
-
 %\begin{figure}
 %\csvreader[%
 % respect all,%
@@ -393,9 +392,14 @@ You could take it as an example for other sections of the paper.}
 
 \subsection{Image Scanners}
 
-Container image scanners can be broadly categorized into static and dynamic
-scanners. In static scanning, the image vulnerabilities are extracted from
-file and package lists \tristan{Does it really look into files, or only installed packages? Please check. The difference is important 
+\change{Container image scanners can be broadly categorized into static and dynamic
+scanners. Static scanning performs analysis on a image without running it
+as a container. Therefore, commands cannot be executed to inquire installed packages}
+
+
+
+
+\tristan{Does it really look into files, or only installed packages? Please check. The difference is important 
 when software is installed without using the package manager.}, without deploying the image in a container. In
 dynamic scanning however, a container is started from the image and
 \tristan{... It is still unclear how dynamic scanning works. Your text
@@ -507,9 +511,11 @@ Clair Scanner refers to the Ubuntu CVE tracker for getting Ubuntu vulnerability 
 For that purpose, a Docker image is maintained that contains the Ubuntu CVE tracker database.
 Whenever Ubuntu updates its database, this image is also updated with the required information.
 
-We performed scanning on 2019-09-25 and for our experiments, we used a Docker image that was 
-latest updated i.e with the tag 2019-09-18. So it means that Clair Scanner's database was already
-old by one week.
+\change{In our experiments, we used a Docker image (arminc/clair-local-scan:v2.0.6) for scanning
+and an another Docker image (arminc/clair-db:latest) for the vulnerability database, which was
+last updated on 2019-09-18. We performed
+scanning on 2019-09-25. So, it means that Clair Scanner's database was already
+old by one week.}
 
 \subsubsection{Stools}
 
@@ -540,16 +546,71 @@ for scanning and followed the steps mentioned in \href{https://github.com/singul
         \caption{\label{sing}Number of Vulnerabilities in Singularity images}
 \end{table}
 
-\subsection{Linux Distributions and Vulnerability Databases}
 
-\tristan{This section lacks a sentence to introduce context: why are you even talking about distributions? 
-You should explain that scanners report vulnerabilities differently depending on the release type. 
-Also, is there a similar scheme in CentOS? }
+\begin{table*}
+  \caption{some table}
+	\begin{tabular}{>|{\bfseries}c| c| c| *{4}{c|}}\hline
+	  \multirow{2}{*}{\bfseries Image Labels} & 
+	  \multirow{2}{*}{\bfseries Image Names} & 
+	  \multirow{2}{*}{\bfseries OS} & 
+	  \multicolumn{4}{c|}{\bfseries Vulnerabilities} \\\cline{2-5} 
+                       & \textbf{A} & \textbf{C} & \textbf{V}  & \textbf{S} \\ \hline
+a	& bids/example	& ubuntu:14.04	& 838	& 663	& 683	& \\ \hline
+b	& bids/freesurfer	& ubuntu:14.04	& 353	& 215	& 192	& \\ \hline
+c	& bids/ndmg	& ubuntu:14.04	& 934	& 757	& 782	& \\ \hline
+d	& bids/broccoli:v1.0.0	& centos 6	& 79	& 79	& 117	& \\ \hline
+e	& bids/fibredensityandcrosssection	& ubuntu:14.04	& 1086	& 849	& 868	& \\ \hline
+f	& bids/spm	& ubuntu:14.04	& 191	& 246	& 235	& \\ \hline
+g	& poldracklab/mriqc:0.15.0	& ubuntu:16.04	& 432	& 328	& 332	& \\ \hline
+h	& bids/cpac:v1.0.1a\_22	& ubuntu:16.04	& 698	& 524	& 535	& \\ \hline
+I	& bids/hyperalignment	& ubuntu:16.04	& 1717	& 1327	& 1433	& \\ \hline
+j	& bids/mindboggle:0.0.4-1	& debian:8	& 671	& 955	& 569	& \\ \hline
+k	& bids/mrtrix3\_connectome	& ubuntu:18.04	& 275	& 157	& 158	& \\ \hline
+l	& bids/rs\_signal\_extract:0.1	& ubuntu:16.04	& 867	& 454	& 473	& \\ \hline
+m	& bids/aa:v0.2.0	& ubuntu:14.04	& 189	& 244	& 233	& \\ \hline
+n	& bids/niak	& ubuntu:16.04	& 1482	& 1366	& 1420	& \\ \hline
+o	& bids/oppni:v0.7.0-1	& ubuntu:14.04	& 913	& 698	& 723	& \\ \hline
+p	& poldracklab/fmriprep:unstable	& ubuntu:16.04	& 516	& 355	& 393	& \\ \hline
+q	& bids/brainiak-srm	& ubuntu:16.04	& 897	& 484	& 503	& \\ \hline
+r	& bids/nipypelines:0.3.0	& debian:8	& 641	& 878	& 451	& \\ \hline
+s	& bids/hcppipelines:v3.17.0-18	& debian:8	& 526	& 873	& 620	& \\ \hline
+t	& bids/magetbrain	& ubuntu:18.04	& 112	& 117	& 126	& \\ \hline
+u	& bids/tracula:v6.0.0-4	& ubuntu:14.04	& 874	& 664	& 683	& \\ \hline
+v	& bids/baracus	& ubuntu:14.04	& 172	& 238	& 216	& \\ \hline
+w	& bids/antscorticalthickness:v2.2.0-1	& ubuntu:17.04	& 289	& 27	& no oval data	& \\ \hline 
+x	& bids/dparsf:v4.3.12	& ubuntu:14.04	& 507	& 750	& 757	& \\ \hline
+y	& bids/afni\_proc	& ubuntu:17.10	& 67	& 16	& no oval data	& \\ \hline
+z	& bids/rshrf:1.0.1	& alpine:3.8.4	& 5	& 3	& 3	& \\ \hline
+aa	& bids/ndmg:v0.1.0	& ubuntu 14.04	& 934	& 758	& 782	& \\ \hline
+ab	& mcin/qeeg:latest	& centos 7	& 46	& 46	& 142	& \\ \hline
+ac	& camarasu/creaphase:0.3	& centos 7	& 54	& 54	& 186	& \\ \hline
+ad	& bigdatalabteam/hcp-prefreesurfer:exec-centos7.freesurferbuild-centos4-latest	& centos 7	& 70	& 76	& 157	& \\ \hline
+ae	& mcin/docker-fsl:latest	& centos 7	& 75	& 75	& 201	& \\ \hline
+af	& gkiar/onevoxel:v0.3.0rc2	& alpine 3.7.1	& 5	& 2	& 2	& \\ \hline
+ag	& bigdatalabteam/hcp-prefreesurfer:exec-centos7-fslbuild-centos5-latest	& centos 7	& 70	& 76	& 157	& \\ \hline 
+ah	& bt5e/ants:latest	& centos 7	& 150	& 156	& 336	& \\ \hline
+ai	& poldracklab/fmriprep:1.2.3	& ubuntu 16.04	& 591	& 441	& 447	& \\ \hline
+aj	& gkiar/dwipreproc\_fsl-5.0.11\_minified	& ubuntu 16.04	& 391	& 258	& 263	& \\ \hline
+ak	& gkiar/mask2boundary:v0.1.0	& alpine 3.9.0	& 15	& 11	& 11	& \\ \hline
+al	& mcin/ica-aroma:latest	& centos 7	& 75	& 75	& 202	& \\ \hline
+am	& c3genomics/genpipes	& 	& 	& 	& 	& 99 \\ \hline
+an	& bioinformatics-group/aqua-singularity-recipe	& 	& 	& 	& 	& 7 \\ \hline
+ao	& MontrealSergiy/BEst	& 	& 	& 	& 	& 106 \\ \hline
+ap	& shub://aces/cbrain-containers-recipes:fsl\_v6.0.1	& 	& 	& 	& 	& 206 \\ \hline
+aq	& shots47s/bids-freesurfer-6.0	& 	& 	& 	& 	& 212 \\ \hline
+ar	& shots47s/bids-fmriprep-1.2.3	& 	& 	& 	& 	& 453 \\ \hline
+  \end{tabular}
+  \end{table*}
 
-BIDS app and Boutiques images that we took for our experiments have diverse Linux
+\subsection{Linux Releases and Vulnerability Databases}
+
+\change{Image scanners report vulnerabilities differently depending on the Linux release types.
+Therefore, we provide an overview of these Linux releases by taking an example. 
+BIDS app and Boutiques images in our experiments have diverse Linux
 distributions such as Ubuntu, Centos, Debian, and Alpine. Further, a particular
-distribution can have different releases. As images in our experiments mostly have
-Ubuntu distribution, we can take this distribution as an example \tristan{of what?}. In the case of Ubuntu, release
+distribution have different releases in general. Here, we take Ubuntu as an example
+to discuss different releases and their vulnerability databases. We took Ubuntu's example
+because mostly images in our experiments have this distibution.} In the case of Ubuntu, release
 can be of two types: Regular or Long Term Support (LTS).
 Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
 reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
@@ -560,7 +621,7 @@ Ubuntu. ESM and LTS releases of a particular Ubuntu distribution have different 
 data in vulnerability databases, because after EOL of a release, a vulnerability is fixed only in packages of ESM, however, it still
 exists in LTS.
 
-Ubuntu has ended support for some releases such as 14.04 LTS,
+For instance, Ubuntu has ended support for some releases such as 14.04 LTS,
 17.04, and 17.10, which means they have reached EOL. However, Ubuntu is providing optional extended support for Ubuntu 14.04.
 To use this extended support, users have to buy ESM release for Ubuntu 14.04.
 The images in our experiments have Ubuntu 14.04 LTS so scanners should refer
@@ -631,27 +692,30 @@ The status can be any one of the following:
 Figure~\ref{example} illustrates how the information of a CVE is represented
 in the Ubuntu launchpad database.
 
-\subsection{Image Update Process}
+\subsection{Image Update and Reduction Process}
 
-\tristan{since the next 3 sections are rather short, I would group them all 
-as paragraphs under the same sub-section.}
-
-If there exist vulnerabilities in the container image, then we can
+\change{If there exist vulnerabilities in the container image, then we can
 run after updating the
 image. Updating the image involves updating all software packages that are
-inside that image. We used a bash script (\href{https://github.com/kaurbhupinder/Vulnerability-Analysis}{Github} \tristan{link should point to the actual script, not the repo}) 
+inside that image. We used a bash script 
+(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/update/update.sh}{Github}) 
 to update all images, which checks the
 package manager present inside the image and then according to that it
 updates the image. However, this option affects the reproducibility
 of the image, which means that the image cannot be used to verify the research
 findings of other scientists.
 
-\subsection{Image size Reduction process}
-If we want to reduce the number of vulnerabilities without effecting the reproducibility of the image,
-image size reduction process is a good choice. In this process, we reduce the number of packages
+On the other hand, if we want to reduce the number of vulnerabilities without effecting the reproducibility of the image,
+image size reduction process is a good choice. The most obvious way of doing this is using 
+Neurodocker (\href{https://github.com/ReproNim/neurodocker}{https://github.com/ReproNim/neurodocker}).
+It traces and deletes unnecessary files.
+However, image scanners reports vulnerabilities according to the installed
+packages, whereas Neurodocker deals with the files only and list of installed packages remains same. Therefore, after
+minimization also scanners report same number of vulnerabilities.
+Hence, we need to reduce the number of packages
 installed in the image by deleting unnecessary packages. For that to happen, we need to first figure
-out which packages we need for the pipeline to function properly. Here, we use
-Reprozip~\cite{rampin2016reprozip}. It is a tool that
+out which packages we need for the pipeline to function properly. We use
+Reprozip~\cite{rampin2016reprozip}, a tool that
 is used to make applications reproducible. It traces operating system calls used by the
 application while execution and then based on that it recognizes binaries, files, environment variables,
 and library dependencies that will be used by the application for future re-execution. If the OS is
@@ -661,22 +725,16 @@ So, we get a list of packages from Reprozip that are needed for the application 
 After that, we expand this list by adding important and required packages that are essential
 for the system to function and finally figure out all the dependencies of these packages using Debtree
 ~\cite{debtree}.
-Ultimately, we keep these packages and remove remaining unnecessary packages. We use a bash script
-(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/script.sh}{Github} \tristan{Link is broken}) for
+Ultimately, we keep these packages and remove remaining unnecessary packages. We use bash scripts
+(\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/tree/master/Scripts/minification}{Github}) for
 the image size reduction process, which installs Reprozip in the image, collects Reprozip trace, and
 finally deletes unnecessary packages.
 
-\tristan{You should explain why you didn't use Neurodocker as it's the obvious way to do this.}
-
-\subsection{Update and Size Reduction Together}
-
-Our final experiment involves a combination of both update and size reduction process
+Finally, we combine both update and size reduction process
 to lessen the number of vulnerabilities.
-So in this process we first update all the packages in the image and then deletes
-the unnecessary packages. For this process we used the same two scripts that
-we used for earlier experiments.
-
-\tristan{This could go to the first sentences of the new sub-section, no need for a subsection for that.}
+Therefore, in this process we first update all the packages in the image and then deletes
+the unnecessary packages. For this process we used the same scripts that
+we used for earlier experiments.}
 
 \begin{comment}
 \subsection{CBRAIN}
@@ -708,8 +766,6 @@ results of the three scanners. We then discuss the effect of the update on the
 existing vulnerabilities followed by the results of the image size reduction
 process. Lastly, this section presents the combined effect of update and image size reduction on the
 vulnerabilities.
-\tristan{Probably not really at random... 
-No need to mention anything if it was completely arbitrary. You should mention that just in the experiments themselves, it's giving this comment too much importance to put it here.}. 
 
 \subsection{Existing Vulnerabilities}
 
@@ -771,7 +827,7 @@ are grouped together and sorted by increasing version?}
 %\end{comment}
 \begin{figure}
         {\includegraphics[scale=2.5,width=\columnwidth]
-        {Figures/vennDiagram.pdf}}
+        {Figures/venn.pdf}}
         \caption{\label{fig:venn} Scanner results}
 \end{figure}
 
@@ -858,12 +914,14 @@ Clair Scanner is referring to Ubuntu 14.04 ESM release vulnerability database.
 are not detected by Clair Scanner but they affect Ubuntu 14.04 LTS hence detected by Vuls. For example, CVE-2017-1375.
 
 \textbf{False negatives by Clair:} Clair is missing vulnerabilities that it should detect. For example, CVE-2016-9082 
-is present in package Cairo in Xenial release and it is not detected by Clair. \tristan{You should report the version of Clair in 
-the methods. If you reported this bug to the developers, you should say so and link it here (same comment for all the bugs).}
+is present in package Cairo in Xenial release and it is not detected by Clair.
 
 \textbf{False positives by Clair:} These vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
 present inside the image but Clair is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
-Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
+Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274. \change{The reasons of Clair showing
+false positives and false negatives are unclear. We reported this issue on two Google groups of Clair i.e CoreOS Dev and
+clair-dev (\href{https://groups.google.com/forum/#!topic/clair-dev/8IqCCfd-EEc}{https://groups.google.com/forum/#!topic/clair-dev/8IqCCfd-EEc}).
+However, we did not receive any reply from developers.}
 
 \textbf{Database difference:} As we discussed earlier that Clair Scanner's database was old by one week.
                 So some of the vulnerabilities were not updated yet. For example, CVE-2019-5094, which
@@ -889,8 +947,20 @@ Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274.
 
 \textbf{Rejected CVEs:} There are some CVE that are rejected because they are duplicate copies of other CVEs. 
 	So Anchore is not reporting those rejected CVEs but Vuls is reporting those. For example CVE-2017-13753.
-
-
+%\begin{table*}
+%\csvreader[%
+% respect all,%
+%  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+%      \begin{adjustbox}{max width=\textwidth},
+%  after reading=\end{adjustbox},
+% tabular={c |c | c | c | c |c |c |c |c},
+%	table head =Image Labels &{Image names} &{OS Distro} & {Vulnerabilities by Anchore} & {Vulnerabilities by Clair} & {Vulnerabilities by Vuls} & {a} & {b} & {c}\\\hline,
+% late after line= \\,
+%        late after last line=\\\hline
+%]{status.csv}{}{\csvlinetotablerow}%
+%       \centering
+%        \caption{\label{status}Existing number of Vulnerabilities}
+%\end{table*}
 \subsection{Effect Of Update}
 %\begin{comment}
 %The next experiment involves updating all these images and then rescanning them to see how the number of
@@ -934,19 +1004,19 @@ are not getting updates anymore.
 %	after update of the images}
 %      \end{figure*}
 
-\begin{figure*}
-        {\includegraphics[scale=1.5,width=\textwidth]
-        {Figures/graphwithdeletedpackages.pdf}}
-	\caption{\label{deleted}\#Deleted Packages vs \#Reduced Vulnerabilities}
-\end{figure*}
+%\begin{figure*}
+%        {\includegraphics[scale=1.5,width=\textwidth]
+%        {Figures/graphwithdeletedpackages.pdf}}
+%	\caption{\label{deleted}\#Deleted Packages vs \#Reduced Vulnerabilities}
+%\end{figure*}
 
 \subsection{Effect Of Size Reduction}
 
 Our third experiment involves deleting unnecessary packages from the images.
-We did this experiment only on five images because the reduction process takes
-several hours.\tristan{This is not a good argument, it is vague, and it is not complete. Size reduction also requires 
-to run a pipeline in the image.}. We selected these five images at random \tristan{really? I don't think so.}. We noticed that
-after the size reduction process, the scanning results deviate a little from our initial belief \tristan{what do you mean?}.
+\change{We did this experiment on five images because the reduction process may take
+several hours. Size reduction process also requires 
+to run a pipeline in the image, which takes time}. We noticed that
+after the size reduction process, the scanning results deviate a little from our initial expectation.
 At first, we thought that we will have a notable effect of size reduction on
 vulnerabilities. However, this is not the case always. The bar graph shown in
 Figure~\ref{fig:bargraph} illustrates that images \textit{bids/ndmg} and
