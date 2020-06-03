@@ -105,11 +105,19 @@ are used by containers to mitigate these threats to a certain extent. The securi
 of containers is still the most concerning issue. According to a Forrester survey~\cite{bettini2015vulnerability}
 done in January 2015, security is the
 biggest concern while deploying containers.
-Besides web applications, containers are also popularly used for scientific computing
-and data science in neuroscience. In fact, Singularity was developed for scientific applications
-by keeping the focus on HPC environments. This popularity of containers leads us to the
+Containers are popular in various scientific fields, in particular to run Big Data analyses
+on HPC clusters. 
+However, deploying Docker container images on clusters raises security issues. Some security issues 
+that could possibly lead to privilege escalation, DoS or information leak. Some
+security issues are related to the architecture of Docker but have been 
+largely solved by Singularity.
+In fact, Singularity was developed for scientific applications
+by keeping the focus on HPC environments. Although, this work is of general interest,
+our particular focus in this paper is neuroimaging as containers are popularly used for scientific computing and data science
+in neuroscience.
+This popularity of containers in neuroscience leads us to the
 primary research question of this work: \textit{what is the current security state of
-container images that are deployed on HPC clusters?}
+neuroimaging container images that are deployed on HPC clusters?}
 
 To answer that question, we scan images that are used on Compute
 Canada clusters by the Neuroscience field. Scanning refers to the practice of
@@ -127,17 +135,7 @@ In this paper, we report vulnerabilities that are present in
 container images, specifically used by neuroimaging field. Particularly,
 we aim to answer four primary research questions:
 
-\tristan{The above text contains true statements, but they are not organized 
-to introduce the paper correctly. It should be rewritten according to the following logic:
-\begin{itemize}
-	\item Containers are popular in various scientific fields, in particular to run Big Data analyses on HPC clusters. Mention that neuroimaging is our particular focus, although this work is of general interest.
-	\item However, deploying container images on clusters raises security issues. Some security issues that could possibly lead to privilege escalation, DoS or information leak. Some
-	security issues are related to the architecture of container systems (Docker) but have been largely solved by Singularity.
-	\item Here we are interested in image vulnerabilities [explain research questions as you did]
-	\item [introduce paper outline as done]
-\end{itemize}}
-
-\textit{RQ1:} Are vulnerabilities present inside container images that are
+\textit{RQ1:} Are vulnerabilities present inside neuroimaging container images that are
 deployed on HPC clusters?
 
 \textit{RQ2:} Can these vulnerabilities be reduced by updating the images?
@@ -147,9 +145,6 @@ deployed on HPC clusters?
 \textit{RQ4:} What is the effect of both updating
 and shrinking image size on vulnerabilities?
 
-To answer those questions, we take an example of neuroscience field where
-containers are used on Compute Canada HPC cluster.
-
 The existing research work on containers focuses mainly on the security of Docker
 containers.
 This focus is justified by the fact that containers expose the host's resources
@@ -157,25 +152,29 @@ This focus is justified by the fact that containers expose the host's resources
 threat for the applications running on the same host. Previous studies evaluated
 the security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis},
 and have scanned vulnerabilities on Docker hub images~\cite{Shu2017, gummaraju2015over}.
-Also, Singularity came up with Stools \href{https://github.com/singularityhub/stools}{(https://github.com/singularityhub/stools)}, which can be used for scanning Singularity images
-for security and quality checks.
-Here, we focus on the specific context of scientific data analysis on HPC clusters, taking
-neuroimaging as an example.
+Zerouali et al. in~\cite{zerouali2019relation} studied severity vulnerabilities and bugs in Docker 
+containers due to outdated packages. 
 
+There are various image scanners available for scanning Docker images, for
+instance Anchore, CoreOS's Clair, etc.
+However, these scanners cannot be used to scan Singularity images due to different image formats.
+Therefore, Singularity came up with Stools \href{https://github.com/singularityhub/stools}{(https://github.com/singularityhub/stools)}, which can be used for scanning Singularity images
+for security and quality checks.
 
 This paper is organized as follows: in the next section, we provide description
-of materials and methods which summarize our four main experiments. We also explain
-scanning tools that we use for scanning container images to report
-vulnerabilities. The next section of this paper provides the results, where we
+of materials and methods which summarize our experiments. We also explain different
+image scanners used to report
+vulnerabilities in container images. The next section of this paper provides the results, where we
 present a number of existing vulnerabilities in the container images
 used for data analysis on shared HPC clusters. We then proceed in the following section with 
 discussion and analysis of these results, where we provide more insight into the problems that 
-we faced while conducting these experiments. Finally, we conclude this paper by proposing some
-particular rules that can be followed to secure container images for use in clusters.
+we faced while conducting these experiments. We also propose some
+particular rules that can be followed to secure container images. Finally, conclusions are drawn
+in the last section of the paper.
 
 \section{Materials and Methods}
 
-\change{This study involves several image scanning experiments. To begin with,
+This study involves several image scanning experiments. To begin with,
 we scan the images as is to report the existing vulnerabilities
 inside the images. Updating these images is likely to play a role in vulnerabilities. Therefore, we
 update the images and then rescan all these
@@ -193,7 +192,7 @@ into the container images and the image scanners that we used in our study.
 The image scanners are going to report different results due to different Linux
 distributions/releases, which have different vulnerability data. Therefore, in the last, this section presents a
 description of these varying Linux distributions/releases and their
-vulnerability databases.}
+vulnerability databases.
 
 %As we are taking a particular use case of containers from
 %neuroscience field i.e Canadian Open Neuroscoence Platform (CONP) so  
@@ -207,18 +206,19 @@ vulnerability databases.}
 
 \subsection{Container Tools}
 
-\tristan{This sub-section has a lot of boilerplate material. It should be summarized.}
 
-Container tools are capable of packing and running an application in an isolated environment that has
-the application's dependencies,
-required libraries, and configuration files for the
-application to function properly.
+In this paper, we consider two popular container tools i.e Docker and Singularity because
+neuroimaging uses images from these two tools.
+%Container tools are capable of packing and running an application in an isolated environment that has
+%the application's dependencies,
+%required libraries, and configuration files for the
+%application to function properly.
 
 \subsubsection{Docker}
 
-Docker uses a client-server architecture, where client, containers, communicate to
-the server, Docker Daemon, which is also known as the Docker engine.
-Docker Daemon is a long-running process that manages all Docker images, containers, storage volumes, and networks.
+%Docker uses a client-server architecture, where client, containers, communicate to
+%the server, Docker Daemon, which is also known as the Docker engine.
+%Docker Daemon is a long-running process that manages all Docker images, containers, storage volumes, and networks.
 
 %consists of the following three main components: 
 %
@@ -230,7 +230,7 @@ Docker Daemon is a long-running process that manages all Docker images, containe
 %
 %\textit{Client:} It is a Command Line Interface (CLI) client which is used to interact with the \textit{Docker Daemon}.
 %Docker runs a software, \textit{Docker daemon}, on the host machine.
-It runs as root and is remotely controlled through a
+Docker Engine, which runs as root, is remotely controlled through a
 UNIX socket. It is responsible for launching and managing containers,
 consequently, when a container runs, the container is spawned as a
 child process of this root-owned daemon.
@@ -392,7 +392,7 @@ and 6 Singularity images.
 
 \subsection{Image Scanners}
 
-\change{Container image scanners can be broadly categorized into static and dynamic
+Container image scanners can be broadly categorized into static and dynamic
 scanners. Static scanning performs analysis on a image without running it
 as a container. Therefore, package manager, which is a executable file,
 cannot be used to extract required data while statically extracting image data.
@@ -401,7 +401,7 @@ and OS distribution etc. For instance, in Debian and Ubuntu, \textit{/var/lib/dp
 can be parsed to get a list of installed packages and in the same way \textit{/etc/os-release} file can be
 parsed to get information about OS distribution.
 Whereas in dynamic scanning, a container is deployed from the image first and then
-package manager of the image is executed inside the container to collect required data.}
+package manager of the image is executed inside the container to collect required data.
 
 
 %\subsubsection{Scanning tools used}
@@ -416,21 +416,18 @@ package manager of the image is executed inside the container to collect require
 %and one scanner for Singularity images.
 %\end{comment}
 
-\change{We used four popular image scanners, namely Anchore~\cite{github_2019},
+We used four popular image scanners, namely Anchore~\cite{github_2019},
 Vuls~\cite{future-architect_2019}, Clair Scanner~\cite{arminc_2019} and
 Stools~\cite{stools}. Anchore, Vuls and Clair Scanner support Docker
 images while Stools supports Singularity. Vuls support both static as well as dynamic
 scanning till version 0.9.5, however, in our experiments we used it dynamically.
 On the contrary, the others
-are static scanners.} To avoid discrepancies, we froze the vulnerability
+are static scanners. To avoid discrepancies, we froze the vulnerability
 databases for these scanners on September 25, 2019.
-
-
-\tristan{The scanner descriptions need to be streamlined. They are quite verbose and not very consistent for now.}
 
 \subsubsection{Anchore}
 
-Anchore is an end-to-end, open-source container security platform. Anchore
+Anchore is an end-to-end, open-source container security platform. It
 is a static
 scanning tool that analyses container images and lists OS
 packages, non-OS packages (Python, Java, Gem, and Npm), and files.
@@ -449,7 +446,7 @@ Command Line Interface (CLI).
 %\end{comment}
 It can be
 installed directly on the host and used to inspect images.
-In our experiments, we used a Docker image to get Anchore Engine version 0.5.0 and Engine Database
+In our experiments, we used a Docker image to get Anchore Engine version 0.5.0 and Database
 version 0.0.11.
 
 Anchore compares package versions, which are present inside the
@@ -457,7 +454,7 @@ image, with the vulnerability database in order to flag vulnerabilities.
 To get a vulnerability feed of various OS distribution, Anchore refers to
 different sources. For example, the Ubuntu launchpad database is used for Ubuntu.
 
-\begin{figure}
+\begin{figure}[!ht]
 	\fbox{{\includegraphics[scale=2.5,width=\columnwidth]
 	{Figures/vulnExample2.png}}}
         \caption{\label{example} Representation of a CVE in Ubuntu Launchpad}
@@ -466,19 +463,21 @@ different sources. For example, the Ubuntu launchpad database is used for Ubuntu
 \subsubsection{Vuls}
 
 Vuls is an open-source vulnerability scanner for Linux and FreeBSD.
+It offers both static and dynamic scanning. In our experiments, we used
+it to dynamically scan containers.
 Using a dynamic scanning technique, it offers
 remote and local scans at the time of writing. The remote scan involves setting up only one machine, to
 which other target servers are connected via SSH. Local scan involves running
 the scan on the target server itself. Further, Vuls offer a fast scan, fast root scan,
 and deep scan mode.
-The Fast scan is performed without root privileges, whereas a fast root scan is
-performed with root privileges. The latter also uses checkrestart utility to 
-detect processes that are updated but not yet restarted because if they are not
-restarted, updates are not effective. Fast root scan also detects these
-processes. Both fast scan and fast root scan are performed offline without Internet
-access, and put almost no load on the scan target server. The Deep scan uses
-root privileges for scanning and is used to get a more detailed scan. It checks
-changelogs, which puts more load on the target server.
+%The Fast scan is performed without root privileges, whereas a fast root scan is
+%performed with root privileges. The latter also uses checkrestart utility to 
+%detect processes that are updated but not yet restarted because if they are not
+%restarted, updates are not effective. Fast root scan also detects these
+%processes. Both fast scan and fast root scan are performed offline without Internet
+%access, and put almost no load on the scan target server. The Deep scan uses
+%root privileges for scanning and is used to get a more detailed scan. It checks
+%changelogs, which puts more load on the target server.
 
 In our experiments, we used Vuls Docker image having version 0.9.0 with fast scan mode.
 Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
@@ -509,11 +508,11 @@ Clair Scanner refers to the Ubuntu CVE tracker for getting Ubuntu vulnerability 
 For that purpose, a Docker image is maintained that contains the Ubuntu CVE tracker database.
 Whenever Ubuntu updates its database, this image is also updated with the required information.
 
-\change{In our experiments, we used a Docker image (arminc/clair-local-scan:v2.0.6) for scanning
+In our experiments, we used a Docker image (arminc/clair-local-scan:v2.0.6) for scanning
 and an another Docker image (arminc/clair-db:latest) for the vulnerability database, which was
 last updated on 2019-09-18. We performed
 scanning on 2019-09-25. So, it means that Clair Scanner's database was already
-old by one week.}
+old by one week.
 
 \subsubsection{Stools}
 
@@ -602,13 +601,14 @@ for scanning and followed the steps mentioned in \href{https://github.com/singul
 
 \subsection{Linux Releases and Vulnerability Databases}
 
-\change{Image scanners report vulnerabilities differently depending on the Linux release types.
-Therefore, we provide an overview of these Linux releases by taking an example. 
+Image scanners report vulnerabilities differently depending on the different Linux release types.
+Therefore, we provide an overview of these Linux releases and scanners re. 
 BIDS app and Boutiques images in our experiments have diverse Linux
 distributions such as Ubuntu, Centos, Debian, and Alpine. Further, a particular
-distribution have different releases in general. Here, we take Ubuntu as an example
+distribution have different releases in general. Here, we take Ubuntu's example
 to discuss different releases and their vulnerability databases. We took Ubuntu's example
-because mostly images in our experiments have this distibution.} In the case of Ubuntu, release
+because mostly images in our experiments have this distibution. However, other distributions also have
+similar release trend. In the case of Ubuntu, release
 can be of two types: Regular or Long Term Support (LTS).
 Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
 reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
@@ -692,7 +692,7 @@ in the Ubuntu launchpad database.
 
 \subsection{Image Update and Reduction Process}
 
-\change{If there exist vulnerabilities in the container image, then we can
+If there exist vulnerabilities in the container image, then we can
 run after updating the
 image. Updating the image involves updating all software packages that are
 inside that image. We used a bash script 
@@ -732,7 +732,7 @@ Finally, we combine both update and size reduction process
 to lessen the number of vulnerabilities.
 Therefore, in this process we first update all the packages in the image and then deletes
 the unnecessary packages. For this process we used the same scripts that
-we used for earlier experiments.}
+we used for earlier experiments.
 
 \begin{comment}
 \subsection{CBRAIN}
@@ -769,20 +769,19 @@ vulnerabilities.
 
 Table~\ref{table1} shows the number of vulnerabilities present in the images,
 which are detected by the scanners.
-\tristan{You should refer to tables in the order they are presented (1
-first, then 2). Tables should also be located next to their reference.}
-It is important to note that results have major discrepancies.
-The Jaccard coefficient of Anchore with both Clair and Vuls is 0.59,
-whereas Vuls and Clair have 0.83.
+It is important to note that results have major discrepancies. In particular,
+Anchore reports far more different results than Vuls and Clair resulting in 
+the Jaccard coefficient of 0.59 with both,
+whereas Vuls and Clair share more common vulnerabilities resulting to the Jaccard coefficient of 0.83.
 
 Figure~\ref{fig:graph1} gives more image-specific information.
 It represents the number of vulnerabilities that are present inside images.
 The overall trend of the Figure shows that as the number of packages increases in the image, the number of vulnerabilities
-also get increased \tristan{mention the parameters of the regression line (preferably as a label in the figure) and the regression error}.
+also get increased.
 The figure also infers that Alpine distribution, being the
-lightweight distribution, have the least number of vulnerabilities, whereas Ubuntu contains the highest number of
-vulnerabilities. Debian and Centos contain a higher number of critical vulnerabilities than Ubuntu and Alpine \tristan{I dont think there is enough data to 
-claim that, claim should be softened.}.
+lightweight distribution, have the least number of vulnerabilities, whereas Ubuntu contains more packages and hence report more vulnerabilities.
+We also analyzed that out of the total Docker images scanned in our experiment, Debian reported more critical vulnerabilties than others, reaching
+up to 180.
 %\begin{table*}
 %\csvreader[%
 % respect all,%
@@ -815,27 +814,29 @@ claim that, claim should be softened.}.
         \caption{\label{table1}Number of vulnerabilities by scanners}
 \end{table*}
 
-\begin{figure}
+\begin{figure*}[!ht]
+        {\includegraphics[scale=1.5,width=\textwidth]
+        {Figures/vulngraph.pdf}}
+        \caption{\label{fig:graph1} Number of vulnerabilities by packages}
+      \end{figure*}
+
+\begin{figure}[!ht]
         {\includegraphics[scale=2.5,width=\columnwidth]
         {Figures/venn.pdf}}
         \caption{\label{fig:venn} Scanner results}
 \end{figure}
 
-\begin{figure*}[t]
-	{\includegraphics[scale=1.5,width=\textwidth]
-	{Figures/vulngraph.pdf}}
-        \caption{\label{fig:graph1} Number of vulnerabilities by packages}
-      \end{figure*}
-
-\begin{figure*}[b]
-        {\includegraphics[width=\textwidth]
-        {Figures/vulnwithupdate.pdf}}
-        \caption{\label{fig:graph2} Number of vulnerabilities before and
-        after update of the images}
-      \end{figure*}
+%\begin{figure*}[b]
+%        {\includegraphics[width=\textwidth]
+%        {Figures/vulnwithupdate.pdf}}
+%        \caption{\label{fig:graph2} Number of vulnerabilities before and
+%        after update of the images}
+%      \end{figure*}
 
 \subsection{Comparisons between Scanners}
 
+Figure~\ref{fig:venn} represents the number of common and different vulnerabilities
+that are shown by scanners.
 When we add all regions of Venn diagram
 we get total 20050 vulnerabilities in BIDS apps and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
@@ -891,7 +892,15 @@ so it is not reported by Anchore. Whereas, this vulnerability has status as "DNE
 release so Clair Scanner also does not report it. As Ubuntu 14.04 LTS release is present inside the images still
 Clair Scanner is referring to Ubuntu 14.04 ESM release vulnerability database.
 
-\begin{figure*}[b]
+\begin{figure*}[!ht]
+        {\includegraphics[width=\textwidth]
+        {Figures/vulnwithupdate.pdf}}
+        \caption{\label{fig:graph2} Number of vulnerabilities before and
+        after update of the images}
+      \end{figure*}
+
+
+\begin{figure*}[!ht]
         {\includegraphics[scale=1.5,width=\textwidth]
         {Figures/bargraph.png}}
         \caption{\label{fig:bargraph} Vulnerabilities by different experiments}
@@ -904,10 +913,9 @@ is present in package Cairo in Xenial release and it is not detected by Clair.
 
 \textbf{False positives by Clair:} These vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
 present inside the image but Clair is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
-Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274. \change{The reasons of Clair showing
+Clair is only referring to Ubuntu 14.04 ESM release. For example CVE-2019-1274. The reasons of Clair showing
 false positives and false negatives are unclear. We reported this issue on two Google groups of Clair i.e CoreOS Dev and
 clair-dev \href{https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc}{(https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc).}
-However, we did not receive any reply from developers.}
 
 \textbf{Database difference:} As we discussed earlier that Clair Scanner's database was old by one week.
                 So some of the vulnerabilities were not updated yet. For example, CVE-2019-5094, which
@@ -925,7 +933,8 @@ However, we did not receive any reply from developers.}
 		which it is not able to detect some vulnerabilities. Due to this bug, Anchore does not detect 
 		vulnerabilities that have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
 		However, if this vulnerability is present in Ubuntu 14.04 ESM release it is detected by Clair. 
-		For example CVE-2019-13565 in Ubuntu 14.04.
+		For example CVE-2019-13565 in Ubuntu 14.04. We reported this bug as well through slack
+		channel.
 
 
 \textbf{False Negatives by Vuls:} Vuls is missing some of the vulnerabilities that it should detect. 
@@ -999,7 +1008,7 @@ are not getting updates anymore.
 \subsection{Effect Of Size Reduction}
 
 Our third experiment involves deleting unnecessary packages from the images.
-\change{We did this experiment on five images because the reduction process may take
+We did this experiment on five images because the reduction process may take
 several hours because it requires 
 a pipeline to run in the image, which takes time. We noticed that
 after the size reduction process, the scanning results deviate a little from our initial expectation.
@@ -1016,7 +1025,7 @@ reduced only by 4 and 17 respectively.
 Also, if we delete packages that contain a lot of vulnerabilities, it helps in reducing
 vulnerabilities by a significant number. For instance, in case of our experiments
 deleting compilers and Linux-kernel-header packages helped to minimize vulnerabilities
-by a significant number in \textit{bids/example, bids/freesurfer, and bids/mindboggle:0.0.4-1}.} 
+by a significant number in \textit{bids/example, bids/freesurfer, and bids/mindboggle:0.0.4-1}. 
 %Our third experiment shows that deleting unnecessary packages from the image also helps to reduce
 %the number of vulnerabilities by a significant number. We started this experiment with
 %\textit{bids/example} image and deleted 61 unnecessary packages out of total 528 packages, which helped
@@ -1039,7 +1048,7 @@ scanning results did not change.
 \subsection{Discussion}
 
 As we noticed that none of the Boutiques and BIDS images at the time of the study are free of vulnerabilities, out of which
-some have critical vulnerabilities as well. Yet there is not a single image scanner on which we can rely upon for
+so many are critical vulnerabilities as well. Yet there is not a single image scanner on which we can rely upon for
 scanning. Additionally, we cannot update all images because some OS releases, which are used inside images, 
 already reached end-of-life and are
 no longer getting updates. Furthermore, the minimization of images is a time consuming process. As we have to run
@@ -1048,10 +1057,22 @@ of running the pipeline because it is image specific. In addition to that, Repro
 in the images having Python version 2.7.3 or greater, or 3.3 or greater. Above all, there is no guarantee that
 the commands that you ran to get Reprozip trace covered the whole program, maybe it runs a particular
 branch of the program. So there should be some kind of coverage measurement.
-
-\tristan{You should comment on the important number of vulnerabilities found in the images overall.}
-
-\tristan{Mention software not installed thorugh the package manager.}
+Besides this, as scanners report vulnerabilities according to the versions of the installed packages,
+they are likely to miss packages that are not installed using package manager. 
+Therefore, we suggest some particular rules that can be
+followed to keep container images safe.
+\newline 1. Update packages regularly.
+\newline 2. Remove unnecessary packages, in particular the ones used for installation (compilers, source packages, etc).
+\newline 3. Choose your base OS image wisely.
+\newline 4. Run image scanning tools in CI scripts. For instance Anchore.
+\newline 5. Protect your GitHub/DockerHub credentials because if automated builds is set up
+in Docker Hub, it can automatically build images from external repositories, for instance GitHub.
+\newline 6. Minimize dependencies.
+\newline 7. Avoid static linking because it obfuscates vulnerability scanning.
+\newline 8. Use the package manager to facilitate vulnerability detection.
+\newline 9. Use OS releases that have LTS support.
+\newline 10. Sign your images. Docker Content Trust (DCT) provides ability to digitally sign
+images to verify the integrity of the images.
 
 \subsection{Conclusions and Future Work}
 
@@ -1065,24 +1086,11 @@ vulnerabilities there are no fixes available yet so the images cannot
 be made totally invulnerable. Continuing with our next two experiments, we analyzed that the
 image size reduction process also reduces vulnerabilities a lot. However, we found out that this is not
 always true. It depends on two factors: kind and the number of packages that we are
-deleting. Therefore, we conclude this paper by suggesting some particular rules that can be
-followed to keep container images safe.
-\newline 1. Update packages regularly.
-\newline 2. Remove unnecessary packages, in particular the ones used for installation (compilers, source packages, etc).
-\newline 3. Mind your base OS image.
-\newline 4. Run image scanning tools in CI scripts. For instance Anchore.
-\newline 5. Mind your GitHub/DockerHub credentials.
-\newline 6. Minimize dependencies.
-\newline 7. Avoid static linking because it obfuscates vulnerability scanning.
-\newline 8. Use the package manager to facilitate vulnerability detection.
-\newline 9. Use OS releases that have LTS support.
-\newline 10. Sign your images.
+deleting.
 
 In future work we would like to see how these vulnerabilities can be leveraged
 to design attacks from containers. Particularly, we want
 to consider web servers and clusters that processes data using containers.
-
-\tristan{future work}
 
 \bibliography{bibliography}
 
