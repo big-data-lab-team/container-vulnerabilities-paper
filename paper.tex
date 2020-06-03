@@ -394,19 +394,15 @@ and 6 Singularity images.
 
 \change{Container image scanners can be broadly categorized into static and dynamic
 scanners. Static scanning performs analysis on a image without running it
-as a container. Therefore, commands cannot be executed to inquire installed packages}
+as a container. Therefore, package manager, which is a executable file,
+cannot be used to extract required data while statically extracting image data.
+Thus, scanners parse different files for extracting image data e.g, installed packages, their versions,
+and OS distribution etc. For instance, in Debian and Ubuntu, \textit{/var/lib/dpkg/status} file
+can be parsed to get a list of installed packages and in the same way \textit{/etc/os-release} file can be
+parsed to get information about OS distribution.
+Whereas in dynamic scanning, a container is deployed from the image first and then
+package manager of the image is executed inside the container to collect required data.}
 
-
-
-
-\tristan{Does it really look into files, or only installed packages? Please check. The difference is important 
-when software is installed without using the package manager.}, without deploying the image in a container. In
-dynamic scanning however, a container is started from the image and
-\tristan{... It is still unclear how dynamic scanning works. Your text
-mentions ``running a container from the image and then scanning the dynamic
-behavior of the image'' but in practice it should explain what is executed
-in the image: the package manager? other scanning tools? Please clarify by
-completing this sentence.}
 
 %\subsubsection{Scanning tools used}
 
@@ -420,11 +416,13 @@ completing this sentence.}
 %and one scanner for Singularity images.
 %\end{comment}
 
-We used four popular image scanners, namely Anchore~\cite{github_2019},
+\change{We used four popular image scanners, namely Anchore~\cite{github_2019},
 Vuls~\cite{future-architect_2019}, Clair Scanner~\cite{arminc_2019} and
 Stools~\cite{stools}. Anchore, Vuls and Clair Scanner support Docker
-images while Stools supports Singularity. Vuls is a dynamic scanner, while the others
-are static scanners. To avoid discrepancies, we froze the vulnerability
+images while Stools supports Singularity. Vuls support both static as well as dynamic
+scanning till version 0.9.5, however, in our experiments we used it dynamically.
+On the contrary, the others
+are static scanners.} To avoid discrepancies, we froze the vulnerability
 databases for these scanners on September 25, 2019.
 
 
@@ -521,7 +519,7 @@ old by one week.}
 
 Stools combines CoreOS's Clair Scanner with Continuous Integration (CI)
 for scanning Singularity images for vulnerabilities.
-Initially, Clair Scanner was intended to scan Docker containers only. This tool does not fit well
+Initially, Clair Scanner was intended to scan Docker images only. This tool does not fit well
 to scan Singularity images because of the different image formats.
 However, TravisCI and CircleCI are commonly used for testing code, and these
 services also offer running containers. Stools combined both these concepts.
@@ -531,20 +529,20 @@ Singularity image, and scanning it for filesystem before the image is finalized.
 In our experiments, we used a Docker image (\href{https://hub.docker.com/r/vanessa/stools-clair}{vanessa/stools-clair:v3.2.1})
 for scanning and followed the steps mentioned in \href{https://github.com/singularityhub/stools}{Stools Github}.
 
-\begin{table}
-\csvreader[%
- respect all,%
-  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
-      \begin{adjustbox}{max width=\columnwidth},
-  after reading=\end{adjustbox},
- tabular={c |c},
-        table head =Singularity Images & {Vulnerabilities by Stools}\\\hline,
- late after line= \\,
-        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
-]{Singularityresults.csv}{}{\csvlinetotablerow}%
-       \centering
-        \caption{\label{sing}Number of Vulnerabilities in Singularity images}
-\end{table}
+%\begin{table}
+%\csvreader[%
+% respect all,%
+%  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+%      \begin{adjustbox}{max width=\columnwidth},
+%  after reading=\end{adjustbox},
+% tabular={c |c},
+%        table head =Singularity Images & {Vulnerabilities by Stools}\\\hline,
+% late after line= \\,
+%        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+%]{Singularityresults.csv}{}{\csvlinetotablerow}%
+%       \centering
+%        \caption{\label{sing}Number of Vulnerabilities in Singularity images}
+%\end{table}
 
 
 %\begin{table*}
@@ -769,20 +767,13 @@ vulnerabilities.
 
 \subsection{Existing Vulnerabilities}
 
-Table~\ref{sing} shows the number of vulnerabilities present in Singularity
-images whereas Figure~\ref{fig:venn} illustrates the number of
-vulnerabilities in Docker images, which are detected by the three scanners.
+Table~\ref{table1} shows the number of vulnerabilities present in the images,
+which are detected by the scanners.
 \tristan{You should refer to tables in the order they are presented (1
-first, then 2). Tables should also be located next to their reference. In
-this case I would actually create a single table, greying out cells that
-aren't pertinent (Anchore, Vuls and Clair for Singularity images.)}
- The
-overlapping regions of the Venn diagram show the number of common vulnerabilities detected by either two or
-three scanners. In total 10691 vulnerabilities are detected by three scanners.
-There are also vulnerabilities that are detected only by one scanner. \tristan{The last 3 sentences bring absolutely no 
-extra information that can't be read on the figure directly. You should replace them with only 1 sentence noting that there 
-are important discrepancies between scanner results (maybe quantify that with a Dice or Jaccard coefficient). This is an example 
-of how writing should be improved throughout the paper.}
+first, then 2). Tables should also be located next to their reference.}
+It is important to note that results have major discrepancies.
+The Jaccard coefficient of Anchore with both Clair and Vuls is 0.59,
+whereas Vuls and Clair have 0.83.
 
 Figure~\ref{fig:graph1} gives more image-specific information.
 It represents the number of vulnerabilities that are present inside images.
@@ -792,39 +783,38 @@ The figure also infers that Alpine distribution, being the
 lightweight distribution, have the least number of vulnerabilities, whereas Ubuntu contains the highest number of
 vulnerabilities. Debian and Centos contain a higher number of critical vulnerabilities than Ubuntu and Alpine \tristan{I dont think there is enough data to 
 claim that, claim should be softened.}.
-Similarly, Figure~\ref{sing} \tristan{there is a reference error, and if it's still a different figure I think you should make only 1.} illustrates the number of vulnerabilities in Singularity images used in Boutiques images.
-\tristan{In the Figure, could you increase the marker size in the caption, and order it so that the different versions of a distribution 
-are grouped together and sorted by increasing version?}
-\begin{table*}
+%\begin{table*}
+%\csvreader[%
+% respect all,%
+%  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+%      \begin{adjustbox}{max width=\textwidth},
+%  after reading=\end{adjustbox},
+% tabular={c |c | c | c | c |c},
+%	table head =Image Labels &{Image names} & {OS} & {Anchore} & {Clair} & {Vuls}\\\hline,
+% late after line= \\,
+%        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+%]{results.csv}{}{\csvlinetotablerow}%
+%       \centering
+%	\caption{\label{table1}Existing number of Vulnerabilities}
+%\end{table*}
+
+
+
+\begin{table*}[!ht]
 \csvreader[%
  respect all,%
   before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
       \begin{adjustbox}{max width=\textwidth},
   after reading=\end{adjustbox},
  tabular={c |c | c | c | c |c},
-	table head =Image Labels &{Image names} &{OS Distro} & {Vulnerabilities by Anchore} & {Vulnerabilities by Clair} & {Vulnerabilities by Vuls}\\\hline,
+	table head =Image Labels &{Image names} & {Anchore} & {Clair} & {Vuls} &{Stools}\\\hline,
  late after line= \\,
         late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
-]{results.csv}{}{\csvlinetotablerow}%
+]{fullresults.csv}{}{\csvlinetotablerow}%
        \centering
-	\caption{\label{table1}Existing number of Vulnerabilities}
+        \caption{\label{table1}Number of vulnerabilities by scanners}
 \end{table*}
-%\begin{comment}
-%\begin{table}
-%\csvreader[%
-% respect all,%
-%  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
-%      \begin{adjustbox}{max width=\columnwidth},
-%  after reading=\end{adjustbox},
-% tabular={c|c},
-%	table head ={Image Tag} & {Image Name}\\\hline,
-% late after line= \\,
-%        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
-%]{names.csv}{}{\csvlinetotablerow}%
-%       \centering
-%	\caption{\label{table2}Image names}
-%\end{table}
-%\end{comment}
+
 \begin{figure}
         {\includegraphics[scale=2.5,width=\columnwidth]
         {Figures/venn.pdf}}
@@ -840,22 +830,19 @@ are grouped together and sorted by increasing version?}
 \begin{figure*}[b]
         {\includegraphics[width=\textwidth]
         {Figures/vulnwithupdate.pdf}}
-        \caption{\label{fig:graph2} Numner of vulnerabilities before and
+        \caption{\label{fig:graph2} Number of vulnerabilities before and
         after update of the images}
       \end{figure*}
 
 \subsection{Comparisons between Scanners}
-
-Table~\ref{table1} compares the results of scanning images with the three scanners.
-Venn Diagram in Figure~\ref{fig:venn} summarizes this table. \tristan{You said it already.}
 
 When we add all regions of Venn diagram
 we get total 20050 vulnerabilities in BIDS apps and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
 reported by Anchore, 673 reported only by Clair, and 325 detected only by Vuls.
 
-The number and type of vulnerabilities reported by the three scanners are drastically different from each other.
-It was interesting to investigate the reasons for these differences.
+As the number and type of vulnerabilities reported by the three scanners are drastically different from each other,
+it was interesting to investigate the reasons for these differences.
 %these scanners report different numbers and types of vulnerabilities.
 %How their logic differs and what exactly is making these results different than each other.
 
@@ -885,9 +872,8 @@ So, vulnerability detection in header files
 is irrelevant in this case.
 
 \textbf{CVEs with Status as “Not-affected”:} Vuls is reporting vulnerabilities that have status
-as "not-affected" in the vulnerability database. So it means Linux distribution which is inside the image is not affected
-by the particular CVE. However, it is reported by Vuls \tristan{do you mean Anchore? This sounds circular.}. In other words, we can say that
-these are false positives \tristan{the use of ``false positives'' is ambiguous} by Vuls.
+as "not-affected" in the vulnerability database. It means Linux distribution which is inside the image is not affected
+by the particular CVE. In other words, Vuls is reporting vulnerabilities that it should not have reported.
 For example, we scanned an image having the Trusty release in it and Vuls is reporting CVE-2015-2305
 in the package Cups. However, if we check the vulnerability database, package Cups in Trusty is not
 affected by this CVE.
@@ -1014,8 +1000,8 @@ are not getting updates anymore.
 
 Our third experiment involves deleting unnecessary packages from the images.
 \change{We did this experiment on five images because the reduction process may take
-several hours. Size reduction process also requires 
-to run a pipeline in the image, which takes time}. We noticed that
+several hours because it requires 
+a pipeline to run in the image, which takes time. We noticed that
 after the size reduction process, the scanning results deviate a little from our initial expectation.
 At first, we thought that we will have a notable effect of size reduction on
 vulnerabilities. However, this is not the case always. The bar graph shown in
@@ -1023,18 +1009,14 @@ Figure~\ref{fig:bargraph} illustrates that images \textit{bids/ndmg} and
 \textit{poldracklab/fmriprep:1.2.3} have an insignificant effect of size reduction.
 According to our analyzes here, this can be due to two reasons: \rom{1}) the number
 and \rom{2}) the kind of packages that we deleted. In other
-words, if we delete a low number of packages then vulnerabilities do not get decreased as expected.
-In contrast, if the number of deleted packages are high, reduction
-in vulnerabilities also becomes high. For instance, we were able to delete only 21 and 25 packages for 
+words, deleting more packages reduces more vulnerabilities. 
+For instance, we were able to delete only 21 and 25 packages for 
 \textit{bids/ndmg} and \textit{poldracklab/fmriprep:1.2.3} images. Consequently, vulnerabilities
-reduced only by 4 and 17 respectively. Furthermore, this is illustrated in Figure~\ref{deleted} \tristan{I'm not thrilled by this figure, I would 
-just mention in the text that we verified that.}.
-\tristan{The next sentence is interesting because it starts characterizing the images that benefit the most 
-from size reduction. The previous sentences read like a tautology, you should make your comment more specific.} 
+reduced only by 4 and 17 respectively. 
 Also, if we delete packages that contain a lot of vulnerabilities, it helps in reducing
 vulnerabilities by a significant number. For instance, in case of our experiments
 deleting compilers and Linux-kernel-header packages helped to minimize vulnerabilities
-by a significant number in \textit{bids/example, bids/freesurfer, and bids/mindboggle:0.0.4-1}. 
+by a significant number in \textit{bids/example, bids/freesurfer, and bids/mindboggle:0.0.4-1}.} 
 %Our third experiment shows that deleting unnecessary packages from the image also helps to reduce
 %the number of vulnerabilities by a significant number. We started this experiment with
 %\textit{bids/example} image and deleted 61 unnecessary packages out of total 528 packages, which helped
@@ -1047,9 +1029,8 @@ by a significant number in \textit{bids/example, bids/freesurfer, and bids/mindb
 Our last experiment includes updating the image and then removing unnecessary packages from it.
 Figure~\ref{fig:bargraph} displays the results. 
 Our initial thought was that with the update and size reduction process together, we will be able to
-reduce vulnerabilities even more. However
-we analyzed that this is not always true. Again, it depends on which packages you \tristan{in general don't use ``you'' in a 
-formal paper.} are deleting and how
+reduce vulnerabilities even more. However,
+we analyzed that this is not always true. Again, it depends on which packages are deleted and how
 many vulnerabilities they contained. To illustrate, \textit{bids/example} image in Figure~\ref{fig:bargraph}
 shows no effect of size reduction along with update process. It has 181 vulnerabilities for both experiments 2 and 4.
 Meaning that packages, which we deleted after updating the image, were already vulnerability free. Therefore,
@@ -1072,7 +1053,7 @@ branch of the program. So there should be some kind of coverage measurement.
 
 \tristan{Mention software not installed thorugh the package manager.}
 
-\subsection{Conclusion}
+\subsection{Conclusions and Future Work}
 
 
 In this paper, we performed various experiments to study the security state of the Docker
@@ -1084,7 +1065,7 @@ vulnerabilities there are no fixes available yet so the images cannot
 be made totally invulnerable. Continuing with our next two experiments, we analyzed that the
 image size reduction process also reduces vulnerabilities a lot. However, we found out that this is not
 always true. It depends on two factors: kind and the number of packages that we are
-deleting. Therefore, we conclude this paper by suggesting ten simple rules that can be
+deleting. Therefore, we conclude this paper by suggesting some particular rules that can be
 followed to keep container images safe.
 \newline 1. Update packages regularly.
 \newline 2. Remove unnecessary packages, in particular the ones used for installation (compilers, source packages, etc).
@@ -1097,7 +1078,11 @@ followed to keep container images safe.
 \newline 9. Use OS releases that have LTS support.
 \newline 10. Sign your images.
 
-\tristan{You should discuss future work here too.}
+In future work we would like to see how these vulnerabilities can be leveraged
+to design attacks from containers. Particularly, we want
+to consider web servers and clusters that processes data using containers.
+
+\tristan{future work}
 
 \bibliography{bibliography}
 
