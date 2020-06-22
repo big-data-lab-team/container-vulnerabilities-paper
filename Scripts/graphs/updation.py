@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+import scipy.stats as st
 # Load the data
-d = pd.read_csv(r"../train3.csv")
+d = pd.read_csv(r"../../train3.csv")
 d.head()
 df=pd.DataFrame(d)
 plt.figure(figsize=(200,20))
@@ -27,13 +28,22 @@ ax = p1.axes[0,0]
 #leg._loc = 4
 #leg.texts[12].set_text("CRITICAL \nVulnerabilities")
 #leg.remove()
-z = np.polyfit(df['Packages'], df['Vulnerabilities'], 1)
-p = np.poly1d(z)
-plt.plot(df['Packages'],p(df['Packages']),"k--")
+#z = np.polyfit(df['Packages'], df['Vulnerabilities'], 1)
+#p = np.poly1d(z)
+#plt.plot(df['Packages'],p(df['Packages']),"k--")
+
+slope, intercept, r_value, p_value, std_err = st.linregress(df['Packages'],df['Vulnerabilities'])
+line_df = pd.DataFrame()
+line_df['line'] = slope*df['Packages']+intercept
+print(std_err)
+plt.plot(df['Packages'], line_df['line'],"k-")
+#plt.legend()
+for idx,row in line_df.iterrows():
+    l = row[0]
+    ax.text(700,1050,'y=({:.2f})x+({:.2f})'.format(slope,intercept),weight='bold')
 
 
-
-d = pd.read_csv(r"../Results_after_update2.csv")
+d = pd.read_csv(r"../../Results_after_update2.csv")
 df=pd.DataFrame(d)
 packages=[]
 #before=[]
@@ -44,11 +54,20 @@ for idx,row in df.iterrows():
     after.append(row[2])
 plt.plot([],[])
 p2=plt.scatter(packages, after, color='r',s=150,marker='2',label='Vulnerabilities after update')
-y = np.polyfit(packages, after, 1)
-p3 = np.poly1d(y)
-plt.plot(packages,p3(packages),"r--")
+#y = np.polyfit(packages, after, 1)
+#p3 = np.poly1d(y)
+#plt.plot(packages,p3(packages),"r--")
 plt.legend(loc='upper left', shadow=True, ncol=2,labelspacing=1.2,borderpad=1.0,prop={'size': 14})
 #leg.remove()
+slope, intercept, r_value, p_value, std_err = st.linregress(df['OS Packages'],df['Vulnerabilities by Anchore after Update'])
+line_df = pd.DataFrame()
+line_df['line'] = slope*df['OS Packages']+intercept
+print(std_err)
+plt.plot(packages, line_df['line'],"r-")
+#plt.legend()
+for idx,row in line_df.iterrows():
+    l = row[0]
+    ax.text(600,255,'y=({:.2f})x+({:.2f})'.format(slope,intercept),weight='bold')
 
 #leg._labelspacing=10
 #for idx,row in df.iterrows():

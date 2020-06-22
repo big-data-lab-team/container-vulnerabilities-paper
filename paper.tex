@@ -58,10 +58,10 @@ Containers; Vulnerabilities; Docker; Singularity; Neuroimaging.
 Containers, which provide an operating system (OS) level virtualization, are
 popular. This is because they are lightweight, flexible, resource-efficient,
 provide fast development cycles, continuous delivery,
-and cost reduction of infrastructure. OS-level virtualization gained a lot of interest when Docker was
+and cost reduction of infrastructure. OS-level virtualization gained a lot of interest when Docker~\cite{docker19} was
 introduced in 2013~\cite{gantikow2016providing}. However, Docker has security concerns due to which it
 is not supported by High Performance
-Computing (HPC) environments. As a result, Singularity came in 2016 with the goal of providing support
+Computing (HPC) environments. As a result, Singularity~\cite{singularity19} came in 2016 with the goal of providing support
 for HPC environments. It is used in many clusters including Compute Canada.
 According to~\cite{kurtzer2017singularity}, Singularity is used in 36 research clusters.
 
@@ -158,7 +158,7 @@ containers due to outdated packages.
 There are various image scanners available for scanning Docker images, for
 instance Anchore, CoreOS's Clair, etc.
 However, these scanners cannot be used to scan Singularity images due to different image formats.
-Therefore, Singularity came up with Stools \href{https://github.com/singularityhub/stools}{(https://github.com/singularityhub/stools)}, which can be used for scanning Singularity images
+Therefore, Singularity came up with Stools~\cite{stools}, which can be used for scanning Singularity images
 for security and quality checks.
 
 This paper is organized as follows: in the next section, we provide description
@@ -175,8 +175,8 @@ in the last section of the paper.
 \section{Materials and Methods}
 
 This study involves several image scanning experiments. To begin with,
-we scan the images as is to report the existing vulnerabilities
-inside the images. Updating these images is likely to play a role in vulnerabilities. Therefore, we
+we scan the images as is to report the vulnerabilities
+inside the images. Updating and shrinking the size of these images is likely to play a role in vulnerabilities. Therefore, we
 update the images and then rescan all these
 images.
 Subsequently, we shrink the size of the images
@@ -185,12 +185,12 @@ vulnerabilities in the images.
 Lastly, we update and shrink the image size together and then
 rescan for the vulnerabilities.
 
-In this section, we first
-introduce two container tools used in our experiments: Docker and
-Singularity and their image formats. Then we provide more insight
+In this section, we provide
+insight
 into the container images and the image scanners that we used in our study.
-The image scanners are going to report different results due to different Linux
-distributions/releases, which have different vulnerability data. Therefore, in the last, this section presents a
+The image scanners refer to different Linux
+distributions/releases, which have different vulnerability data and is likely to
+create discrepancies in results. Therefore, in the last, this section presents a
 description of these varying Linux distributions/releases and their
 vulnerability databases.
 
@@ -204,17 +204,17 @@ vulnerability databases.
 %Here, we summarize all the resources that are
 %used by CONP to function.
 
-\subsection{Container Tools}
-
-
-In this paper, we consider two popular container tools i.e Docker and Singularity because
-neuroimaging uses images from these two tools.
+%\subsection{Container Tools}
+%
+%
+%In this paper, we consider two popular container tools i.e Docker and Singularity because
+%neuroimaging uses images from these two tools.
 %Container tools are capable of packing and running an application in an isolated environment that has
 %the application's dependencies,
 %required libraries, and configuration files for the
 %application to function properly.
 
-\subsubsection{Docker}
+%\subsubsection{Docker}
 
 %Docker uses a client-server architecture, where client, containers, communicate to
 %the server, Docker Daemon, which is also known as the Docker engine.
@@ -230,45 +230,46 @@ neuroimaging uses images from these two tools.
 %
 %\textit{Client:} It is a Command Line Interface (CLI) client which is used to interact with the \textit{Docker Daemon}.
 %Docker runs a software, \textit{Docker daemon}, on the host machine.
-Docker Engine, which runs as root, is remotely controlled through a
-UNIX socket. It is responsible for launching and managing containers,
-consequently, when a container runs, the container is spawned as a
-child process of this root-owned daemon.
 
-\begin{comment}
-It is responsible for launching containers, their
-isolation, and spawning shells into the containers. It is also
-responsible for managing Docker images i.e \textit{pull} and \textit{push}
-from image repository, building images from Dockerfiles, signing them, etc.
-When a Docker container runs, the container process is spawned as a
-child of this root owned daemon. 
-\end{comment}
-As Docker users directly interact with the
-Docker daemon through Command Line Interface (CLI) i.e \textit{docker} command, it is possible to force Docker daemon to escalate privileges.
-If a user gets root privileges, it
-introduces unthinkable security risks for multi-tenant shared
-environments. Due to this reason, Docker is not supported by
-HPC environments.
-
-Docker images are organized as a series of layers stacked on top of each
-other and identified by unique layer identifiers. If a layer is reused
-in different images it will
-have the same id across images. Each layer consists of a filesystem diff
-with respect to the layer below.
-
-\subsubsection{Singularity}
-
-As Docker is not suitable for HPC systems, therefore, Singularity came up with a new approach
-of packing and running applications in containers. 
-In contrast to Docker,
-Singularity does not run containers as root. Consequently, users cannot escalate
-privileges in Singularity containers making it suitable for HPC environments.
-
-A Singularity image is a single immutable file and
-does not contain layers.
-Once a Singularity image is created, it cannot be changed, consequently,
-it can be used for reproducing the results of scientific
-experiments.
+%Docker Engine, which runs as root, is remotely controlled through a
+%UNIX socket. It is responsible for launching and managing containers,
+%consequently, when a container runs, the container is spawned as a
+%child process of this root-owned daemon.
+%
+%\begin{comment}
+%It is responsible for launching containers, their
+%isolation, and spawning shells into the containers. It is also
+%responsible for managing Docker images i.e \textit{pull} and \textit{push}
+%from image repository, building images from Dockerfiles, signing them, etc.
+%When a Docker container runs, the container process is spawned as a
+%child of this root owned daemon. 
+%\end{comment}
+%As Docker users directly interact with the
+%Docker daemon through Command Line Interface (CLI) i.e \textit{docker} command, it is possible to force Docker daemon to escalate privileges.
+%If a user gets root privileges, it
+%introduces unthinkable security risks for multi-tenant shared
+%environments. Due to this reason, Docker is not supported by
+%HPC environments.
+%
+%Docker images are organized as a series of layers stacked on top of each
+%other and identified by unique layer identifiers. If a layer is reused
+%in different images it will
+%have the same id across images. Each layer consists of a filesystem diff
+%with respect to the layer below.
+%
+%\subsubsection{Singularity}
+%
+%As Docker is not suitable for HPC systems, therefore, Singularity came up with a new approach
+%of packing and running applications in containers. 
+%In contrast to Docker,
+%Singularity does not run containers as root. Consequently, users cannot escalate
+%privileges in Singularity containers making it suitable for HPC environments.
+%
+%A Singularity image is a single immutable file and
+%does not contain layers.
+%Once a Singularity image is created, it cannot be changed, consequently,
+%it can be used for reproducing the results of scientific
+%experiments.
 
 %\begin{comment}
 %Singularity offers mobility of compute by facilitating portable environments 
@@ -334,7 +335,7 @@ experiments.
 %\end{comment}
 \subsection{Container images}
 
-We scanned a total of 44 container images taken from the BIDS
+We scan a total of 44 container images taken from the BIDS
 apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques}
 frameworks, two containerization frameworks used in neuroscience to share
 and re-use applications. Among the 27 BIDS apps \href{https://bids-apps.neuroimaging.io/apps/}
@@ -392,16 +393,18 @@ and 6 Singularity images.
 
 \subsection{Image Scanners}
 
-Container image scanners can be broadly categorized into static and dynamic
-scanners. Static scanning performs analysis on a image without running it
-as a container. Therefore, package manager, which is a executable file,
-cannot be used to extract required data while statically extracting image data.
-Thus, scanners parse different files for extracting image data e.g, installed packages, their versions,
-and OS distribution etc. For instance, in Debian and Ubuntu, \textit{/var/lib/dpkg/status} file
-can be parsed to get a list of installed packages and in the same way \textit{/etc/os-release} file can be
-parsed to get information about OS distribution.
-Whereas in dynamic scanning, a container is deployed from the image first and then
-package manager of the image is executed inside the container to collect required data.
+%Container image scanners can be broadly categorized into static and dynamic
+%scanners. Static scanning performs analysis on a image without running it
+%as a container. 
+
+%Therefore, package manager, which is a executable file,
+%cannot be used to extract required data while statically extracting image data.
+%Thus, scanners parse different files for extracting image data e.g, installed packages, their versions,
+%and OS distribution etc. For instance, in Debian and Ubuntu, \textit{/var/lib/dpkg/status} file
+%can be parsed to get a list of installed packages and in the same way \textit{/etc/os-release} file can be
+%parsed to get information about OS distribution.
+%Whereas in dynamic scanning, a container is deployed from the image first and then
+%package manager of the image is executed inside the container to collect required data.
 
 
 %\subsubsection{Scanning tools used}
@@ -419,11 +422,14 @@ package manager of the image is executed inside the container to collect require
 We used four popular image scanners, namely Anchore~\cite{github_2019},
 Vuls~\cite{future-architect_2019}, Clair Scanner~\cite{arminc_2019} and
 Stools~\cite{stools}. Anchore, Vuls and Clair Scanner support Docker
-images while Stools supports Singularity. Vuls support both static as well as dynamic
-scanning till version 0.9.5, however, in our experiments we used it dynamically.
-On the contrary, the others
-are static scanners. To avoid discrepancies, we froze the vulnerability
+images while Stools supports Singularity. 
+To avoid discrepancies, we froze the vulnerability
 databases for these scanners on September 25, 2019.
+
+%Vuls support both static as well as dynamic
+%scanning till version 0.9.5, however, in our experiments we used it dynamically.
+%On the contrary, the others
+%are static scanners. 
 
 \subsubsection{Anchore}
 
@@ -482,7 +488,7 @@ and deep scan mode.
 In our experiments, we used Vuls Docker image having version 0.9.0 with fast scan mode.
 Vuls gets data from Open Vulnerability and Assessment Language (OVAL).
 The interesting point is that there is no OVAL data for Ubuntu 17.04 and 17.10 distribution,
-meaning that images with these distributions are impossible to scan with Vuls.
+meaning that images with these distributions are hard to scan with Vuls.
 
 \subsubsection{Clair Scanner}
 
@@ -602,11 +608,11 @@ for scanning and followed the steps mentioned in \href{https://github.com/singul
 \subsection{Linux Releases and Vulnerability Databases}
 
 Image scanners report vulnerabilities differently depending on the different Linux release types.
-Therefore, we provide an overview of these Linux releases and scanners re. 
+Therefore, we provide an overview of these Linux releases and scanners. 
 BIDS app and Boutiques images in our experiments have diverse Linux
 distributions such as Ubuntu, Centos, Debian, and Alpine. Further, a particular
 distribution have different releases in general. Here, we take Ubuntu's example
-to discuss different releases and their vulnerability databases. We took Ubuntu's example
+to discuss its different releases and their vulnerability databases. We took Ubuntu's example
 because mostly images in our experiments have this distibution. However, other distributions also have
 similar release trend. In the case of Ubuntu, release
 can be of two types: Regular or Long Term Support (LTS).
@@ -684,11 +690,35 @@ The status can be any one of the following:
 		an update has been already uploaded and published. However,
 		this update is published in the Ubuntu ESM release only and not in LTS.
 		The fixed version of such packages is appended by
-		+esmN or \char`\~esm, indicating that this package version is available
+		+esm or \char`\~esm, indicating that this package version is available
 		only via ESM.
 
 Figure~\ref{example} illustrates how the information of a CVE is represented
 in the Ubuntu launchpad database.
+
+%\begin{figure*} \centering{
+%\includegraphics{status.pdf}}
+%\caption{Experiment 1}
+%\end{figure*}  
+
+
+%\includegraphics[width=300, max width=\textwidth]{status.pdf}
+
+%\begin{table*}[!ht]
+%\csvreader[%
+% respect all,%
+%  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+%      \begin{adjustbox}{max width=\textwidth},
+%  after reading=\end{adjustbox},
+% tabular={c |c | c | c | c | c | c | c| c | c},
+%	table head =Image Labels & {Image names} & {Anchore} & {Clair} & {Vuls} &{Stools} & {a} & {b} & {c} & {d}\\\hline,
+% late after line= \\,
+%        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
+%]{status.csv}{}{\csvlinetotablerow}%
+%       \centering
+%        \caption{\label{status}Number of vulnerabilities by scanners}
+%\end{table*}
+
 
 \subsection{Image Update and Reduction Process}
 
@@ -705,7 +735,7 @@ findings of other scientists.
 
 On the other hand, if we want to reduce the number of vulnerabilities without effecting the reproducibility of the image,
 image size reduction process is a good choice. The most obvious way of doing this is using 
-Neurodocker (\href{https://github.com/ReproNim/neurodocker}{https://github.com/ReproNim/neurodocker}).
+Neurodocker~\cite{neurodocker}.
 It traces and deletes unnecessary files.
 However, image scanners reports vulnerabilities according to the installed
 packages, whereas Neurodocker deals with the files only and list of installed packages remains same. Therefore, after
@@ -765,7 +795,7 @@ existing vulnerabilities followed by the results of the image size reduction
 process. Lastly, this section presents the combined effect of update and image size reduction on the
 vulnerabilities.
 
-\subsection{Existing Vulnerabilities}
+\subsection{Detected Vulnerabilities}
 
 Table~\ref{table1} shows the number of vulnerabilities present in the images,
 which are detected by the scanners.
@@ -833,11 +863,11 @@ up to 180.
 %        after update of the images}
 %      \end{figure*}
 
-\subsection{Comparisons between Scanners}
+\subsection{Discrepancies between Scanners}
 
 Figure~\ref{fig:venn} represents the number of common and different vulnerabilities
 that are shown by scanners.
-When we add all regions of Venn diagram
+
 we get total 20050 vulnerabilities in BIDS apps and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
 reported by Anchore, 673 reported only by Clair, and 325 detected only by Vuls.
