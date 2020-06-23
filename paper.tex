@@ -48,150 +48,81 @@
 
 \maketitle
 
+\begin{abstract}
+	\tristan{Abstract goes here}
+\end{abstract}
+
 \begin{keywords}
-Containers; Docker; Singularity; Security; Vulnerabilities; Image Scanning; Outdated packages; Shrinking Images; Neuroimaging.
+Containers; Docker; Singularity; Security Vulnerabilities; Neuroimaging.
 \end{keywords}
 
 
 \section{Introduction}
 
+% Containers are popular on HPC, in particular Singularity
+Software containers have emerged has an efficient solution to deploy
+scientific data analyses on High Performance Computing (HPC) clusters, due
+to their portability, ease of use, and limited overhead. The
+Singularity~\cite{kurtzer2017singularity} framework is often preferred to
+Docker\footnote{\url{http://docker.com}} on HPC clusters, due to its
+secure handling of multi-user environments, and its convenient support for
+Docker images. Singularity is now available in dozens of HPC
+clusters around the globe, and used routinely for Big Data analyses.
 
-Containers, which provide an operating system (OS) level virtualization, are
-popular. This is due to them being lightweight, flexible, and resource-efficient.
-Additionally, they are capable of providing fast development cycles and continuous delivery with the
-reduction of infrastructure cost~\cite{martin2018docker}. Containers are heavily utilised in various scientific fields,
-in particular, to run big data analysis. OS-level virtualization gained a lot of interest when Docker~\cite{docker19} was
-introduced in 2013. However, Docker is not supported by High Performance Computing (HPC)
-environments, mainly due to the fact that Docker user can act as superuser inside the container.
-As a result, Singularity~\cite{singularity19} was developed
-for scientific applications by keeping the focus on HPC environments. In addition, Singularity also solves some other security issues
-related to the architecture of Docker. It is used in many clusters including Compute Canada.
-According to~\cite{kurtzer2017singularity}, Singularity is used in 36 research clusters.
+% Containers are meant to isolate applications from the host, but security remains an issue
+Using core features of the Linux kernel such as namespaces, control groups
+and chroot, containers isolate processes from the
+host computer,  
+and control the memory, CPU, network and file-system resources assigned to
+them. However, containers still share the kernel, mounted file systems and
+some devices with the host, which raises potential security issues. In
+particular, privilege escalation, denial of service and information leak
+are always plausible~\cite{gantikow2016providing}. Therefore, security remains 
+an important concern when deploying containers~\cite{bettini2015vulnerability}.
 
-\begin{comment}
-\begin{figure}
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/cluster_list.png}
-	\caption{List of HPC clusters using Singularity~\cite{kurtzer2017singularity}.}
-	\label{fig:cluster_list}
-\end{figure}
-\end{comment}
+% Container images, our study
+This study is a vulnerability analysis of container images used in HPC
+clusters. Container images contain complete operating-system distributions,
+including the data analysis software and its required dependencies.
+Images are rarely updated, as they are often built once
+for the entire duration of an analysis, to avoid results perturbations
+coming from software updates~\cite{gronenschild, glatard2015}. Images also
+commonly include more dependencies than required by a specific analysis, to 
+enable reusability across experiments.
 
-Inspite of their popularity, containers tightly
-integrate with the host due to the sharing of the kernel, 
-mounted file systems, and devices, which raises security
-concerns.
-In fact, in relation to other virtualization techniques, they share three main security threats~\cite{gantikow2016providing}:
+Our research questions are the following:
 
-\begin{comment}
-\begin{figure}
-  \centering
-  \includegraphics[width=.7\columnwidth]{Figures/container.png}
-  \caption{Architecture of Container-based
-                Virtualization.}
-  \label{fig:container-overview}
-\end{figure}
-\end{comment}
-\textit{Privilege Escalation} A malicious attacker can break out of the container
-and gain control of the host system and other containers running on the same host;
+\textit{RQ1: What is the current amount of known vulnerabilities in
+container images deployed on HPC clusters?} Vulnerabilities are possible
+attack vectors that may seriously compromise the security of HPC clusters
+and the integrity of user data. We report vulnerability analyses produced
+by four popular image scanning tools, Anchore, Vuls, Clair and Stools.
 
-\textit{Denial-of-Service} One container may end up consuming all the resources of the
-host, hence resulting in the starvation of the host and other containers;
+\textit{RQ2: Can the amount of vulnerabilities be reduced by updating the images?}  
+For many reasons related to reproducibility and the life-cycle of research
+projects, container images deployed on HPC clusters often include outdated
+software. We report on the effect of software updates on the vulnerability
+analysis of RQ1.
 
-\textit{Information Leak} Private data of the host and other containers could be
-leaked and can be used for further attacks.
+\textit{RQ3: Can the amount of vulnerabilities be reduced by shrinking the images?} 
+Container images often include more software packages than required for a
+typical analysis. We report on the impact of this additional software on
+the presence of vulnerabilities.
 
-In order to mitigate these threats, containers use some features of the Linux kernel
-such as \textit{control groups, namespaces}, etc. For instance, \textit{control groups}
-are used to restrict the amount of resources that a container can use. Nonetheless, container's
-security is still one of the concerning issues.
-%However, two features of the Linux kernel, \textit{control groups} and \textit{namespaces},
-%are used by containers to mitigate these threats to a certain extent. The security
-%of containers is still the most concerning issue. 
-According to a 2015 Forrester survey, security is the
-biggest concern when deploying containers~\cite{bettini2015vulnerability}.
-%Containers are popular in various scientific fields, in particular to run Big Data analyses
-%on HPC clusters. 
-%However, deploying Docker container images on clusters raises security issues. Some security issues 
-%that could possibly lead to privilege escalation, DoS or information leak. Some
-%Above mentioned threats are not the only security issues that containers may suffer.
-%Other security issues are related to the architecture of Docker but have been 
-%largely solved by Singularity.
-%In fact, Singularity was developed for scientific applications
-%by keeping the focus on HPC environments. Although, this work is of general interest,
-%our particular focus in this paper is neuroimaging as containers are popularly used for scientific computing and data science
-%in neuroscience.
-While containers still suffer general security problems that may affect any application using
-them, our particular focus in this research is the security of container images.
-In this research work, we aim to study and analyse the security of container images.
-Although this work, is of general interest and can be applied on any field, we focus in this
-paper on neuroimaging. This is due to the fact that containers are particulary popular in
-scientific computing and heavily utiilised in neuroscience, which makes it a good candidate
-for this research.
-This popularity of containers in neuroscience leads us to the following
-primary research question:
+We answer these questions taking the particular example of neuroimaging, a
+domain that has entered the Big Data era as many other
+ones~\cite{vanhorn-toga}. We focus on the analysis of container images
+present in BIDS apps~\cite{xxx} and Boutiques~\cite{xxx}, two containerized
+application frameworks commonly used in neuroimaging. 
 
-\textit{RQ1: What is the current security state of
-neuroscience container images that are deployed on HPC clusters?}
 
-In fact, answering this question leads us to further questions as described below. 
-To answer our primary research question, we scan neuroscience images. The purpose
-of this scanning process is to collect information about the container images
-and then investigate these findings against security vulnerabilities.
-%we scan images that are used on Compute
-%Canada clusters by the Neuroscience field. Scanning refers to the practice of
-%collecting all information about the container image, investigating it
-%for vulnerabilities, and finally producing a
-%report to summarize scanning results. 
-It is broadly categorized into
-two types: \textit{Static} and \textit{Dynamic} scanning. The former
-involves extracting information of an image without running that image into a container,
-whereas the latter involves running a container with the target image.
-While scanning may provide different information, here, we focus mainly on security vulnerability.
-These types of vulnerabilities may be caused by an exploitable weakness in developer's software.
-Such exploitation may result in serious attacks such as gaining unauthorized access on the target
-computer, deletion of mounted files, etc. In this work, we target the detection of vulnerabilities
-that are present in neuroscience container images. It is further important to answer following three 
-secondary questions:
-%Vulnerability is a weakness in the developer's software that can be exploited
-%by the attacker to perform unauthorized actions on the target computer.
-%In this paper, we report vulnerabilities that are present in
-%container images, specifically used by neuroimaging field. Particularly,
-%we aim to answer four primary research questions:
-
-\textit{RQ2:} Can vulnerabilities be reduced by updating the images?
-
-\textit{RQ3:} Can vulnerabilities be reduced by shrinking the size of the images?
-
-\textit{RQ4:} What is the effect of both updating
-and shrinking image size on vulnerabilities?
-
-%%%%%%%%%Related Work%%%%%%%
-%The existing research work on containers focuses mainly on the security of Docker
-%containers.
-%This focus is justified by the fact that containers expose the host's resources
-%(e.g., file system/ IPC) to the guest system. This feature raises a confidentiality
-%threat for the applications running on the same host. Previous studies evaluated
-%the security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis},
-%and have scanned vulnerabilities on Docker hub images~\cite{Shu2017, gummaraju2015over}.
-%Zerouali et al. in~\cite{zerouali2019relation} studied severity vulnerabilities and bugs in Docker 
-%containers due to outdated packages. 
-%
-%There are various image scanners available for scanning Docker images, for
-%instance Anchore, CoreOS's Clair, etc.
-%However, these scanners cannot be used to scan Singularity images due to different image formats.
-%Therefore, Singularity came up with Stools~\cite{stools}, which can be used for scanning Singularity images
-%for security and quality checks.
-
-This paper is organized as follows: in the next section, we provide a description
-of materials and tools, which we utilise throughout our experiments. We also present
-different image scanners used for vulnerability reporting in container images.
-The following section of this paper provides our approach and methodology, where we
-mainly examine the effect of image update and image reduction for the purpose
-of reducing vulnerabilities. Afterwards, we provide the results of our experiments,
-where we indicate a number of detected vulnerabilities in container images used for
-data analysis on shared HPC clusters. The last two sections provide a conclusion of this
-work following by a summary and an indication of our future work.
+The next section describes the materials and tools used in the experiments,
+including image scanners and container images. We then describe our image
+update and shrinking methodology to reduce vulnerabilities. Results review
+the detected vulnerabilities in container images, explain observed
+discrepancies between scanners, and report on the efficiency of image
+update and size reduction. As a conclusion, we provide a set of image
+creation guidelines for a secure deployment on HPC clusters.
 
 %This paper is organized as follows: in the next section, we provide a description
 %of materials and methods which summarize our experiments. We also explain different
@@ -1186,6 +1117,12 @@ many vulnerabilities they contained. To illustrate, \textit{bids/example} image 
 shows no effect of size reduction along with update process. It has 181 vulnerabilities for both experiments 2 and 4.
 Meaning that packages, which we deleted after updating the image, were already vulnerability free. Therefore,
 scanning results did not change.
+
+\section{Discussion}
+
+% Would the results apply to other domains than neuroimaging
+
+
 
 \section{Conclusions}
 
