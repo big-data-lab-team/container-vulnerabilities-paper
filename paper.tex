@@ -49,7 +49,20 @@
 \maketitle
 
 \begin{abstract}
-	\tristan{Abstract goes here}
+
+Today, containers, which provide operating system level virtualization, are
+popular. Correspondingly, they are widely used for scientific data analyses on 
+High Performance Computing (HPC) clusters. However, the security of containers
+still remains the concerning issue. Here, we focus on the security of container
+images in particular. Container images are often built for the entire
+duration of an analysis, so scientific researchers do not prefer to update
+them. Consequently, their chances of containing vulnerabilities increases.  
+In this study, we analyze vulnerabilities in container images used in 
+HPC clusters.
+We conduct two different
+experiments, image update and image shrinking, to report the effect 
+on the number of vulnerabilities.
+
 \end{abstract}
 
 \begin{keywords}
@@ -86,7 +99,7 @@ clusters. Container images contain complete operating-system distributions,
 including the data analysis software and its required dependencies.
 Images are rarely updated, as they are often built once
 for the entire duration of an analysis, to avoid results perturbations
-coming from software updates~\cite{gronenschild, glatard2015}. Images also
+coming from software updates~\cite{gronenschild2012effects, glatard2015reproducibility}. Images also
 commonly include more dependencies than required by a specific analysis, to 
 enable reusability across experiments.
 
@@ -96,7 +109,7 @@ Our research questions are the following:
 container images deployed on HPC clusters?} Vulnerabilities are possible
 attack vectors that may seriously compromise the security of HPC clusters
 and the integrity of user data. We report vulnerability analyses produced
-by four popular image scanning tools, Anchore, Vuls, Clair and Stools.
+by four popular image scanning tools, Anchore, Vuls, Clair-scanner and Stools.
 
 \textit{RQ2: Can the amount of vulnerabilities be reduced by updating the images?}  
 For many reasons related to reproducibility and the life-cycle of research
@@ -111,8 +124,8 @@ the presence of vulnerabilities.
 
 We answer these questions taking the particular example of neuroimaging, a
 domain that has entered the Big Data era as many other
-ones~\cite{vanhorn-toga}. We focus on the analysis of container images
-present in BIDS apps~\cite{xxx} and Boutiques~\cite{xxx}, two containerized
+ones~\cite{van2014human}. We focus on the analysis of container images
+present in BIDS apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques}, two containerized
 application frameworks commonly used in neuroimaging. 
 
 
@@ -887,7 +900,7 @@ the scanners and the overlap between them.
 
 We find a total of 20,050 vulnerabilities in BIDS apps and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
-reported by Anchore, 673 by Clair, and 325 by Vuls.
+reported by Anchore, 673 by Clair-scanner, and 325 by Vuls.
 
 As the number and type of vulnerabilities reported by the three scanners are significantly different from each other,
 we desire to investigate the reasons behind these differences.
@@ -1118,16 +1131,15 @@ shows no effect of size reduction along with update process. It has 181 vulnerab
 Meaning that packages, which we deleted after updating the image, were already vulnerability free. Therefore,
 scanning results did not change.
 
-\section{Discussion}
 
 % Would the results apply to other domains than neuroimaging
 
 
 
-\section{Conclusions}
+\section{Discussion}
 
 As we noticed that none of the Boutiques and BIDS images at the time of the study are free of vulnerabilities, out of which
-so many are critical vulnerabilities as well. Yet there is not a single image scanner on which we can rely upon for
+so many are high vulnerabilities as well. Yet there is not a single image scanner on which we can rely upon for
 scanning. Additionally, we cannot update all images because some OS releases, which are used inside images, 
 already reached end-of-life and are
 no longer getting updates. Furthermore, the minimization of images is a time consuming process. As we have to run
@@ -1153,7 +1165,7 @@ in Docker Hub, it can automatically build images from external repositories, for
 \newline 10. Sign your images. Docker Content Trust (DCT) provides ability to digitally sign
 images to verify the integrity of the images.
 
-\section{Summary and Future Work}
+\section{Conclusions and Future Work}
 
 
 In this paper, we performed various experiments to study the security state of the Docker

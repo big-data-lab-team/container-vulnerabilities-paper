@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib_venn import venn3, venn3_circles
  
 # Make a Basic Venn
-v = venn3(subsets=(1, 1, 1, 1, 1, 1, 1), set_labels = ('Anchore', 'Clair', 'Vuls'))
+v = venn3(subsets=(1, 1, 1, 1, 1, 1, 1), set_labels = ('Anchore', 'Clair-scanner', 'Vuls'))
  
 # Custom it
 v.get_label_by_id('100').set_text('4453')
