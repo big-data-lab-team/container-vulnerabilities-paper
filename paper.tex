@@ -41,6 +41,7 @@
 \begin{document}
 
 \author[1]{Bhupinder Kaur}
+\author[1]{Mathieu Dugr\'e}
 \author[1]{Aiman Hanna}
 \author[1]{Tristan Glatard}
 
@@ -60,7 +61,7 @@ them. Consequently, their chances of containing vulnerabilities increases.
 In this study, we analyze vulnerabilities in container images used in 
 HPC clusters.
 We conduct two different
-experiments, image update and image shrinking, to report the effect 
+experiments, image update and image minimization, to report the effect 
 on the number of vulnerabilities.
 
 \end{abstract}
@@ -117,7 +118,7 @@ projects, container images deployed on HPC clusters often include outdated
 software. We report on the effect of software updates on the vulnerability
 analysis of RQ1.
 
-\textit{RQ3: Can the amount of vulnerabilities be reduced by shrinking the images?} 
+\textit{RQ3: Can the amount of vulnerabilities be reduced by minimizing the images?} 
 Container images often include more software packages than required for a
 typical analysis. We report on the impact of this additional software on
 the presence of vulnerabilities.
@@ -131,7 +132,7 @@ application frameworks commonly used in neuroimaging.
 
 The next section describes the materials and tools used in the experiments,
 including image scanners and container images. We then describe our image
-update and shrinking methodology to reduce vulnerabilities. Results review
+update and minimization methodology to reduce vulnerabilities. Results review
 the detected vulnerabilities in container images, explain observed
 discrepancies between scanners, and report on the efficiency of image
 update and size reduction. As a conclusion, we provide a set of image
@@ -154,7 +155,7 @@ creation guidelines for a secure deployment on HPC clusters.
 
 Since the aim of this research work is to detect security vulnerabilities
 in container images and attempt to examine the effect of different
-manipulation of these images, it is needed to have a representative set
+manipulation of these images, it is needed to have a representative set of
 images. Additionally, for the purpose of detecting vulnerabilities,
 utilization of image scanners is required. We utilize container
 images from two popular application frameworks, as well as
@@ -178,9 +179,9 @@ and 6 Singularity images.
 \subsection{Image Scanners}
 
 We use four popular image scanners, namely Anchore~\cite{github_2019},
-Vuls~\cite{future-architect_2019}, Clair-scanner~\cite{arminc_2019} and
-Stools~\cite{stools}. Anchore, Vuls and Clair-scanner support Docker
-images while Stools supports Singularity. Different vulnerabilities may be
+Vuls~\cite{future-architect_2019}, Clair~\cite{arminc_2019} and
+Singularity Container Tools --- Stools~\cite{stools}. Anchore, Vuls and Clair support Docker
+images while Stools support Singularity. Different vulnerabilities may be
 reported if scanning experiments take place on different dates.
 To avoid such discrepancies, we freeze the vulnerability
 databases used by these scanners as of 2019-09-25, when we initiate our
@@ -189,13 +190,8 @@ experiments. This allows for a fair comparison between the scanners.
 \subsubsection{Anchore}
 
 Anchore is an end-to-end, open-source container security platform. It
-is a static
-scanning tool that analyses container images and lists OS
+analyses container images and lists OS
 packages, non-OS packages (Python, Java, Gem, and Npm), and files.
-Anchore Engine can be used in two ways: through Docker image or Anchore
-Command Line Interface (CLI).
-It can be
-installed directly on the host and used to inspect images.
 In our experiments, we use Anchore Engine version 0.5.0 through Docker image \todo{insert name}, and
 Anchore vulnerability database version 0.0.11.
 
@@ -203,52 +199,62 @@ Anchore compares package versions, which are present inside the
 image, with the vulnerability database in order to flag vulnerabilities.
 To get a vulnerability feed of various OS distributions, Anchore refers to
 different sources, for instance, Ubuntu launchpad database to get
-vulnerability data related to Ubuntu.
+vulnerability data related to Ubuntu \tristan{You need to be accurate on these sources, this is not ``for instance". 
+You should list all the sources used in the experiments, for all image types: Ubuntu but also CentOS, Debian, Alpine.}.
 
 \subsubsection{Vuls}
 
 Vuls is an open-source vulnerability scanner for Linux and FreeBSD. It
 offers both static and dynamic scanning, and both local and remote
 scanning. In our experiments, we use remote dynamic scanning, that is, Vuls
-starts a container for every image to test, and queries the package manager in the image through SSH.
-We use Vuls 0.9.0, executed through Docker image \todo{add Docker image name}. Vuls gets data from the Open Vulnerability and Assessment Language (OVAL) database.
-It is worth noting that there is no OVAL data for Ubuntu 17.04 and 17.10 distributions,
-meaning that images with these distributions cannot be scanned with Vuls.
+starts a container for every image to test, and queries the package manager
+in the image through SSH. We use Vuls 0.9.0, executed through Docker image
+\todo{add Docker image name}. Vuls gets data from the Open Vulnerability
+and Assessment Language (OVAL) database \tristan{Does it contain
+vulnerabilities for all distributions?} \tristan{The Vuls website says that it uses multiple vulnerability databases: https://vuls.io/docs/en/main-features.html Are you sure 
+that you only used OVAL and if so, why?}. It is worth noting that there is
+no OVAL data for Ubuntu 17.04 and 17.10 distributions, meaning that images
+with these distributions cannot be scanned with Vuls.
 
-\subsubsection{Clair-scanner}
+\subsubsection{Clair}
 
-Clair-scanner is a static vulnerability scanner for Docker containers.
-It scans the image, prepares the list of
-vulnerabilities, compares that list against a whitelist, and flags vulnerabilities
-that are not present in the whitelist.
-Clair-scanner utilizes the Ubuntu CVE tracker to obtain  Ubuntu vulnerability feed.
-For that purpose, a Docker image is maintained that contains the Ubuntu CVE tracker database.
-Whenever Ubuntu updates its database, this image is also updated with the required information.
-We use Clair-scanner version 2.0.6, executed through  Docker image arminc/clair-local-scan:v2.0.6. 
-We use another Docker image (arminc/clair-db:latest) for the vulnerability database, which was
-last updated on 2019-09-18.
+Clair (\url{https://github.com/quay/clair}) is an open-source and extensible
+vulnerability scanner for Docker and appc container images, developed by
+CoreOS (now Container Linux), a Linux distribution to deploy container
+clusters. Clair has a client-server architecture, in which the server
+maintains a database of vulnerabilities. We use Clair through Clair scanner
+(\url{https://github.com/arminc/clair-scanner}), a tool to facilitate the testing
+of container images against a local Clair server. Clair scanner scans the image,
+prepares the list of vulnerabilities, compares that list against a
+whitelist, and flags vulnerabilities that are not present in the whitelist
+\tristan{What is this whitelist about, and which one did you use?}. Clair
+scanner maintains a Docker image with the up-to-date Ubuntu CVE tracker
+database, used for the analysis \tristan{Please mention the vulnerability sources for all distributions}.
+ We use Clair-scanner version 2.0.6, executed through
+Docker image \texttt{arminc/clair-local-scan:v2.0.6}. For the vulnerability
+database, we use Docker image \texttt{arminc/clair-db:latest}, last
+updated on 2019-09-18.
 
-\subsubsection{Stools}
+\subsubsection{Singularity Tools}
 
-\todo{remove mentioning of CI, rewrite this paragraph.}
-Continuous Integration (CI) allows smaller code changes, fault isolations,
-faster release date, etc. Two types of CI are commonly used : TravisCI and
-CircleCI. The former targets open source projects that need to be tested in
-different environments, whereas the latter targets smaller projects where
-integration needs to be done as fast as possible. 
-
-Stools uses CoreOS's Clair, which
-is used for Docker images, in combination with CI to allow scanning of
-Singularity images.
-It involves spinning a Clair container during testing and building a
-Singularity image, and scanning it before the image is finalized.
-
-In our experiments, we use a Docker image (\href{https://hub.docker.com/r/vanessa/stools-clair}{vanessa/stools-clair:v3.2.1})
-following the steps mentioned in \href{https://github.com/singularityhub/stools}{Stools Github} for scanning
-Singularity images.
+Singularity Tools (Stools)
+are an extension of Clair scanner for Singularity images. Stools
+directly scan the image files in a local installation of the Clair
+scanner, to circumvent the Docker-specific requirements in the Clair API.
+In our experiments, we use Singularity Tools version 3.2.1  through Docker
+image
+\texttt{vanessa/stools-clair:v3.2.1}
+and we follow the steps mentioned in
+\href{https://github.com/singularityhub/stools}{Stools Github} to scan
+Singularity images. \tristan{which docker images did you use for clair and clair database?}
 
 \subsection{Linux Releases and Vulnerability Databases}
 
+\tristan{This section is still very confusing. I can rewrite it but would first need to
+have a clear picture of vulnerability statuses across the tested Linux distributions. 
+Are vulnerability statuses present only in Ubuntu, or are there statuses in other distributions too?
+If so, what are the vulnerability statuses in the other distributions?
+}
 Through our experiments, we find that image scanners report vulnerabilities 
 differently depending on the different Linux release types. So, it is 
 important to provide an overview of these Linux releases types. 
@@ -372,11 +378,11 @@ in the Ubuntu launchpad database.
 %        \caption{\label{status}Number of vulnerabilities by scanners}
 %\end{table*}
 
-\section{Our Approach}
+\section{Reducing the amount of vulnerabilities}
 
-In this section, we present our approach, where we attempt the reduction
-of security vulnerabilities in images by updating or
-shrinking these images.
+In this section, we present our approach to reduce the number of
+vulnerabilities in container images  by updating and minimizing these
+images.
 
 \subsection{Image Update Process}
 
@@ -389,15 +395,15 @@ inside that image. We use a
 to update all images. That script checks the
 package manager, which is present inside the image, and updates the image
 accordingly. However, this action affects the reproducibility
-of that image. For example, if a package is used by a scientist to conduct an experiment
-and later that package is updated, other scientists want to reproduce initial results may actually
-get different results due to updates.
+of that image. For example, if a package is used in an experiment
+and later that package is updated, subsequent instances of the experiment may actually
+get different results.
 %which means that the image cannot be used to verify the research
 %findings of other scientists.
 
-\subsection{Image Reduction/Minimization Process}
-On the other hand, if it is desired to reduce the number of vulnerabilities without affecting the reproducibility of the image,
-then we revert to image size reduction instead of image update. An interesting choice to do so would be to use 
+\subsection{Image Minimization Process}
+We revert to image minimization to reduce the number of vulnerabilities without affecting results reproducibility.
+An interesting choice to do so would be to use 
 Neurodocker~\cite{neurodocker}.
 This tool traces and deletes unnecessary files.
 However, it does not affect the number of installed packages.
@@ -408,18 +414,18 @@ Consequently, we need to reduce the number of installed packages
 in the images by deleting unnecessary packages. For that, it is required to figure
 out which packages we need for the pipeline to function properly. To allow for that, we utilize
 Reprozip~\cite{rampin2016reprozip}, which is a tool that
-is used to make applications reproducible. This tool traces operating system calls used by the
+is used to make applications reproducible \tristan{No it doesn't make applications reproducible}. This tool traces operating system calls used by the
 application while execution, and then based on this trace, it recognizes binaries, files, environment variables,
 and library dependencies that are used by the application for future re-execution. If the OS is
 Debian or RPM-based, Reprozip also
 uses an available package manager to acquire a list of distribution packages from where these files come from.
-So, a list of packages that are needed for the application re-execution is determined. Following that, the list
+So, a list of packages that are needed for the application re-execution is determined. \tristan{How did you run the applications? Which command lines, why, etc} Following that, the list
 is expanded by adding important and required packages that are essential
 for the system to function. Finally, we figure out all the dependencies of these packages using Debtree
-~\cite{debtree}.
+~\cite{debtree} \tristan{does debtree work in centos? if not, how do you minimize centos images?}.
 Effectively all needed packages are kept and remaining unnecessary packages are removed. We use
 \href{https://github.com/kaurbhupinder/Vulnerability-Analysis/tree/master/Scripts/minification}{bash scripts} for
-the image size reduction process, which install Reprozip in the image, collect Reprozip trace, and
+the image size reduction process \tristan{Can we please have at least a README for these scripts?}, which install Reprozip in the image, collect Reprozip trace, and
 finally delete all unnecessary packages.
 
 Following the above two approaches, we employ a hybrid approach, where
@@ -539,7 +545,7 @@ classified by databases, than others.
 \subsection{Discrepancies between Scanners}
 
 Figure~\ref{fig:venn} represents the number of vulnerabilities reported by
-the scanners and the overlap between them.
+the scanners and the overlap between them. \tristan{According to our discussion, this is only for Ubuntu. This should be clarified.}
 
 We find a total of 20,050 vulnerabilities in BIDS apps and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
