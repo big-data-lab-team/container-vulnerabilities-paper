@@ -36,7 +36,7 @@ for i in range(1,12):
 leg.set_bbox_to_anchor([1.01, 0.04])
 leg._loc = 4
 #leg.markerscale=2
-leg.texts[12].set_text("CRITICAL \nVulnerabilities")
+leg.texts[12].set_text("HIGH \nVulnerabilities")
 
 #leg(markerscale=6)
 #z = np.polyfit(df['Packages'], df['Vulnerabilities'], 1)

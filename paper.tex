@@ -149,6 +149,20 @@ creation guidelines for a secure deployment on HPC clusters.
 %particular rules that can be followed to secure container images. Finally, conclusions are drawn
 %in the last section of the paper.
 
+%%%%%%%%%Related Work%%%%%%%
+The existing research work on containers focuses mainly on the security of containers.
+This focus is justified by the fact that containers expose the host's resources
+(e.g., file system/ IPC) to the guest system. This feature raises a confidentiality
+threat for the applications running on the same host. Previous studies evaluated
+the security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis}.
+Other work studied security vulnerabilities on Docker hub. A study in 2015 by Gummaraju et al.
+states that over 30\% of official images in docker hub contain high priority 
+security vulnerabilities~\cite{gummaraju2015over}. Shu et al. show that both official and community images 
+contain more than 180 vulnerabilities on an average~\cite{Shu2017}.
+Zerouali et al. studied that 
+outdated packages lead to bugs and severity vulnerabilities in Docker
+images~\cite{zerouali2019relation}.
+
 \todo{Add related work on vulnerability scanning}
 
 \section{Materials and Tools}
@@ -167,12 +181,12 @@ We scan a total of 44 container images taken from two containerization framework
 used in neuroscience: BIDS
 apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques}.
 Out of these 44 images, 26 were obtained from BIDS apps
-\href{https://bids-apps.neuroimaging.io/apps/}{(https://bids-apps.neuroimaging.io/apps/)} 
+(\url{https://bids-apps.neuroimaging.io/apps/}) 
 and 18 from Boutiques. In fact, at the time of the study, BIDS apps had 27 images,
 out of which one wasn't available on DockerHub. Boutiques had 49 images, listed using
 Boutiques \texttt{bosh search} command,
 however, only 23 unique images were listed, out of which 3 couldn't be retrieved and 2
- were already included in BIDS apps. All the final 26 images
+were already included in BIDS apps. All the final 26 images
 from BIDS apps are Docker images, whereas Boutiques contains 18 Docker images
 and 6 Singularity images.
 
@@ -192,15 +206,43 @@ experiments. This allows for a fair comparison between the scanners.
 Anchore is an end-to-end, open-source container security platform. It
 analyses container images and lists OS
 packages, non-OS packages (Python, Java, Gem, and Npm), and files.
-In our experiments, we use Anchore Engine version 0.5.0 through Docker image \todo{insert name}, and
+In our experiments, we use Anchore Engine version 0.5.0 through Docker image \texttt{anchore/anchore-engine:v0.5.0}, and
 Anchore vulnerability database version 0.0.11.
 
 Anchore compares package versions, which are present inside the
 image, with the vulnerability database in order to flag vulnerabilities.
 To get a vulnerability feed of various OS distributions, Anchore refers to
-different sources, for instance, Ubuntu launchpad database to get
-vulnerability data related to Ubuntu \tristan{You need to be accurate on these sources, this is not ``for instance". 
+different sources. The figure~\ref{anchore} displays a list of all sources
+that it refers at the time of this study.
+
+%for instance, Ubuntu launchpad database to get
+%vulnerability data related to Ubuntu 
+\tristan{You need to be accurate on these sources, this is not ``for instance". 
 You should list all the sources used in the experiments, for all image types: Ubuntu but also CentOS, Debian, Alpine.}.
+
+\begin{figure*}[!ht]
+    \centering
+	\begin{subfigure}[t]{0.3\textwidth}
+        \includegraphics[height=2.0in]{Figures/anchore.png}
+        \caption{Anchore}
+        \label{anchore}
+    \end{subfigure}%
+    ~ 
+	\begin{subfigure}[t]{0.3\textwidth}
+        \includegraphics[height=2.5in]{Figures/vuls.png}
+        \caption{Vuls}
+        \label{vuls}
+    \end{subfigure}
+     ~
+	\begin{subfigure}[t]{0.3\textwidth}
+        \includegraphics[height=2.0in]{Figures/clair.png}
+        \caption{Clair}
+	\label{clair}
+    \end{subfigure}
+    \caption{Vulnerability databases used by scanners}
+    \label{database}
+\end{figure*}
+
 
 \subsubsection{Vuls}
 
@@ -209,10 +251,16 @@ offers both static and dynamic scanning, and both local and remote
 scanning. In our experiments, we use remote dynamic scanning, that is, Vuls
 starts a container for every image to test, and queries the package manager
 in the image through SSH. We use Vuls 0.9.0, executed through Docker image
-\todo{add Docker image name}. Vuls gets data from the Open Vulnerability
-and Assessment Language (OVAL) database \tristan{Does it contain
-vulnerabilities for all distributions?} \tristan{The Vuls website says that it uses multiple vulnerability databases: https://vuls.io/docs/en/main-features.html Are you sure 
-that you only used OVAL and if so, why?}. It is worth noting that there is
+\texttt{vuls/vuls:latest}. At the time of this study, Vuls gets vulnerability feed
+from a configured set of sources, which are listed in Figure~\ref{vuls}.
+%from the Open Vulnerability
+%and Assessment Language (OVAL) database 
+\tristan{Does it contain
+vulnerabilities for all distributions?} 
+\tristan{The Vuls website says that it uses multiple vulnerability databases: https://vuls.io/docs/en/main-features.html Are you sure 
+that you only used OVAL and if so, why?}. According to this list, Vuls
+refers to OVAL database for some distribution e.g. Ubuntu, Debian, etc.
+It is worth noting that there is
 no OVAL data for Ubuntu 17.04 and 17.10 distributions, meaning that images
 with these distributions cannot be scanned with Vuls.
 
@@ -226,10 +274,12 @@ maintains a database of vulnerabilities. We use Clair through Clair scanner
 (\url{https://github.com/arminc/clair-scanner}), a tool to facilitate the testing
 of container images against a local Clair server. Clair scanner scans the image,
 prepares the list of vulnerabilities, compares that list against a
-whitelist, and flags vulnerabilities that are not present in the whitelist
+whitelist, and flags vulnerabilities that are not present in the whitelist.
+In our experiments, we did not use a whitelist to filter scanning results in
+order to make a fair comparison between scanners.
 \tristan{What is this whitelist about, and which one did you use?}. Clair
-scanner maintains a Docker image with the up-to-date Ubuntu CVE tracker
-database, used for the analysis \tristan{Please mention the vulnerability sources for all distributions}.
+scanner maintains a Docker image with the up-to-date vulnerability
+database from a set of different sources listed in Figure~\ref{clair}.  \tristan{Please mention the vulnerability sources for all distributions}.
  We use Clair-scanner version 2.0.6, executed through
 Docker image \texttt{arminc/clair-local-scan:v2.0.6}. For the vulnerability
 database, we use Docker image \texttt{arminc/clair-db:latest}, last
@@ -241,10 +291,11 @@ Singularity Tools (Stools)
 are an extension of Clair scanner for Singularity images. Stools
 directly scan the image files in a local installation of the Clair
 scanner, to circumvent the Docker-specific requirements in the Clair API.
-In our experiments, we use Singularity Tools version 3.2.1  through Docker
+In our experiments, we use Singularity Tools version 3.2.1 through Docker
 image
-\texttt{vanessa/stools-clair:v3.2.1}
-and we follow the steps mentioned in
+\texttt{vanessa/stools-clair:v3.2.1}, which is using another Docker
+image \texttt{arminc/clair-db:latest} for referring to vulnerability feed.
+We follow the steps mentioned in
 \href{https://github.com/singularityhub/stools}{Stools Github} to scan
 Singularity images. \tristan{which docker images did you use for clair and clair database?}
 
@@ -291,7 +342,7 @@ turns to be vulnerable as it is not possible to retrieve any updates.
 Ubuntu maintains its vulnerability database in the Ubuntu Launchpad or the Ubuntu CVE Tracker. For a given CVE, there is an entry for all ubuntu releases.
 Ubuntu releases are listed with the package name
 in which vulnerability exists and are entitled a status
-(\href{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}), which is
+(\url{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}), which is
 encoded in the following form:
 \newline \\
 \noindent <release>\_<source-package>: <status> (<version/notes>) \\
@@ -361,6 +412,7 @@ in the Ubuntu launchpad database.
 %\end{figure*}  
 
 
+
 %\includegraphics[width=300, max width=\textwidth]{status.pdf}
 
 %\begin{table*}[!ht]
@@ -419,10 +471,14 @@ application while execution, and then based on this trace, it recognizes binarie
 and library dependencies that are used by the application for future re-execution. If the OS is
 Debian or RPM-based, Reprozip also
 uses an available package manager to acquire a list of distribution packages from where these files come from.
-So, a list of packages that are needed for the application re-execution is determined. \tristan{How did you run the applications? Which command lines, why, etc} Following that, the list
+So, a list of packages that are needed for the application re-execution is determined. We run applications
+using specific command lines given on application's Github repository in order to collect Reprozip trace.
+These command lines represent how applications should be used.
+\tristan{How did you run the applications? Which command lines, why, etc} Following that, the list
 is expanded by adding important and required packages that are essential
 for the system to function. Finally, we figure out all the dependencies of these packages using Debtree
-~\cite{debtree} \tristan{does debtree work in centos? if not, how do you minimize centos images?}.
+~\cite{debtree}, which is avaiable in Debian and Ubuntu. Its alternative in Centos is Repoquery (\url{https://linux.die.net/man/1/repoquery}), which
+gives a complete dependency tree.\tristan{does debtree work in centos? if not, how do you minimize centos images?}.
 Effectively all needed packages are kept and remaining unnecessary packages are removed. We use
 \href{https://github.com/kaurbhupinder/Vulnerability-Analysis/tree/master/Scripts/minification}{bash scripts} for
 the image size reduction process \tristan{Can we please have at least a README for these scripts?}, which install Reprozip in the image, collect Reprozip trace, and
@@ -434,7 +490,7 @@ lessen number of vulnerabilities or to test the effect of
 combining two approaches. To allow for that, we first update all packages
 the image, then delete all unnecessary packages. Applying these processes in reverse
 may reduce the needed work; however this is not possible in all cases. For instance,
-some packages, such as apt-transport-https, are required to fetch updates, deleting these packages
+some packages, such as \texttt{apt-transport-https}, are required to fetch updates, deleting these packages
 ahead of time will disallow the update process to take place.
 %Finally, we combine both update and size reduction process
 %to lessen the number of vulnerabilities.
@@ -545,7 +601,14 @@ classified by databases, than others.
 \subsection{Discrepancies between Scanners}
 
 Figure~\ref{fig:venn} represents the number of vulnerabilities reported by
-the scanners and the overlap between them. \tristan{According to our discussion, this is only for Ubuntu. This should be clarified.}
+the scanners in Docker images and the overlap between them.
+This figure excludes Centos Docker images because scanners report results in different
+formats for Centos. Anchore and Clair use Red Hat Security Advisories (RHSAs)
+to report pending patches that need to be applied to specific packages
+,whereas Vuls uses Common Vulnerabilities and Exposures (CVE) number to report
+vulnerabilities in packages. Also, we excluded two other images \texttt{bids/antscorticalthickness:v2.2.0-1} and
+\texttt{bids/afni\_proc} from this figure, since we do not have Vuls scanning results for these images. 
+\tristan{According to our discussion, this is only for Ubuntu. This should be clarified.}
 
 We find a total of 20,050 vulnerabilities in BIDS apps and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
