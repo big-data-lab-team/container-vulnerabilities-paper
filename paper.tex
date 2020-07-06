@@ -465,8 +465,8 @@ minimization the same number of vulnerabilities is still reported.
 Consequently, we need to reduce the number of installed packages
 in the images by deleting unnecessary packages. For that, it is required to figure
 out which packages we need for the pipeline to function properly. To allow for that, we utilize
-Reprozip~\cite{rampin2016reprozip}, which is a tool that
-is used to make applications reproducible \tristan{No it doesn't make applications reproducible}. This tool traces operating system calls used by the
+Reprozip~\cite{rampin2016reprozip}, which is a open-source tool that
+helps scientists to make their research reproducible \tristan{No it doesn't make applications reproducible}. This tool traces operating system calls used by the
 application while execution, and then based on this trace, it recognizes binaries, files, environment variables,
 and library dependencies that are used by the application for future re-execution. If the OS is
 Debian or RPM-based, Reprozip also
@@ -478,7 +478,7 @@ These command lines represent how applications should be used.
 is expanded by adding important and required packages that are essential
 for the system to function. Finally, we figure out all the dependencies of these packages using Debtree
 ~\cite{debtree}, which is avaiable in Debian and Ubuntu. Its alternative in Centos is Repoquery (\url{https://linux.die.net/man/1/repoquery}), which
-gives a complete dependency tree.\tristan{does debtree work in centos? if not, how do you minimize centos images?}.
+gives a complete dependency tree of a particular package.\tristan{does debtree work in centos? if not, how do you minimize centos images?}.
 Effectively all needed packages are kept and remaining unnecessary packages are removed. We use
 \href{https://github.com/kaurbhupinder/Vulnerability-Analysis/tree/master/Scripts/minification}{bash scripts} for
 the image size reduction process \tristan{Can we please have at least a README for these scripts?}, which install Reprozip in the image, collect Reprozip trace, and
