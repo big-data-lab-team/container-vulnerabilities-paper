@@ -212,7 +212,7 @@ Anchore vulnerability database version 0.0.11.
 Anchore compares package versions, which are present inside the
 image, with the vulnerability database in order to flag vulnerabilities.
 To get a vulnerability feed of various OS distributions, Anchore refers to
-different sources. The figure~\ref{anchore} displays a list of all sources
+different sources. The Figure~\ref{anchore} displays a list of all sources
 that it refers at the time of this study.
 
 %for instance, Ubuntu launchpad database to get
@@ -474,10 +474,10 @@ uses an available package manager to acquire a list of distribution packages fro
 So, a list of packages that are needed for the application re-execution is determined. We run applications
 using specific command lines given on application's Github repository in order to collect Reprozip trace.
 These command lines represent how applications should be used.
-\tristan{How did you run the applications? Which command lines, why, etc} Following that, the list
+\tristan{How did you run the applications? Which command lines, why, etc}. Following that, the list
 is expanded by adding important and required packages that are essential
 for the system to function. Finally, we figure out all the dependencies of these packages using Debtree
-~\cite{debtree}, which is avaiable in Debian and Ubuntu. Its alternative in Centos is Repoquery (\url{https://linux.die.net/man/1/repoquery}), which
+~\cite{debtree}, which is avaiable in Debian and Ubuntu. It's alternative in Centos is Repoquery (\url{https://linux.die.net/man/1/repoquery}), which
 gives a complete dependency tree of a particular package.\tristan{does debtree work in centos? if not, how do you minimize centos images?}.
 Effectively all needed packages are kept and remaining unnecessary packages are removed. We use
 \href{https://github.com/kaurbhupinder/Vulnerability-Analysis/tree/master/Scripts/minification}{bash scripts} for
