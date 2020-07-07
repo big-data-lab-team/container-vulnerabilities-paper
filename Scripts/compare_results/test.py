@@ -64,21 +64,6 @@ def compare1(file1,file2):
             if line in filetwo:
                 f3.write(line)
 
-def get_package(file1,file2):
-    with open(file1, 'r') as t1, open(file2, 'r') as t2:
-        fileone = t1.readlines()
-        filetwo = t2.readlines()
-        default=list()
-        for line in filetwo:
-            if line['Vulnerability_ID']:
-                 default.append(line[0])
-        req=list(set(default))
-    with open('default.csv','w') as out:
-        for entry in req:
-            out.write(entry)
-            out.write("\n")
-    file.close()
-
 
 def main():
     file1=sys.argv[1]
