@@ -270,9 +270,9 @@ Clair (\url{https://github.com/quay/clair}) is an open-source and extensible
 vulnerability scanner for Docker and appc container images, developed by
 CoreOS (now Container Linux), a Linux distribution to deploy container
 clusters. Clair has a client-server architecture, in which the server
-maintains a database of vulnerabilities. We use Clair through Clair scanner
+scans Docker images layer by layer and maintains a database of vulnerabilities. We use Clair through Clair-scanner
 (\url{https://github.com/arminc/clair-scanner}), a tool to facilitate the testing
-of container images against a local Clair server. Clair scanner scans the image,
+of container images against a local Clair server. Clair-scanner scans the image,
 prepares the list of vulnerabilities, compares that list against a
 whitelist, and flags vulnerabilities that are not present in the whitelist.
 In our experiments, we did not use a whitelist to filter scanning results in
@@ -289,8 +289,8 @@ updated on 2019-09-18.
 
 Singularity Tools (Stools)
 are an extension of Clair scanner for Singularity images. Stools
-directly scan the image files in a local installation of the Clair
-scanner, to circumvent the Docker-specific requirements in the Clair API.
+exports Singularity image to \url{tar.gz} format, masquerading as a single layer docker image
+to circumvent the Docker-specific requirements in the Clair API.
 In our experiments, we use Singularity Tools version 3.2.1 through Docker
 image
 \texttt{vanessa/stools-clair:v3.2.1}, which is using another Docker
@@ -299,35 +299,33 @@ We follow the steps mentioned in
 \href{https://github.com/singularityhub/stools}{Stools Github} to scan
 Singularity images. \tristan{which docker images did you use for clair and clair database?}
 
-\subsection{Linux Releases and Vulnerability Databases}
+\subsection{Ubuntu Releases and its Vulnerability Database}
 
 \tristan{This section is still very confusing. I can rewrite it but would first need to
 have a clear picture of vulnerability statuses across the tested Linux distributions. 
 Are vulnerability statuses present only in Ubuntu, or are there statuses in other distributions too?
 If so, what are the vulnerability statuses in the other distributions?
 }
-Through our experiments, we find that image scanners report vulnerabilities 
-differently depending on the different Linux release types. So, it is 
-important to provide an overview of these Linux releases types. 
 BIDS app and Boutiques images in our experiments have diverse Linux
-distributions, such as Ubuntu, CentOS, Debian, and Alpine. Further, a particular
-distribution has different releases in general. To illustrate, we here examine Ubuntu as an example,
-since it is heavily utilized in our experiments. 
+distributions, such as Ubuntu, CentOS, Debian, and Alpine. A particular
+distribution has different releases in general. Regarding Ubuntu, it has different
+types of releases e.g. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release.
+Through our experiments, we find that image scanners report Ubuntu vulnerabilities 
+differently depending on the different Ubuntu release types. It is 
+important to provide an overview of these Ubuntu releases types, 
+since Ubuntu is heavily utilized in our experiments. 
 \todo{Explain the situation with centos, update figure 3 accordingly.}
-However, other distributions also have
-similar release trend. Ubuntu releases
-can be of two types: Regular or Long Term Support (LTS).
-Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
+Ubuntu's Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
 reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
-in the form of Extended Security Maintenance (ESM) release.
+in the form of ESM release.
 ESM is a paid service that can be requested from Ubuntu to get security 
-updates even after the EOL of a particular Ubuntu release. ESM and LTS releases of a particular Ubuntu distribution have different vulnerability
+updates even after the EOL of a particular Ubuntu release. ESM and LTS releases of a particular Ubuntu version have different vulnerability
 databases, because after EOL of a release, a vulnerability is fixed only in packages of ESM; however, it still
 exists in LTS.
 
 As an example, Ubuntu has ended support for some releases, such as 14.04 LTS,
 17.04, and 17.10, as they reached EOL. However, Ubuntu decided to provide optional extended support for Ubuntu 14.04.
-To use this extended support, users have to purchase ESM release for Ubuntu 14.04.
+To use this extended support, users have to purchase Ubuntu 14.04 ESM release.
 The images in our experiments have Ubuntu 14.04 LTS, so scanners should refer
 to LTS release only while collecting data from the vulnerability databases.
 More interestingly, scanners are able to refer to ESM release vulnerability database
@@ -339,7 +337,7 @@ turns to be vulnerable as it is not possible to retrieve any updates.
 %Also, if ubuntu release with ended support is used in images, there are no chances of getting updates, hence
 %resulting in vulnerable images. 
 
-Ubuntu maintains its vulnerability database in the Ubuntu Launchpad or the Ubuntu CVE Tracker. For a given CVE, there is an entry for all ubuntu releases.
+Ubuntu maintains its vulnerability database in the Ubuntu CVE Tracker. For a given CVE, there is an entry for all ubuntu releases.
 Ubuntu releases are listed with the package name
 in which vulnerability exists and are entitled a status
 (\url{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}), which is
@@ -704,9 +702,9 @@ present inside the image, however, Clair-scanner have reported such vulnerabilit
 For instance, CVE-2019-1274 is an example of such vulnerabilities. 
 %is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
 %Clair is only referring to Ubuntu 14.04 ESM release. 
-%The reasons of Clair showing
-%false positives and false negatives are unclear. We reported this issue on two Google groups of Clair i.e CoreOS Dev and
-%clair-dev \href{https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc}{(https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc).}
+The reasons of Clair showing
+false positives and false negatives are unclear. We reported this issue on two Google groups of Clair i.e CoreOS Dev and
+clair-dev \href{https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc}{(https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc).}
 
 \textbf{Database difference:} At the time we pulled Clair-scanner's database, it was one week old.
                               As a result some vulnerabilities were not updated. For instance, CVE-2019-5094, which
