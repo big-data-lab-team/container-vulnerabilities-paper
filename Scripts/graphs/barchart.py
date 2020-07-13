@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # data to plot
-d = pd.read_csv(r"../allResults.csv")
+d = pd.read_csv(r"../../allResults.csv")
 df=pd.DataFrame(d)
 imageID=[]
 before=[]

@@ -26,6 +26,7 @@
 \usepackage{adjustbox}
 \usepackage{makecell}
 \usepackage{titlesec}
+\usepackage{anyfontsize}
 \usepackage[flushleft]{threeparttable}
 
 %%%% Commands %%%%
@@ -37,6 +38,53 @@
 
 \renewcommand{\labelitemi}{$\textendash$}
 \title{Vulnerability Analysis of Container Images in Neuroimaging}
+\begin{filecontents*}{resul.csv}
+labels,names,A,C,V,Stools
+a,bids/example,838,663,683,
+b,bids/freesurfer,353,215,192,
+c,bids/ndmg,934,757,782,
+d,\textcolor{red}{bids/broccoli:v1.0.0},79,79,117,
+e,bids/fibredensityandcrosssection,1086,849,868,
+f,bids/spm,191,246,235,
+g,poldracklab/mriqc:0.15.0,432,328,332,
+h,bids/cpac:v1.0.1a\_22,698,524,535,
+I,bids/hyperalignment,1717,1327,1433,
+j,bids/mindboggle:0.0.4-1,671,955,569,
+k,bids/mrtrix3\_connectome,275,157,158,
+l,bids/rs\_signal\_extract:0.1,867,454,473,
+m,bids/aa:v0.2.0,189,244,233,
+n,bids/niak,1482,1366,1420,
+o,bids/oppni:v0.7.0-1,913,698,723,
+p,poldracklab/fmriprep:unstable,516,355,393,
+q,bids/brainiak-srm,897,484,503,
+r,bids/nipypelines:0.3.0,641,878,451,
+s,bids/hcppipelines:v3.17.0-18,526,873,620,
+t,bids/magetbrain,112,117,126,
+u,bids/tracula:v6.0.0-4,874,664,683,
+v,bids/baracus,172,238,216,
+w,bids/antscorticalthickness:v2.2.0-1,289,27,no oval data,
+x,bids/dparsf:v4.3.12,507,750,757,
+y,bids/afni\_proc,67,16,no oval data,
+z,bids/rshrf:1.0.1,5,3,3,
+aa,bids/ndmg:v0.1.0,934,758,782,
+ab,\textcolor{red}{mcin/qeeg:latest},46,46,142,
+ac,\textcolor{red}{camarasu/creaphase:0.3},54,54,186,
+ad,\textcolor{red}{bigdatalabteam/hcp-prefreesurfer:exec-centos7.freesurferbuild-centos4-latest},70,76,157,
+ae,\textcolor{red}{mcin/docker-fsl:latest},75,75,201,
+af,gkiar/onevoxel:v0.3.0rc2,5,2,2,
+ag,\textcolor{red}{bigdatalabteam/hcp-prefreesurfer:exec-centos7-fslbuild-centos5-latest},70,76,157,
+ah,\textcolor{red}{bt5e/ants:latest},150,156,336,
+ai,poldracklab/fmriprep:1.2.3,591,441,447,
+aj,gkiar/dwipreproc\_fsl-5.0.11\_minified,391,258,263,
+ak,gkiar/mask2boundary:v0.1.0,15,11,11,
+al,\textcolor{red}{mcin/ica-aroma:latest},75,75,202,
+am,c3genomics/genpipes,,,,99
+an,bioinformatics-group/aqua-singularity-recipe,,,,7
+ao,MontrealSergiy/BEst,,,,106
+ap,shub://aces/cbrain-containers-recipes:fsl\_v6.0.1,,,,206
+aq,shots47s/bids-freesurfer-6.0,,,,212
+ar,shots47s/bids-fmriprep-1.2.3,,,,453
+\end{filecontents*}
   
 \begin{document}
 
@@ -163,7 +211,6 @@ Zerouali et al. studied that
 outdated packages lead to bugs and severity vulnerabilities in Docker
 images~\cite{zerouali2019relation}.
 
-\todo{Add related work on vulnerability scanning}
 
 \section{Materials and Tools}
 
@@ -212,37 +259,51 @@ Anchore vulnerability database version 0.0.11.
 Anchore compares package versions, which are present inside the
 image, with the vulnerability database in order to flag vulnerabilities.
 To get a vulnerability feed of various OS distributions, Anchore refers to
-different sources. The Figure~\ref{anchore} displays a list of all sources
+different sources. The Table~\ref{database} displays a list of all sources
 that it refers at the time of this study.
 
 %for instance, Ubuntu launchpad database to get
 %vulnerability data related to Ubuntu 
-\tristan{You need to be accurate on these sources, this is not ``for instance". 
-You should list all the sources used in the experiments, for all image types: Ubuntu but also CentOS, Debian, Alpine.}.
 
-\begin{figure*}[!ht]
-    \centering
-	\begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[height=2.0in]{Figures/anchore.png}
-        \caption{Anchore}
-        \label{anchore}
-    \end{subfigure}%
-    ~ 
-	\begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[height=2.5in]{Figures/vuls.png}
-        \caption{Vuls}
-        \label{vuls}
-    \end{subfigure}
-     ~
-	\begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[height=2.0in]{Figures/clair.png}
-        \caption{Clair}
-	\label{clair}
-    \end{subfigure}
-    \caption{Vulnerability databases used by scanners}
-    \label{database}
+%\begin{figure*}[!ht]
+%    \centering
+%	\begin{subfigure}[t]{0.3\textwidth}
+%        \includegraphics[height=2.0in]{Figures/anchore.png}
+%        \caption{Anchore}
+%        \label{anchore}
+%    \end{subfigure}%
+%    ~ 
+%	\begin{subfigure}[t]{0.3\textwidth}
+%        \includegraphics[height=2.5in]{Figures/vuls.png}
+%        \caption{Vuls}
+%        \label{vuls}
+%    \end{subfigure}
+%     ~
+%	\begin{subfigure}[t]{0.3\textwidth}
+%        \includegraphics[height=2.0in]{Figures/clair.png}
+%        \caption{Clair}
+%	\label{clair}
+%    \end{subfigure}
+%    \caption{Vulnerability databases used by scanners}
+%    \label{database}
+%\end{figure*}
+\begin{figure*}
+\begin{tabular}{ |c|c|c|c| }
+ \hline
+\textbf{OS} &	\textbf{Anchore} &	\textbf{Vuls} &	\textbf{Clair} \\
+\hline
+	\textbf{Alpine} & Alpine-SecDB &	Alpine-SecDB &	Alpine-SecDB \\
+\hline
+	\textbf{CentOS} & Red Hat Enterprise Linux Oval & Red Hat Enterprise Linux OVAL And Red Hat Security Advisories & Red Hat Security Data \\
+\hline
+	\textbf{Debian} & Debian Security Bug Tracker &	Debian OVAL and Debian Security Bug Tracker & Debian Security Bug Tracker \\
+\hline
+	\textbf{Ubuntu} & Ubuntu CVE Tracker &	Ubuntu OVAL &	Ubuntu CVE Tracker \\
+ \hline
+\end{tabular}
+\caption{Vulnerability databases used by scanners for different OS distributions}
+\label{database}
 \end{figure*}
-
 
 \subsubsection{Vuls}
 
@@ -252,13 +313,10 @@ scanning. In our experiments, we use remote dynamic scanning, that is, Vuls
 starts a container for every image to test, and queries the package manager
 in the image through SSH. We use Vuls 0.9.0, executed through Docker image
 \texttt{vuls/vuls:latest}. At the time of this study, Vuls gets vulnerability feed
-from a configured set of sources, which are listed in Figure~\ref{vuls}.
+from a configured set of sources, which are listed in the Table~\ref{database}.
 %from the Open Vulnerability
 %and Assessment Language (OVAL) database 
-\tristan{Does it contain
-vulnerabilities for all distributions?} 
-\tristan{The Vuls website says that it uses multiple vulnerability databases: https://vuls.io/docs/en/main-features.html Are you sure 
-that you only used OVAL and if so, why?}. According to this list, Vuls
+According to this list, Vuls
 refers to OVAL database for some distribution e.g. Ubuntu, Debian, etc.
 It is worth noting that there is
 no OVAL data for Ubuntu 17.04 and 17.10 distributions, meaning that images
@@ -277,10 +335,9 @@ prepares the list of vulnerabilities, compares that list against a
 whitelist, and flags vulnerabilities that are not present in the whitelist.
 In our experiments, we did not use a whitelist to filter scanning results in
 order to make a fair comparison between scanners.
-\tristan{What is this whitelist about, and which one did you use?}. Clair
-scanner maintains a Docker image with the up-to-date vulnerability
-database from a set of different sources listed in Figure~\ref{clair}.  \tristan{Please mention the vulnerability sources for all distributions}.
- We use Clair-scanner version 2.0.6, executed through
+Clair scanner maintains a Docker image with the up-to-date vulnerability
+database from a set of different sources listed in the Table~\ref{database}.
+We use Clair-scanner version 2.0.6, executed through
 Docker image \texttt{arminc/clair-local-scan:v2.0.6}. For the vulnerability
 database, we use Docker image \texttt{arminc/clair-db:latest}, last
 updated on 2019-09-18.
@@ -289,7 +346,7 @@ updated on 2019-09-18.
 
 Singularity Tools (Stools)
 are an extension of Clair scanner for Singularity images. Stools
-exports Singularity image to \url{tar.gz} format, masquerading as a single layer docker image
+exports Singularity image to \texttt{tar.gz} format, masquerading as a single layer docker image
 to circumvent the Docker-specific requirements in the Clair API.
 In our experiments, we use Singularity Tools version 3.2.1 through Docker
 image
@@ -297,15 +354,10 @@ image
 image \texttt{arminc/clair-db:latest} for referring to vulnerability feed.
 We follow the steps mentioned in
 \href{https://github.com/singularityhub/stools}{Stools Github} to scan
-Singularity images. \tristan{which docker images did you use for clair and clair database?}
+Singularity images. 
 
 \subsection{Ubuntu Releases and its Vulnerability Database}
 
-\tristan{This section is still very confusing. I can rewrite it but would first need to
-have a clear picture of vulnerability statuses across the tested Linux distributions. 
-Are vulnerability statuses present only in Ubuntu, or are there statuses in other distributions too?
-If so, what are the vulnerability statuses in the other distributions?
-}
 BIDS app and Boutiques images in our experiments have diverse Linux
 distributions, such as Ubuntu, CentOS, Debian, and Alpine. A particular
 distribution has different releases in general. Regarding Ubuntu, it has different
@@ -314,7 +366,6 @@ Through our experiments, we find that image scanners report Ubuntu vulnerabiliti
 differently depending on the different Ubuntu release types. It is 
 important to provide an overview of these Ubuntu releases types, 
 since Ubuntu is heavily utilized in our experiments. 
-\todo{Explain the situation with centos, update figure 3 accordingly.}
 Ubuntu's Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
 reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
 in the form of ESM release.
@@ -464,7 +515,7 @@ Consequently, we need to reduce the number of installed packages
 in the images by deleting unnecessary packages. For that, it is required to figure
 out which packages we need for the pipeline to function properly. To allow for that, we utilize
 Reprozip~\cite{rampin2016reprozip}, which is a open-source tool that
-helps scientists to make their research reproducible \tristan{No it doesn't make applications reproducible}. This tool traces operating system calls used by the
+helps scientists to make their research reproducible. This tool traces operating system calls used by the
 application while execution, and then based on this trace, it recognizes binaries, files, environment variables,
 and library dependencies that are used by the application for future re-execution. If the OS is
 Debian or RPM-based, Reprozip also
@@ -472,14 +523,14 @@ uses an available package manager to acquire a list of distribution packages fro
 So, a list of packages that are needed for the application re-execution is determined. We run applications
 using specific command lines given on application's Github repository in order to collect Reprozip trace.
 These command lines represent how applications should be used.
-\tristan{How did you run the applications? Which command lines, why, etc}. Following that, the list
+Following that, the list
 is expanded by adding important and required packages that are essential
 for the system to function. Finally, we figure out all the dependencies of these packages using Debtree
 ~\cite{debtree}, which is avaiable in Debian and Ubuntu. It's alternative in Centos is Repoquery (\url{https://linux.die.net/man/1/repoquery}), which
-gives a complete dependency tree of a particular package.\tristan{does debtree work in centos? if not, how do you minimize centos images?}.
+gives a complete dependency tree of a particular package.
 Effectively all needed packages are kept and remaining unnecessary packages are removed. We use
 \href{https://github.com/kaurbhupinder/Vulnerability-Analysis/tree/master/Scripts/minification}{bash scripts} for
-the image size reduction process \tristan{Can we please have at least a README for these scripts?}, which install Reprozip in the image, collect Reprozip trace, and
+the image size reduction process, which install Reprozip in the image, collect Reprozip trace, and
 finally delete all unnecessary packages.
 
 Following the above two approaches, we employ a hybrid approach, where
@@ -561,32 +612,42 @@ classified by databases, than others.
 %\end{table*}
 
 
+%\csvreader[tabular=|l|l|l|l|l|l|,
+%         table head=\hline \textbf{ First Name} & \textbf{Last Nmae} & {a} & {b} & {c} & {d}\\\hline,
+%     late after line = \\\hline]%
+% {resul.csv}{labels=\labels,names=\names,A=\A,C=\C,V=\V,Stools=\Stools}%
+%         {\labels & \names & \A & \C & \V & \Stools}%
+%
 
 \begin{table*}[!ht]
 \csvreader[%
- respect all,%
-  before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
-      \begin{adjustbox}{max width=\textwidth},
-  after reading=\end{adjustbox},
- tabular={c |c | c | c | c |c},
-	table head =Image Labels &{Image names} & {Anchore} & {Clair} & {Vuls} &{Stools}\\\hline,
- late after line= \\,
-        late after last line=\\\hline %\multicolumn{5}{c}{Total Score: 1481}
-]{fullresults.csv}{}{\csvlinetotablerow}%
+ %respect all,%
+ % before reading=\footnotesize\sisetup{round-mode=places,round-precision=2,round-integer-to-decimal}
+  %    \begin{adjustbox}{max width=\textwidth},
+  %after reading=\end{adjustbox},
+ tabular={|c|c|c|c|c|c|},
+	table head = \hline\textbf{Image Labels} &\textbf{{Image names}} & \textbf{Anchore} & \textbf{Clair} & \textbf{Vuls} & \textbf{Stools}\\\hline,
+	late after line= \\,
+        late after last line=\\\hline %
+	]{resul.csv}{labels=\labels,names=\names,A=\A,C=\C,V=\V,Stools=\Stools}%
+        {\labels & \names & \A & \C & \V & \Stools}
        \centering
-        \caption{\label{table1}Number of vulnerabilities by scanners}
+	\vspace*{1mm}
+	\caption{\label{table1}Number of vulnerabilities by scanners (all Centos images are highlighted)} 
 \end{table*}
 
 \begin{figure*}[!ht]
         {\includegraphics[scale=1.5,width=\textwidth]
         {Figures/vulngraph.pdf}}
+	\vspace*{-7mm}
         \caption{\label{fig:graph1} Number of vulnerabilities by packages}
       \end{figure*}
 
 \begin{figure}[!ht]
         {\includegraphics[scale=2.5,width=\columnwidth]
         {Figures/venn.pdf}}
-        \caption{\label{fig:venn} Scanner results}
+	\vspace*{-10mm}
+	\caption{\label{fig:venn} Scanner results (excluding non-comparable image results)}
 \end{figure}
 
 %\begin{figure*}[b]
@@ -600,13 +661,12 @@ classified by databases, than others.
 
 Figure~\ref{fig:venn} represents the number of vulnerabilities reported by
 the scanners in Docker images and the overlap between them.
-This figure excludes Centos Docker images because scanners report results in different
+This Figure excludes Centos Docker images (highlighted images in Table\~ref{table1}) because scanners report results in different
 formats for Centos. Anchore and Clair use Red Hat Security Advisories (RHSAs)
-to report pending patches that need to be applied to specific packages
-,whereas Vuls uses Common Vulnerabilities and Exposures (CVE) number to report
+to report pending patches that need to be applied to specific packages,
+whereas Vuls uses Common Vulnerabilities and Exposures (CVE) number to report
 vulnerabilities in packages. Also, we excluded two other images \texttt{bids/antscorticalthickness:v2.2.0-1} and
 \texttt{bids/afni\_proc} from this figure, since we do not have Vuls scanning results for these images. 
-\tristan{According to our discussion, this is only for Ubuntu. This should be clarified.}
 
 We find a total of 20,050 vulnerabilities in BIDS apps and Boutiques images.
 It is interesting to note that out of these vulnerabilities, 4453 vulnerabilities are only
@@ -676,6 +736,7 @@ Clair-scanner still refers to Ubuntu 14.04 ESM release vulnerability database, w
 \begin{figure*}[!ht]
         {\includegraphics[width=\textwidth]
         {Figures/vulnwithupdate.pdf}}
+	\vspace*{-7mm}
         \caption{\label{fig:graph2} Number of vulnerabilities before and
         after update of the images}
       \end{figure*}
@@ -684,27 +745,26 @@ Clair-scanner still refers to Ubuntu 14.04 ESM release vulnerability database, w
 \begin{figure*}[!ht]
         {\includegraphics[scale=1.5,width=\textwidth]
         {Figures/bargraph.png}}
+	\vspace*{-5mm}
         \caption{\label{fig:bargraph} Vulnerabilities by different experiments}
       \end{figure*}
 \textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release:} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
 are not detected by Clair-scanner but they affect Ubuntu 14.04 LTS, and hence detected by Vuls. The CVE-2017-1375 is an example
 of such vulnerabilities.
 
-\textbf{False negatives:} False negative reporting is detected. Clair-scanner and Vuls
+\textbf{Misses:} Clair-scanner and Vuls
 are missing vulnerabilities that they should have detected. For example, the CVE-2016-9082 
 is present in package Cairo in Xenial release and it is not detected by Clair-scanner.
 Vuls is also missing vulnerabilities such as CVE-2019-5094.
 
-\textbf{False positives:} False positive reporting is also detected. For instance,
-there are false positives in clair-scanner.
+\textbf{Wrong Detections:} 
 Some vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
-present inside the image, however, Clair-scanner have reported such vulnerabilities.
+present inside the image, however, Clair have reported such vulnerabilities.
 For instance, CVE-2019-1274 is an example of such vulnerabilities. 
 %is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
 %Clair is only referring to Ubuntu 14.04 ESM release. 
-The reasons of Clair showing
-false positives and false negatives are unclear. We reported this issue on two Google groups of Clair i.e CoreOS Dev and
-clair-dev \href{https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc}{(https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc).}
+We reported this issue on two Google groups of Clair i.e CoreOS Dev and
+clair-dev \url{(https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc).}
 
 \textbf{Database difference:} At the time we pulled Clair-scanner's database, it was one week old.
                               As a result some vulnerabilities were not updated. For instance, CVE-2019-5094, which

@@ -18,5 +18,5 @@ for text in v.set_labels:
 for text in v.subset_labels:
     text.set_fontsize(15)
 # Show it
-plt.savefig('venn.pdf',dpi=2000)
-
+#plt.savefig('venn.pdf',dpi=2000)
+plt.show()
