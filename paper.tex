@@ -40,42 +40,42 @@
 \title{Vulnerability Analysis of Container Images in Neuroimaging}
 \begin{filecontents*}{resul.csv}
 labels,names,A,C,V,Stools
-a,bids/example,838,663,683,
-b,bids/freesurfer,353,215,192,
-c,bids/ndmg,934,757,782,
+a,bids/example:latest,838,663,683,
+b,bids/freesurfer:latest,353,215,192,
+c,bids/ndmg:latest,934,757,782,
 d,\textcolor{red}{bids/broccoli:v1.0.0},79,79,117,
-e,bids/fibredensityandcrosssection,1086,849,868,
-f,bids/spm,191,246,235,
+e,bids/fibredensityandcrosssection:latest,1086,849,868,
+f,bids/spm:latest,191,246,235,
 g,poldracklab/mriqc:0.15.0,432,328,332,
 h,bids/cpac:v1.0.1a\_22,698,524,535,
-I,bids/hyperalignment,1717,1327,1433,
+I,bids/hyperalignment:latest,1717,1327,1433,
 j,bids/mindboggle:0.0.4-1,671,955,569,
-k,bids/mrtrix3\_connectome,275,157,158,
+k,bids/mrtrix3\_connectome:latest,275,157,158,
 l,bids/rs\_signal\_extract:0.1,867,454,473,
 m,bids/aa:v0.2.0,189,244,233,
-n,bids/niak,1482,1366,1420,
+n,bids/niak:latest,1482,1366,1420,
 o,bids/oppni:v0.7.0-1,913,698,723,
 p,poldracklab/fmriprep:unstable,516,355,393,
-q,bids/brainiak-srm,897,484,503,
+q,bids/brainiak-srm:latest,897,484,503,
 r,bids/nipypelines:0.3.0,641,878,451,
 s,bids/hcppipelines:v3.17.0-18,526,873,620,
-t,bids/magetbrain,112,117,126,
+t,bids/magetbrain:latest,112,117,126,
 u,bids/tracula:v6.0.0-4,874,664,683,
-v,bids/baracus,172,238,216,
-w,bids/antscorticalthickness:v2.2.0-1,289,27,no oval data,
+v,bids/baracus:latest,172,238,216,
+w,bids/antscorticalthickness:v2.2.0-1,289,27,no OVAL data,
 x,bids/dparsf:v4.3.12,507,750,757,
-y,bids/afni\_proc,67,16,no oval data,
+y,bids/afni\_proc:latest,67,16,no OVAL data,
 z,bids/rshrf:1.0.1,5,3,3,
 aa,bids/ndmg:v0.1.0,934,758,782,
 ab,\textcolor{red}{mcin/qeeg:latest},46,46,142,
 ac,\textcolor{red}{camarasu/creaphase:0.3},54,54,186,
-ad,\textcolor{red}{bigdatalabteam/hcp-prefreesurfer:exec-centos7.freesurferbuild-centos4-latest},70,76,157,
+ad,\textcolor{red}{bigdatalabteam/hcp-prefreesurfer:exec-centos7.freesurferbuild-centos4-latest:latest},70,76,157,
 ae,\textcolor{red}{mcin/docker-fsl:latest},75,75,201,
 af,gkiar/onevoxel:v0.3.0rc2,5,2,2,
-ag,\textcolor{red}{bigdatalabteam/hcp-prefreesurfer:exec-centos7-fslbuild-centos5-latest},70,76,157,
+ag,\textcolor{red}{bigdatalabteam/hcp-prefreesurfer:exec-centos7-fslbuild-centos5-latest:latest},70,76,157,
 ah,\textcolor{red}{bt5e/ants:latest},150,156,336,
 ai,poldracklab/fmriprep:1.2.3,591,441,447,
-aj,gkiar/dwipreproc\_fsl-5.0.11\_minified,391,258,263,
+aj,gkiar/dwipreproc\_fsl-5.0.11\_minified:latest,391,258,263,
 ak,gkiar/mask2boundary:v0.1.0,15,11,11,
 al,\textcolor{red}{mcin/ica-aroma:latest},75,75,202,
 am,c3genomics/genpipes,,,,99
@@ -102,9 +102,9 @@ ar,shots47s/bids-fmriprep-1.2.3,,,,453
 Today, containers, which provide operating system level virtualization, are
 popular. Correspondingly, they are widely used for scientific data analyses on 
 High Performance Computing (HPC) clusters. However, the security of containers
-still remains the concerning issue. Here, we focus on the security of container
-images in particular. Container images are often built for the entire
-duration of an analysis, so scientific researchers do not prefer to update
+still remains a concerning issue. Here, we focus on the security of container
+images, which are often built for the entire
+duration of an analysis, so scientific researchers prefer not to update
 them. Consequently, their chances of containing vulnerabilities increases.  
 In this study, we analyze vulnerabilities in container images used in 
 HPC clusters.
@@ -317,7 +317,7 @@ from a configured set of sources, which are listed in the Table~\ref{database}.
 %from the Open Vulnerability
 %and Assessment Language (OVAL) database 
 According to this list, Vuls
-refers to OVAL database for some distribution e.g. Ubuntu, Debian, etc.
+refers to Open Vulnerability and Assessment Language (OVAL) database for some distribution e.g. Ubuntu, Debian, etc.
 It is worth noting that there is
 no OVAL data for Ubuntu 17.04 and 17.10 distributions, meaning that images
 with these distributions cannot be scanned with Vuls.
@@ -358,7 +358,7 @@ Singularity images.
 
 \subsection{Ubuntu Releases and its Vulnerability Database}
 
-BIDS app and Boutiques images in our experiments have diverse Linux
+BIDS apps and Boutiques images in our experiments have diverse Linux
 distributions, such as Ubuntu, CentOS, Debian, and Alpine. A particular
 distribution has different releases in general. Regarding Ubuntu, it has different
 types of releases e.g. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release.
@@ -514,9 +514,9 @@ minimization the same number of vulnerabilities is still reported.
 Consequently, we need to reduce the number of installed packages
 in the images by deleting unnecessary packages. For that, it is required to figure
 out which packages we need for the pipeline to function properly. To allow for that, we utilize
-Reprozip~\cite{rampin2016reprozip}, which is a open-source tool that
+Reprozip~\cite{rampin2016reprozip}, an open-source tool that
 helps scientists to make their research reproducible. This tool traces operating system calls used by the
-application while execution, and then based on this trace, it recognizes binaries, files, environment variables,
+application during execution, and then based on this trace, it recognizes binaries, files, environment variables,
 and library dependencies that are used by the application for future re-execution. If the OS is
 Debian or RPM-based, Reprozip also
 uses an available package manager to acquire a list of distribution packages from where these files come from.
@@ -533,10 +533,10 @@ Effectively all needed packages are kept and remaining unnecessary packages are 
 the image size reduction process, which install Reprozip in the image, collect Reprozip trace, and
 finally delete all unnecessary packages.
 
-Following the above two approaches, we employ a hybrid approach, where
+Following the two previous approaches, we employ a hybrid approach, where
 we combine both update and size reduction processes in an attempt to
 lessen number of vulnerabilities or to test the effect of
-combining two approaches. To allow for that, we first update all packages
+combining two approaches. To allow for that, we first update all packages in
 the image, then delete all unnecessary packages. Applying these processes in reverse
 may reduce the needed work; however this is not possible in all cases. For instance,
 some packages, such as \texttt{apt-transport-https}, are required to fetch updates, deleting these packages
@@ -571,8 +571,8 @@ ahead of time will disallow the update process to take place.
 \section{Results}
 
 In this section,
-we first discuss our detected vulnerabilities in the images, using the three scanners, and compare the
-results. We then discuss the effect of the image updating/minimizing and applying the hybrid
+we first discuss the detected vulnerabilities in the images and compare the
+results. We then discuss the effect of updating/minimizing the image and applying the hybrid
 approach on the detected vulnerabilities.
 Lastly, we do an analysis of obtained results and explain the reasons behind our
 findings.
@@ -580,7 +580,11 @@ findings.
 \subsection{Detected Vulnerabilities}
 
 Table~\ref{table1} shows the number of detected vulnerabilities in the different images,
-detected by each of the scanners.
+detected by each of the scanners. Image labels from \texttt{a} to \texttt{al} represents
+Docker images, whereas remaining ones belong to Singularity. It is worth noting that Vuls
+is not able to scan two Docker images \textttt{w} and \textttt{y} because these images
+have Ubuntu 17.04 and 17.10 respectively, and there is no vulnerability data for these
+distributions in OVAL database, which Vuls refers for scanning. 
 Interestingly, our experiments concluded considerable discrepancies in the results obtained by
 these scanners. In particular, in most cases,
 Anchore reports more vulnerabilities than Vuls and Clair-scanner resulting in 
