@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib_venn import venn3, venn3_circles
  
 # Make a Basic Venn
-v = venn3(subsets=(1, 1, 1, 1, 1, 1, 1), set_labels = ('Anchore', 'Clair-scanner', 'Vuls'))
+v = venn3(subsets=(1, 1, 1, 1, 1, 1, 1), set_labels = ('Anchore', 'Clair', 'Vuls'))
  
 # Custom it
 v.get_label_by_id('100').set_text('4453')
@@ -18,5 +18,5 @@ for text in v.set_labels:
 for text in v.subset_labels:
     text.set_fontsize(15)
 # Show it
-#plt.savefig('venn.pdf',dpi=2000)
-plt.show()
+plt.savefig('venn.pdf',dpi=2000)
+#plt.show()
