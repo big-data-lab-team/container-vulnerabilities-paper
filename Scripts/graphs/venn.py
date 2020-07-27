@@ -78,12 +78,6 @@ def compare(file1,file2,file3):
     
 
 def main():
-    dir_name = "./"
-    test = os.listdir(dir_name)
-    for item in test:
-       if item.endswith(".csv"):
-            os.remove(os.path.join(dir_name, item))
-
     file1=sys.argv[1]
     file2=sys.argv[2]
     file3=sys.argv[3]
