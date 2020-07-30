@@ -92,6 +92,7 @@ ar,shots47s/bids-fmriprep-1.2.3,,,,453
 \author[1]{Tristan Glatard}
 
 \affil[1]{Department of Computer Science and Software Engineering, Concordia University, Montreal, Canada}
+
 \maketitle
 
 \begin{abstract}
@@ -242,7 +243,7 @@ Anchore vulnerability database version 0.0.11.
 Anchore compares package versions, which are present inside the
 image, with the vulnerability database in order to flag vulnerabilities.
 To get a vulnerability feed of various OS distributions, Anchore refers to
-different sources. Table~\ref{database} displays Anchore's vulnerability sources for
+different sources. Figure~\ref{database} displays Anchore's vulnerability sources for
 Ubuntu, Debian, Alpine, and Centos, which are present inside taken images.
 Anchore also refers to National
 Vulnerability Database (NVD) to get metadata of vulnerabilities.
@@ -273,10 +274,10 @@ scanning. In our experiments, we use remote dynamic scanning, that is, Vuls
 connects to the running containers that needs to be scanned through SSH, and queries the package manager
 in the container. We use Vuls 0.9.0, executed through Docker image
 \texttt{vuls/vuls:0.9.0}. At the time of this study, Vuls gets vulnerability feed
-from a configured set of sources. Table~\ref{database} lists vulnerability databases
+from a configured set of sources. Figure~\ref{database} lists vulnerability databases
 referred by Vuls for scanned four OS distributions i.e. Alpine, Ubuntu, Debian, and Centos.
 Apart from this, like Anchore, Vuls also refers NVD database for getting vulnerability metadata.
-Table~\ref{database} shows that Vuls
+Figure~\ref{database} shows that Vuls
 refers to Open Vulnerability and Assessment Language (OVAL) database for Ubuntu, Debian, and Centos.
 It is worth noting that there is
 no vulnerability data for Ubuntu 17.04 and 17.10 distributions in OVAL database, meaning that images
@@ -296,7 +297,7 @@ whitelist, and flags vulnerabilities that are not present in the whitelist.
 In our experiments, we did not use a whitelist to filter scanning results in
 order to make a fair comparison between scanners.
 Clair-scanner maintains a Docker image with the up-to-date vulnerability
-database from a set of different sources. Table~\ref{database} lists
+database from a set of different sources. Figure~\ref{database} lists
 vulnerability databases that Clair referred for Alpine, Ubuntu, Debian, and Centos.
 Clair also uses NVD database for getting vulnerability metadata.
 We use Clair version 2.0.6, executed through
@@ -319,18 +320,55 @@ by Stools are same as mentioned for Clair.
 To scan Singularity images, we follow the steps mentioned in
 \href{https://github.com/singularityhub/stools}{Stools Github}.
 
-\subsection{Ubuntu Release types and its Vulnerability statuses}
+\subsection{Ubuntu Vulnerability Database}
 
-BIDS apps and Boutiques images in our experiments have four Linux
-distributions i.e. Ubuntu, CentOS, Debian, and Alpine. 
-Out of these distributions, Ubuntu assigns a vulnerability status to
-all vulnerabilities before keeping them in its vulnerability database.
-Each vulnerability is assigned a unique Common Vulnerabilities and Exposures (CVE) number
-by the MITRE corporation, who maintains a list of all vulnerabilities of all distributions.
-Ubuntu keeps a record of Ubuntu-specific vulnerabilities in Ubuntu CVE Tracker using their CVE
-numbers. In this paper, we use vulnerability and CVE interchangeably.
-The vulnerability status in Ubuntu CVE Tracker is subjected to change
-depending on the work progress to fix that vulnerability.
+\change{There are two types of vulnerability databases that are referred
+by the scanners in these experiments. First one is Open Vulnerability and Assessment Language (OVAL)
+database, which is an international open standard and a common means of determining the existence of
+vulnerabilities in softwares. OVAL supports various OS distributions e.g. Ubuntu, Debian, Centos, etc.
+Second type of databases used by scanners are vulnerability databases from specific OS vendors e.g. Alpine-SecDB
+from Alpine,
+Debian Bug Tracker from Debian, Ubuntu CVE Tracker from Ubuntu, etc., where they
+keep a track of their OS-specific vulnerabilities by assigning a status.
+%In particular, there is a discrepancy in the way Anchore and Clair
+%interpret Ubuntu CVE Tracker.
+Out of four distributions that are present in our images Vuls uses
+OVAL database for Debian, Ubuntu, Centos and refers to Alpine-SecDB
+database for Alpine as this distribution is currently not supported by OVAL.
+Clair and Anchore mostly refers to vulnerability databases provided by specific OS
+vendors except in one case, where Anchore refers to OVAL i.e. Centos.
+
+The major discrepancies are shown by Anchore and Clair in Ubuntu. Both refers to Ubuntu CVE Tracker database for Ubuntu images.
+The way in which both scanners interpret this database is different.
+%
+%There are different vulnerability databases, which have
+%different formats of data.
+%Out of which Open Vulnerability and Assessment Language (OVAL) is an international
+%open standard and a common
+%means of promoting publicly available security issues. 
+%It provides details about software vulnerabilities. It helps to determine
+%whether vulnerabilities exist in local machines or not. Apart from OVAL, operating system
+%vendors also keep track of their vulnerabilities separately and assign
+%a status to each vulnerability.
+%For example, Ubuntu maintains
+%Ubuntu CVE Tracker, Debian maintains Debian Security Bug Tracker, etc.
+%Each vulnerability is assigned a unique Common Vulnerabilities and Exposures (CVE) number
+%by the MITRE corporation, who maintains a list of all vulnerabilities of all distributions.
+%In this paper, we use vulnerability and CVE interchangeably.
+%Ubuntu CVE Tracker is used by Anchore and Clair in our experiments
+%and there is discrepancies in the way both scanners interpret results.
+%
+%BIDS apps and Boutiques images in our experiments have four Linux
+%distributions i.e. Ubuntu, CentOS, Debian, and Alpine. 
+%Out of these distributions, Ubuntu assigns a vulnerability status to
+%all vulnerabilities before keeping them in its vulnerability database.
+%Each vulnerability is assigned a unique Common Vulnerabilities and Exposures (CVE) number
+%by the MITRE corporation, who maintains a list of all vulnerabilities of all distributions.
+%Ubuntu keeps a record of Ubuntu-specific vulnerabilities in Ubuntu CVE Tracker using their CVE
+%numbers. In this paper, we use vulnerability and CVE interchangeably.
+%The vulnerability status in Ubuntu CVE Tracker is subjected to change
+%depending on the work progress to fix that vulnerability.
+%
 %Regarding Ubuntu, it has different
 %types of releases e.g. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release.
 %Ubuntu maintains its vulnerability data in Ubuntu CVE tracker, which is referred by Anchore and Clair.
@@ -338,95 +376,111 @@ depending on the work progress to fix that vulnerability.
 %which is maintained by MITRE corporation. Vuls refers to OVAL repository for getting Ubuntu vulnerability feed.
 %The vulnerability data format of both databases is different. OVAL keeps a separate xml file for each release,
 %which contains that release specific vulnerability information.
-Ubuntu keeps a separate file for each vulnerability, which
+Ubuntu CVE Tracker keeps a separate file for each vulnerability, which
 has an entry for all Ubuntu releases combined with the current status
 of that vulnerability in that release.
-Further, in Ubuntu a particular release can be of different types i.e. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release. 
-Through our experiments, we find that Anchore and Clair report Ubuntu vulnerabilities 
-differently depending on either the different Ubuntu release type or vulnerability status. It is 
-important to provide an overview of these Ubuntu releases types and vulnerability statuses, 
+In particular, Clair and Anchore show discrepancies for Ubuntu 14.04 which have
+two entries for each vulnerability, one for Ubuntu 14.04 Long Term Support (LTS)
+and second for Ubuntu 14.04 Extended Security Maintenance (ESM) release. As Ubuntu 14.04 LTS
+reached end-of-life on 2019-04-30, so Ubuntu ignores new vulnerabilities in LTS release and
+fix them only in ESM release. Consequently, a same vulnerability may have different vulnerability status in LTS and ESM releases,
+which is causing discrepancies. This is because Anchore refers to Ubuntu 14.04 LTS, whereas Clair refers to
+ESM.
+%Further, in Ubuntu a particular release can be of different types i.e. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release. 
+%Through our experiments, we find that Anchore and Clair report Ubuntu vulnerabilities 
+%differently depending on either the different Ubuntu release type or vulnerability status. 
+It is important to provide an overview of these Ubuntu vulnerability statuses, 
 since Ubuntu is heavily utilized in our experiments. 
-Ubuntu's Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
-reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
-in the form of ESM release.
-ESM is a paid service that can be requested from Ubuntu to get security 
-updates even after the EOL of a particular Ubuntu release. ESM and LTS releases of a particular Ubuntu version have different vulnerability
-databases, because after EOL of a release, a vulnerability is fixed only in packages of ESM; however, it still
-exists in LTS.
-
-As an example, Ubuntu has ended support for some releases, such as 14.04 LTS,
-17.04, and 17.10, as they reached EOL. However, Ubuntu decided to provide optional extended support for Ubuntu 14.04.
-To use this extended support, users have to purchase Ubuntu 14.04 ESM release.
-The images in our experiments have Ubuntu 14.04 LTS, so scanners should refer
-to LTS release only while collecting data from the vulnerability databases.
-More interestingly, Clair refers to ESM release vulnerability database, however, this may lead to discrepancies in results.
-Further, if an image is using a Linux release where EOL has been reached that image may
-turns to be vulnerable as it is not possible to retrieve any updates.
-
-In Ubuntu CVE Tracker, all Ubuntu releases are listed with the package name
-in which vulnerability exists and are entitled a vulnerability status
+%Ubuntu's Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
+%reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
+%in the form of ESM release.
+%ESM is a paid service that can be requested from Ubuntu to get security 
+%updates even after the EOL of a particular Ubuntu release. ESM and LTS releases of a particular Ubuntu version have different vulnerability
+%databases, because after EOL of a release, a vulnerability is fixed only in packages of ESM; however, it still
+%exists in LTS.
+%
+%As an example, Ubuntu has ended support for some releases, such as 14.04 LTS,
+%17.04, and 17.10, as they reached EOL. However, Ubuntu decided to provide optional extended support for Ubuntu 14.04.
+%To use this extended support, users have to purchase Ubuntu 14.04 ESM release.
+%The images in our experiments have Ubuntu 14.04 LTS, so scanners should refer
+%to LTS release only while collecting data from the vulnerability databases.
+%More interestingly, Clair refers to ESM release vulnerability database, however, this may lead to discrepancies in results.
+%Further, if an image is using a Linux release where EOL has been reached that image may
+%turns to be vulnerable as it is not possible to retrieve any updates.
+%
+In Ubuntu CVE Tracker, for a vulnerability all Ubuntu releases are listed with the package name
+in which that vulnerability exists and are entitled a vulnerability status
 (\url{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}), which is
 encoded in the following form:
 \newline \\
-\noindent <release>\_<source-package>: <status> (<version/notes>) \\
+\noindent <release>\_<source-package>: <status> (<version/notes>)
 \newline\\
+The <version/notes> given with a vulnerability status provide more
+information about the vulnerability.
 For a given release, the vulnerability status can be any one of the following:
 
 \textbf{DNE (Does Not Exist):} The package does not exist in the
-		archive.
+		release.
 
 \textbf{needs-triage:} The vulnerability of this package
 		is not known, and hence evaluation is needed.
 
 \textbf{not-affected:} The package, while related to the
-		CVE in some way, is not affected by the issue. The <notes> should
-		provide detailed information, if needed. For instance, if the given
-		status is "not-affected (1.14.6-1.1)" then this indicates that this specific
-		package version is not affected.
+		vulnerability in some way, is not affected by the issue.
+	%	The <notes> should
+	%	provide detailed information, if needed.
+		%For instance, if the given
+		%status is "not-affected (1.14.6-1.1)" then this indicates that this specific
+		%package version is not affected.
 
-\textbf{needed:} The package is vulnerable to the
-		CVE and needs to be fixed.
+\textbf{needed:} The package is vulnerable and needs to be fixed.
 
-\textbf{active:} The package is vulnerable to the
-		CVE, needs fixing, and is actively being worked on.
+\textbf{active:} The package is vulnerable, needs fixing, and is 
+                 actively being worked on.
 
 \textbf{ignored:} The package, while related to the
-		CVE in some way, is being ignored for some reason. The
-		<notes> should provide that reason. For instance, if status looks like
-		"ignored (reached end-of-life)", this means that the given Ubuntu release already reached
-		end-of-life, so this CVE is ignored by Ubuntu. However, if there
-		is extended security support for this release then this
-		CVE will be handled in ESM release.
+		vulnerability in some way, is being ignored for some reason. 
+	%	The
+	%	<notes> should provide that reason.
+	%	For instance, if status looks like
+	%	"ignored (reached end-of-life)", this means that the given Ubuntu release already reached
+	%	end-of-life, so this CVE is ignored by Ubuntu. However, if there
+	%	is extended security support for this release then this
+	%	CVE will be handled in ESM release.
 
 \textbf{pending:} The package is vulnerable and
                   has been fixed but an update has not been yet uploaded or
-		  published. The <version> is given to indicate the particular 
-		  version where the fix has been done.
+		  published.
+		 % The <version> is given to indicate the particular 
+		 % version where the fix has been done.
 
 \textbf{deferred:} The package is vulnerable, but 
-                   its fix has been deferred for some reason. The <notes>
-		   should provide further details. If a date is mentioned, e.g.
-		   "deferred (2015-02-02)", the given date specifies the date when
-		   the CVE was deferred.
+                   its fix has been deferred for some reason. 
+		  % The <notes>
+		  % should provide further details.
+		  % If a date is mentioned, e.g.
+		  % "deferred (2015-02-02)", the given date specifies the date when
+		  % the CVE was deferred.
 
 \textbf{released:} The package was vulnerable, but
-		an update has been already uploaded and published, e.g. "released (1.2.3)",
-		<version> indicates the first version where the fix was applied.
+		an update has been already uploaded and published.
+	%	e.g. "released (1.2.3)",
+	%	<version> indicates the first version where the fix was applied.
 
 \textbf{released-esm:} The package was vulnerable and
 		an update has been already uploaded and published. However,
-		this update is published in the Ubuntu ESM release only and not in LTS.
-		The fixed version of such packages is appended by either
-		+esm or \char`\~esm, indicating that this package version is available
-		only via ESM.
-
-Figure~\ref{example} illustrates how the information of a CVE is represented
+		this update is published in the Ubuntu ESM release only and not in LTS.}
+		%The fixed version of such packages is appended by either
+		%+esm or \char`\~esm, indicating that this package version is available
+		%only via ESM.
+\newlne\\
+Figure~\ref{example} illustrates how the information of a vulnerability is represented
 in the Ubuntu CVE Tracker.
 
 \begin{figure}[!ht]
 	\fbox{{\includegraphics[scale=2.5,width=\columnwidth]
 	{Figures/vulnExample2.png}}}
-        \caption{\label{example} Representation of a CVE in Ubuntu CVE Tracker}
+        \caption{\label{example} Representation of a vulnerability in Ubuntu CVE Tracker}
 \end{figure}
 \vspace*{-7mm}
 \section{Reducing the amount of vulnerabilities}
@@ -502,13 +556,20 @@ findings.
 \vspace*{-2mm}
 \subsection{Detected Vulnerabilities}
 
-Table~\ref{table1} shows the number of vulnerabilities in the different images,
+\change{Table~\ref{table1} shows the number of vulnerabilities in the different images,
 detected by each of the scanners. Image labels from a to al represents
 Docker images, whereas remaining ones belong to Singularity.
 Vuls shows \textit{no data} for images \texttt{bids/antscorticalthickness:v2.2.0-1} and \texttt{bids/afni\_proc:latest},
-which have Ubuntu 17.04 and 17.10 OS distribution respectively. This is because there is no
-vulnerability data present in OVAL database, which Vuls refers for Ubuntu distributions, for these two releases.
-
+which have Ubuntu 17.04 and 17.10 OS distribution respectively. This is because Vuls
+cannot support scanning of these two distributions as they reached end of life.
+For Centos images, Anchore and Clair gives scanning results using Red Hat Security Advisory
+(RHSA) identifiers for Centos images, whereas Vuls uses CVE identifiers.
+RHSA identifiers specifies security patches that are pending to apply and
+CVE identifiers specifies vulnerabilities that exist in the system.
+So, we mapped RHSA identifiers to corresponding CVE identifiers to make
+a fair comparison of scanners. Table~\ref{table1} shows
+all vulnerabilities using CVE identifiers.}
+\newline\\
 Figure~\ref{fig:graph1} provides more image-specific information.
 It represents the number of vulnerabilities that are present inside each images.
 The overall trend shows that as the number of packages increases in the image, the number of vulnerabilities
@@ -528,7 +589,7 @@ classified by databases, than others.
         {\labels & \names & \A & \C & \V & \Stools}
        \centering
 	\vspace*{1mm}
-	\caption{\label{table1}Number of vulnerabilities by scanners (all Centos images are highlighted)} 
+	\caption{\label{table1}Number of vulnerabilities by scanners} 
 \end{table*}
 
 \begin{figure*}
@@ -547,26 +608,27 @@ classified by databases, than others.
 
 \subsection{Discrepancies between Scanners}
 
-Our experiments concluded considerable discrepancies in the results obtained by
+\change{Our experiments concluded considerable discrepancies in the results obtained by
 these scanners. %We higlighted all Centos images in the Table~\ref{table1} since.
-While comparing scanner results, we exluded all Centos images (highlighted images in Table~\ref{table1})
-and two other images \texttt{bids/antscorticalthickness:v2.2.0-1} and
-\texttt{bids/antscorticalthickness:v2.2.0-1}. The reason behind excluding Centos images is that scanners report results using different
-vulnerability identifiers for Centos. Anchore and Clair use Red Hat Security Advisories (RHSAs)
-to report pending patches that need to be applied to specific packages,
-whereas Vuls uses Common Vulnerabilities and Exposures (CVE) number to report
-vulnerabilities in packages. We exluded other two images because Vuls
-can not scan these image, hence no results are present to compare.
+While comparing scanner results, we exluded two images \texttt{bids/antscorticalthickness:v2.2.0-1} and
+\texttt{bids/antscorticalthickness:v2.2.0-1} because Vuls
+cannot scan these image, hence no results are present to compare.
+%The reason behind excluding
+%vulnerability identifiers for Centos. Anchore and Clair use Red Hat Security Advisories (RHSAs)
+%to report pending patches that need to be applied to specific packages,
+%whereas Vuls uses Common Vulnerabilities and Exposures (CVE) number to report
+%vulnerabilities in packages. We exluded other two images because Vuls
+%can not scan these image, hence no results are present to compare.
 In most cases,
 Anchore reports more vulnerabilities than Vuls and Clair resulting in 
-the Jaccard coefficient of 0.59 with both,
-whereas Vuls and Clair share more common vulnerability detection resulting to the Jaccard coefficient of 0.83.
+the Jaccard coefficient of 0.63 with Clair, 0.59 with Vuls,
+whereas Vuls and Clair share more common vulnerability detection resulting to the Jaccard coefficient of 0.86.
 Figure~\ref{fig:venn} represents the number of vulnerabilities reported by
 the scanners in Docker images and the overlap between them.
-This Figure also excludes Centos Docker images and other two non-comparable images.
+This Figure also excludes two non-comparable images, which cannot be scanned with Vuls.
 It is interesting to note that out of all reported vulnerabilities, 4453 vulnerabilities are only
-reported by Anchore, 673 by Clair, and 325 by Vuls.
-
+reported by Anchore, 699 by Clair, and 536 by Vuls.}
+\newline\\
 As the number and type of vulnerabilities reported by the these scanners are significantly different from each other,
 we desire to investigate the reasons behind these differences.
 Following our investigation, we are able to explain some of the reasons behind
@@ -594,17 +656,17 @@ The actual source code of those functions is present in the Linux kernel and is 
 So, vulnerability detection in header files
 is irrelevant in this case.
 
-\textbf{Ubuntu CVEs with status as “Not-affected”:} Vuls reports vulnerabilities that have status
+\textbf{Ubuntu vulnerabilities with status as “Not-affected”:} Vuls reports vulnerabilities that have status
 as "not-affected" in the Ubuntu database. It means that according to Ubuntu the image is not affected
 by the particular vulnerability. In other words, Vuls reports vulnerabilities that it should not have been reported.
 For example, when we scan an image having the Trusty release in it and Vuls reports CVE-2015-2305
 in the package Cups. However, upon checking the Ubuntu vulnerability database, we find that package Cups in Trusty is not
-affected by this CVE.
+affected by this vulnerability.
 
-\textbf{Ubuntu CVEs with status as "Ignored (reached end-of-life)":}
+\textbf{Ubuntu vulnerabilities with status as "Ignored (reached end-of-life)":}
 Some vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life. 
 However, in Ubuntu 14.04 ESM release, these vulnerabilities may or may not be present.
-Anchore checks the last status of these vulnerabilities whether the package was vulnerable to the CVE
+Anchore checks the last status of these vulnerabilities in LTS whether the package was vulnerable
 prior to the end-of-life. Only if it was vulnerable, Anchore reports it, otherwise it does not.
 If this kind of vulnerability is present in ESM release then Clair reports it because it
 only refers to ESM release. On the other hand, if the vulnerability
@@ -660,7 +722,7 @@ clair-dev \url{(https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc).
 		detected by Anchore due to the presence of epoch in the Procps package version.
 		We reported this bug to the Anchore development team through their Slack channel.
 
-\textbf{Ubuntu CVEs with status "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
+\textbf{Ubuntu vulnerabilities with status "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
 		which it is not able to detect some vulnerabilities. Due to this bug, Anchore does not detect 
 		vulnerabilities that have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
 		However, if this vulnerability is present in Ubuntu 14.04 ESM release, it is detected by Clair. 
