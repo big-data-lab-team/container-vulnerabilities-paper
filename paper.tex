@@ -497,8 +497,9 @@ on the vulnerabilities.
 Updating an image involves updating all software packages that are
 inside that image. We use a 
 \href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/update/update.sh}{bash script} 
-to update all images. That script checks the
-package manager, which is present inside the image, and updates the image
+to update all images. That script checks which
+package manager is present inside the image, and based on that
+it updates OS packages of the image
 accordingly. However, this action affects the reproducibility
 of that image. For example, if a package is used in an experiment
 and later that package is updated, subsequent instances of the experiment may actually
@@ -506,17 +507,29 @@ get different results.
 \vspace*{-2mm}
 \subsection{Image Minimization Process}
 
-We revert to image minimization to reduce the number of vulnerabilities without affecting results reproducibility.
-An interesting choice to do so would be to use 
-Neurodocker~\cite{neurodocker}.
-This tool traces and deletes unnecessary files.
-However, it does not affect the number of installed packages.
-Since image scanners report vulnerabilities according to the installed
-packages. Therefore, after
-minimization the same number of vulnerabilities is still reported.
-Consequently, we need to reduce the number of installed packages
-in the images by deleting unnecessary packages. For that, it is required to figure
-out which packages we need for the pipeline to function properly. To allow for that, we utilize
+%We revert to image minimization to reduce the number of vulnerabilities without affecting results reproducibility.
+%An interesting choice to do so would be to use 
+%Neurodocker~\cite{neurodocker}.
+%This tool traces and deletes unnecessary files.
+%However, it does not affect the number of installed packages.
+%Since image scanners report vulnerabilities according to the installed
+%packages. Therefore, after
+%minimization the same number of vulnerabilities is still reported.
+%Consequently, we need to reduce the number of installed packages
+%in the images by deleting unnecessary packages. For that, it is required to figure
+%out which packages we need for the pipeline to function properly.
+\change{We revert to our second approach i.e. image minimization to reduce the number of vulnerabilities in the
+images with the aim to remove unused packages from the images.
+We use Neurodocker for this purpose.
+This tool traces and deletes unnecessary files from an image execution, however
+the removal of a packages file is not reflected in the installation status of
+the package manger.
+Therefore, after minimization, the same amount of vulnerabilities is still
+reported since image scanners report vulnerabilities according to the installed
+packages.
+In order to update the package manager information, it is essential to
+determine which packages are required for the pipeline to function properly}.
+To allow for that, we utilize
 Reprozip~\cite{rampin2016reprozip}, an open-source tool that
 helps scientists to make their research reproducible. This tool traces operating system calls used by the
 application during execution, and then based on this trace, it recognizes binaries, files, environment variables,
@@ -531,10 +544,16 @@ is expanded by adding important and required packages that are essential
 for the system to function. Finally, we figure out all the dependencies of these packages using Debtree
 ~\cite{debtree}, which is avaiable in Debian and Ubuntu. It's alternative in Centos is Repoquery (\url{https://linux.die.net/man/1/repoquery}), which
 gives a complete dependency tree of a particular package.
-Effectively all needed packages are kept and remaining unnecessary packages are removed. We use
+Effectively all needed packages are kept and remaining unnecessary packages are removed. \change{We use
 \href{https://github.com/kaurbhupinder/Vulnerability-Analysis/tree/master/Scripts/minification}{bash scripts} for
 the image size reduction process, which install Reprozip in the image, collect Reprozip trace, and
-finally delete all unnecessary packages.
+finally delete all unnecessary packages. In this script, we use two temporary
+image containers to install Reprozip, collect its trace,
+identify the dependencies of the needed packages and then finally use
+a fresh image container to
+delete unnecessary packages from the image}.
+
+\subsection{Hybrid Approach}
 
 Following the two previous approaches, we employ a hybrid approach, where
 we combine both update and size reduction processes in an attempt to
@@ -611,7 +630,7 @@ classified by databases, than others.
 \change{Our experiments concluded considerable discrepancies in the results obtained by
 these scanners. %We higlighted all Centos images in the Table~\ref{table1} since.
 While comparing scanner results, we exluded two images \texttt{bids/antscorticalthickness:v2.2.0-1} and
-\texttt{bids/antscorticalthickness:v2.2.0-1} because Vuls
+\texttt{bids/afni\_proc:latest} because Vuls
 cannot scan these image, hence no results are present to compare.
 %The reason behind excluding
 %vulnerability identifiers for Centos. Anchore and Clair use Red Hat Security Advisories (RHSAs)
@@ -756,11 +775,14 @@ vulnerabilities which do not have fix yet.
 \subsection{Effect Of Size Reduction}
 
 Our second approach involves the deletion of unnecessary packages from the images.
-We tested our approach on 5 different images covering the spectrum of Figure~\ref{fig:graph1}. We find that
-after the size reduction process, sometimes the scanning results deviate only a little from the results
-without minimization. While the minimization process results in significant reduction
-in the number of vulnerabilities in some cases, we find that in other cases the effect
-is negligible. In other words, the image reduction was inconsistent.
+We tested our approach on 5 different images covering the spectrum of Figure~\ref{fig:graph1}.
+We find that the image reduction process brings inconsistent deviation in scanning results.
+%We find that
+%after the size reduction process, sometimes the scanning results deviate only a little from the results
+%without minimization. While the minimization process results in significant reduction
+%in the number of vulnerabilities in some cases, we find that in other cases the effect
+%is negligible. 
+In other words, the image reduction was inconsistent.
 According to our analysis, this can be due to two reasons: \rom{1}) the number of
 deleted packages
 and \rom{2}) the kind of deleted packages. 
@@ -769,7 +791,7 @@ that particular deletion naturally results in the drop of number of vulnerabilit
 In other
 words, deleting more packages reduces more vulnerabilities. 
 For instance, we were able to delete only 21 and 25 packages for 
-\textit{bids/ndmg} and \textit{poldracklab/fmriprep:1.2.3} images. Consequently, vulnerabilities
+\textit{bids/ndmg} and \textit{poldracklab/fmriprep:1.2.3} images respectively. Consequently, vulnerabilities
 reduced only by 4 and 17 respectively. 
 Also, if we delete packages that contain a lot of vulnerabilities, it helps in reducing
 vulnerabilities by a significant number. For instance, in case of our experiments
