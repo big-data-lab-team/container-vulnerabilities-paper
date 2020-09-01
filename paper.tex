@@ -96,19 +96,23 @@ ar,shots47s/bids-fmriprep-1.2.3,,,,453
 \maketitle
 
 \begin{abstract}
+Software containers have become key technologies for the deployment of
+scientific data analyses on high-performance computing (HPC)
+infrastructures. They facilitate analysis portability, deployment, and
+reproducibility. Container images, however, often contain slightly outdated
+software packages compared to HPC environments maintained by professional
+and dedicated system administrators. In addition, they often carry more
+software packages than required by analyses, including compilers or unused
+system librairies. As a result, container images are likely to contain
+important amounts of security vulnerability, increasing the attack surface
+for the entire infrastructure. This paper presents a vulnerability analysis
+of container images for scientific data analysis. We analyze container
+images with four vulnerability scanners, focusing on the use case of
+neuroscience data analyses. We quantify the effect of images updates and
+size reduction on the number of vulnerabilities, and conclude with
+recommendations on how to build container images with a reduced amount of
+vulnerabilities.
 
-Today, containers, which provide operating-system level virtualization, are
-popular. Correspondingly, they are widely used for scientific data analyses on 
-High Performance Computing (HPC) clusters. However, the security of containers
-still remains a concerning issue. Here, we focus on the security of container
-images, which are often built for the entire
-duration of an analysis, so scientific researchers prefer not to update
-them. Consequently, their chances of containing vulnerabilities increases.  
-In this study, we analyze vulnerabilities in container images used in 
-HPC clusters.
-We conduct two different
-experiments, image update and image minimization, to report the effect 
-on the number of vulnerabilities.
 
 \end{abstract}
 
