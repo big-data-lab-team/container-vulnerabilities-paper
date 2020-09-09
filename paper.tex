@@ -26,16 +26,17 @@
 \usepackage{titlesec}
 \usepackage{anyfontsize}
 \usepackage[flushleft]{threeparttable}
+\usepackage{xspace}
 
 %%%% Commands %%%%
 \newcommand{\todo}[1]{\color{red}\textbf{TODO:}#1\color{black}}
 \newcommand{\change}[2]{\color{cyan}Changes: #1\color{black}}
-\newcommand{\reprozip}[0]{ReproZip}
+\newcommand{\reprozip}[0]{ReproZip\xspace}
 \newcommand{\rom}[1]{\lowercase\expandafter{\romannumeral #1\relax}}
 \newcommand{\tristan}[1]{\color{blue}From Tristan: #1\color{black}}
 
 \renewcommand{\labelitemi}{$\textendash$}
-\title{Vulnerability Analysis of Container Images in Neuroimaging}
+\title{Security Vulnerabilities of Container Images in Neuroimaging}
 \begin{filecontents*}{resul.csv}
 labels,names,A,C,V,Stools
 a,bids/example:latest,838,663,683,
@@ -127,32 +128,40 @@ Software containers have emerged has an efficient solution to deploy
 scientific data analyses on High Performance Computing (HPC) clusters, due
 to their portability, ease of use, and limited overhead. The
 Singularity~\cite{kurtzer2017singularity} framework is often preferred to
-Docker\footnote{\url{http://docker.com}} on HPC clusters, due to its
+Docker\footnote{\url{http://docker.com}} for HPC deployments, due to its
 secure handling of multi-user environments, and its convenient support for
 Docker images. Singularity is now available in dozens of HPC
 clusters around the globe, and used routinely for Big Data analyses.
 
-% Containers are meant to isolate applications from the host, but security remains an issue
-Using core features of the Linux kernel such as namespaces, control groups
-and chroot, containers isolate processes from the
-host computer,  
+% Containers are meant to isolate applications from the host, but security
+% remains an issue
+Leveraging core features of the Linux kernel such as namespaces, control
+groups and chroot, containers isolate processes from the host computer,  
 and control the memory, CPU, network and file-system resources assigned to
-them. However, containers still share the kernel, mounted file systems and
-some devices with the host, which raises potential security issues. In
-particular, privilege escalation, denial of service and information leak
-are always plausible~\cite{gantikow2016providing}. Therefore, security remains 
-an important concern when deploying containers~\cite{bettini2015vulnerability}.
+them. Nevertheless, containers still share the kernel, mounted file systems
+and some devices with the host, which raises security
+issues~\cite{martin2018docker, sultan2019container, combe2016docker} and
+opens the door to privilege escalation, denial of service, information
+leak and other types of attacks~\cite{gantikow2016providing}. 
+
 
 % Container images, our study
-This study is a vulnerability analysis of container images used in HPC
-clusters. Container images contain complete operating-system distributions, including
-the data analysis software and its required dependencies.
-Images are rarely updated, as they are often built once
-for the entire duration of an analysis, to avoid results perturbations
-coming from software updates~\cite{gronenschild2012effects, glatard2015reproducibility}. Images also
-commonly include more dependencies than required by a specific analysis, to 
-enable reusability across experiments.
+Container images often include nearly complete operating-system
+distributions in addition to the data analysis software and its required
+dependencies. Images are rarely updated, as they are often built once for
+the entire duration of an analysis, to avoid results perturbations due to
+software updates~\cite{gronenschild2012effects,
+glatard2015reproducibility}. Images also commonly include more dependencies
+than required by a specific analysis, to facilitate reusability across
+experiments. As a result, it has been shown that over 30\% of official
+images in DockerHub contain high priority security
+vulnerabilities~\cite{gummaraju2015over}, that both official and community
+images contain more than 180 vulnerabilities on average~\cite{Shu2017}, and
+that vulnerabilities are often due to outdated
+packages~\cite{zerouali2019relation}.
 
+In this study, we focus on the vulnerability analysis of container images
+used in HPC clusters.  
 Our research questions are the following:
 
 \textit{RQ1: What is the current amount of known vulnerabilities in
@@ -167,90 +176,67 @@ projects, container images deployed on HPC clusters often include outdated
 software. We report on the effect of software updates on the vulnerability
 analysis of RQ1.
 
-\textit{RQ3: Can the amount of vulnerabilities be reduced by minimizing the images?} 
+\textit{RQ3: Can the amount of vulnerabilities be reduced by minifying the images?} 
 Container images often include more software packages than required for a
 typical analysis. We report on the impact of this additional software on
 the presence of vulnerabilities.
 
-We answer these questions taking the particular example of neuroimaging, a
-domain that has entered the Big Data era as many other
-ones~\cite{van2014human}. We focus on the analysis of container images
-present in BIDS apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques}, two containerized
-application frameworks commonly used in neuroimaging. 
+We answer these questions by taking the particular example of neuroimaging,
+a domain that has entered the Big Data era as many other
+ones~\cite{van2014human}. The next section describes the materials and
+tools used in the experiments, including container images and image
+scanners. We then describe our image update and minification methodology to
+reduce vulnerabilities. Results present the detected vulnerabilities in
+container images, explain observed discrepancies between scanners, and
+report on the efficiency of image update and size reduction. As a
+conclusion, we provide a set of image creation guidelines for a more secure
+deployment on HPC clusters.
 
-The next section describes the materials and tools used in the experiments,
-including container images and image scanners. We then describe our image
-update and minimization methodology to reduce vulnerabilities. Results review
-the detected vulnerabilities in container images, explain observed
-discrepancies between scanners, and report on the efficiency of image
-update and size reduction. As a conclusion, we provide a set of image
-creation guidelines for a secure deployment on HPC clusters.
 
-The existing research work on containers focuses mainly on the security of containers.
-This focus is justified by the fact that containers expose the host's resources
-(e.g., file system/ IPC) to the guest system. This feature raises a confidentiality
-threat for the applications running on the same host. Previous studies evaluated
-the security of Docker engine ~\cite{martin2018docker, sultan2019container, combe2016docker, bui2015analysis}.
-Other work studied security vulnerabilities in Docker images. A study in 2015 by Gummaraju et al.
-states that over 30\% of official images in docker hub contain high priority 
-security vulnerabilities~\cite{gummaraju2015over}. Shu et al. show that both official and community images 
-contain more than 180 vulnerabilities on an average~\cite{Shu2017}.
-Zerouali et al. studied that 
-outdated packages lead to bugs and severity vulnerabilities in Docker
-images~\cite{zerouali2019relation}.
+% We focus on the analysis of container images
+% present in BIDS apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques}, two containerized
+% application frameworks commonly used in neuroimaging. 
+
+
+
+
 
 \section{Materials and Tools}
 
-Since the aim of this research work is to detect security vulnerabilities
-in container images and attempt to examine the effect of different
-manipulations on these images, it is needed to have a representative set of
-images. Additionally, for the purpose of detecting vulnerabilities,
-utilization of image scanners is required. We utilize container
+To detect security vulnerabilities
+in container images and examine the effect of different
+manipulations on these images, we used container
 images from two popular application frameworks, as well as
 four of the main image scanners.
 
 \subsection{Container Images}
 
-We scan all container images, available at the time of this study, on two containerization frameworks
+We scanned all container images available at the time of this study on two containerization frameworks
 used in neuroscience: BIDS
-apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques}, totalling
+apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques},
+totalling
 44 container images.
-Out of these 44 images, 26 were obtained from BIDS apps
-(\url{https://bids-apps.neuroimaging.io/apps/}) 
-and 18 from Boutiques. In fact, at the time of the study, BIDS apps had 27 images,
+Out of these 44 images, 26 were obtained from BIDS apps 
+and 18 from Boutiques. At the time of the study, BIDS apps had 27 images,
 out of which one wasn't available on DockerHub. Boutiques had 49 images,
 %listed using Boutiques \texttt{bosh search} command,
 however, only 23 unique images were listed, out of which 3 couldn't be retrieved and 2
 were already included in BIDS apps. All the final 26 images
-from BIDS apps are Docker images, whereas Boutiques contains 18 Docker images
+from BIDS apps were Docker images, whereas Boutiques contained 18 Docker images
 and 6 Singularity images.
 
 \subsection{Image Scanners}
 
-We use four popular image scanners, namely Anchore~\cite{github_2019},
+We used four popular image scanners, namely Anchore~\cite{github_2019},
 Vuls~\cite{future-architect_2019}, Clair~\cite{arminc_2019} and
 Singularity Container Tools --- Stools~\cite{stools}. Anchore, Vuls and Clair support Docker
-images while Stools support Singularity. Different vulnerabilities may be
-reported by scanners if scanning experiments take place on different dates.
-To avoid such discrepancies, we freeze the vulnerability
-databases used by these scanners as of 2019-09-25, when we initiate our
-experiments. This allows for a fair comparison between the scanners.
-
-\subsubsection{Anchore}
+images while Stools support Singularity. 
 
 Anchore is an end-to-end, open-source container security platform. It
-analyze	container images and lists OS
+analyzes container images and lists OS
 packages, non-OS packages (Python, Java, Gem, and Npm), and files.
 In our experiments, we use Anchore Engine version 0.5.0 through Docker image \texttt{anchore/anchore-engine:v0.5.0}, and
 Anchore vulnerability database version 0.0.11.
-
-Anchore compares package versions, which are present inside the
-image, with the vulnerability database in order to flag vulnerabilities.
-To get a vulnerability feed of various OS distributions, Anchore refers to
-different sources. Figure~\ref{database} displays Anchore's vulnerability sources for
-Ubuntu, Debian, Alpine, and Centos, which are present inside taken images.
-Anchore also refers to National
-Vulnerability Database (NVD) to get metadata of vulnerabilities.
 
 \begin{figure*}
 \begin{tabular}{|c|c|c|c|}
@@ -270,246 +256,93 @@ Vulnerability Database (NVD) to get metadata of vulnerabilities.
 \label{database}
 \end{figure*}
 
-\subsubsection{Vuls}
-
 Vuls is an open-source vulnerability scanner for Linux and FreeBSD. It
 offers both static and dynamic scanning, and both local and remote
-scanning. In our experiments, we use remote dynamic scanning, that is, Vuls
-connects to the running containers that needs to be scanned through SSH, and queries the package manager
-in the container. We use Vuls 0.9.0, executed through Docker image
-\texttt{vuls/vuls:0.9.0}. At the time of this study, Vuls gets vulnerability feed
-from a configured set of sources. Figure~\ref{database} lists vulnerability databases
-referred by Vuls for scanned four OS distributions i.e. Alpine, Ubuntu, Debian, and Centos.
-Apart from this, like Anchore, Vuls also refers NVD database for getting vulnerability metadata.
-Figure~\ref{database} shows that Vuls
-refers to Open Vulnerability and Assessment Language (OVAL) database for Ubuntu, Debian, and Centos.
-It is worth noting that there is
-no vulnerability data for Ubuntu 17.04 and 17.10 distributions in OVAL database, meaning that images
-with these distributions cannot be scanned with Vuls.
-
-\subsubsection{Clair}
+scanning. In our experiments,we used Vuls 0.9.0, executed through Docker image
+\texttt{vuls/vuls:0.9.0} in remote dynamic mode.
 
 Clair (\url{https://github.com/quay/clair}) is an open-source and extensible
 vulnerability scanner for Docker and appc container images, developed by
 CoreOS (now Container Linux), a Linux distribution to deploy container
 clusters. Clair has a client-server architecture, in which the server
-scans Docker images layer by layer and maintains a database of vulnerabilities. We use Clair through Clair-scanner
+scans Docker images layer by layer and maintains a database of vulnerabilities. We used Clair through Clair-scanner
 (\url{https://github.com/arminc/clair-scanner}), a tool to facilitate the testing
-of container images against a local Clair server. Clair-scanner scans the image,
-prepares a list of vulnerabilities, compares that list against a
-whitelist, and flags vulnerabilities that are not present in the whitelist.
-In our experiments, we did not use a whitelist to filter scanning results in
-order to make a fair comparison between scanners.
-Clair-scanner maintains a Docker image with the up-to-date vulnerability
-database from a set of different sources. Figure~\ref{database} lists
-vulnerability databases that Clair referred for Alpine, Ubuntu, Debian, and Centos.
-Clair also uses NVD database for getting vulnerability metadata.
-We use Clair version 2.0.6, executed through
+of container images against a local Clair server. 
+% Clair-scanner scans the image,
+% prepares a list of vulnerabilities, compares that list against a
+% whitelist, and flags vulnerabilities that are not present in the whitelist.
+% In our experiments, we did not use a whitelist to filter scanning results in
+% order to make a fair comparison between scanners.
+% Clair-scanner maintains a Docker image with the up-to-date vulnerability
+% database from a set of different sources.
+% Figure~\ref{database} lists
+% vulnerability databases that Clair referred for Alpine, Ubuntu, Debian, and Centos.
+% Clair also uses NVD database for getting vulnerability metadata.
+We used Clair version 2.0.6, executed through
 Docker image \texttt{arminc/clair-local-scan:v2.0.6}. For the vulnerability
 database, we use Docker image \texttt{arminc/clair-db:latest}, last
 updated on 2019-09-18.
-
-\subsubsection{Singularity Tools}
 
 Singularity Tools (Stools)
 are an extension of Clair for Singularity images. Stools
 exports Singularity images to \texttt{tar.gz} format, acting as a single layer Docker image
 to circumvent the Docker-specific requirements in the Clair API.
-In our experiments, we use Singularity Tools version 3.2.1 through Docker
+In our experiments, we used Singularity Tools version 3.2.1 through Docker
 image
-\texttt{vanessa/stools-clair:v3.2.1}, which is using another Docker
-image \texttt{arminc/clair-db:latest} for referring to vulnerability feed.
+\texttt{vanessa/stools-clair:v3.2.1}.
+% , which is using another Docker
+% image \texttt{arminc/clair-db:latest} for referring to vulnerability feed.
 Since Stools uses Clair internally for scanning, vulnerability databases used
 by Stools are same as mentioned for Clair.
-To scan Singularity images, we follow the steps mentioned in
+To scan Singularity images, we followed the steps mentioned in
 \href{https://github.com/singularityhub/stools}{Stools Github}.
 
-\subsection{Ubuntu Vulnerability Database}
+\subsection{Vulnerability Databases}
 
-\change{There are two types of vulnerability databases that are referred
-by the scanners in these experiments. First one is Open Vulnerability and Assessment Language (OVAL)
-database, which is an international open standard and a common means of determining the existence of
-vulnerabilities in softwares. OVAL supports various OS distributions e.g. Ubuntu, Debian, Centos, etc.
-Second type of databases used by scanners are vulnerability databases from specific OS vendors e.g. Alpine-SecDB
-from Alpine,
-Debian Bug Tracker from Debian, Ubuntu CVE Tracker from Ubuntu, etc., where they
-keep a track of their OS-specific vulnerabilities by assigning a status.
-%In particular, there is a discrepancy in the way Anchore and Clair
-%interpret Ubuntu CVE Tracker.
-Out of four distributions that are present in our images Vuls uses
-OVAL database for Debian, Ubuntu, Centos and refers to Alpine-SecDB
-database for Alpine as this distribution is currently not supported by OVAL.
-Clair and Anchore mostly refers to vulnerability databases provided by specific OS
-vendors except in one case, where Anchore refers to OVAL i.e. Centos.
+Scanners refer to two types of vulnerability databases. The first one is
+the Open Vulnerability and Assessment Language (OVAL) database, an
+international open standard that supports various OS distributions
+including Ubuntu, Debian and Centos but not Alpine. The second one are vulnerability
+databases from specific OS distributions, such as Alpine-SecDB, Debian
+Security Bug Tracker, Ubuntu CVE Tracker, or Red Hat Security Data. OS
+distributions often assign a status to each vulnerability, to keep track of
+required and available security fixes in different versions of the
+distribution. Figure~\ref{database} shows the vulnerabilities databases used by each scanner 
+by OS distribution. Vuls uses OVAL databases for all distributions except Alpine, since Alpine is not available in OVAL. On the contrary, 
+Clair exclusively refers to distribution-specific databases. Anchore uses OVAL only for CentOS \tristan{why?}. It is also worth noting that there is
+no vulnerability data for Ubuntu 17.04 and 17.10 distributions in the OVAL database, since these distributions have reached end of life, meaning that images
+with these distributions cannot be scanned with Vuls \tristan{why doesn't vuls use Ubuntu CVE tracker?}.
+\tristan{In Vuls, what happens when 2 databases are used?}
 
-The major discrepancies are shown by Anchore and Clair in Ubuntu. Both refers to Ubuntu CVE Tracker database for Ubuntu images.
-The way in which both scanners interpret this database is different.
-%
-%There are different vulnerability databases, which have
-%different formats of data.
-%Out of which Open Vulnerability and Assessment Language (OVAL) is an international
-%open standard and a common
-%means of promoting publicly available security issues. 
-%It provides details about software vulnerabilities. It helps to determine
-%whether vulnerabilities exist in local machines or not. Apart from OVAL, operating system
-%vendors also keep track of their vulnerabilities separately and assign
-%a status to each vulnerability.
-%For example, Ubuntu maintains
-%Ubuntu CVE Tracker, Debian maintains Debian Security Bug Tracker, etc.
-%Each vulnerability is assigned a unique Common Vulnerabilities and Exposures (CVE) number
-%by the MITRE corporation, who maintains a list of all vulnerabilities of all distributions.
-%In this paper, we use vulnerability and CVE interchangeably.
-%Ubuntu CVE Tracker is used by Anchore and Clair in our experiments
-%and there is discrepancies in the way both scanners interpret results.
-%
-%BIDS apps and Boutiques images in our experiments have four Linux
-%distributions i.e. Ubuntu, CentOS, Debian, and Alpine. 
-%Out of these distributions, Ubuntu assigns a vulnerability status to
-%all vulnerabilities before keeping them in its vulnerability database.
-%Each vulnerability is assigned a unique Common Vulnerabilities and Exposures (CVE) number
-%by the MITRE corporation, who maintains a list of all vulnerabilities of all distributions.
-%Ubuntu keeps a record of Ubuntu-specific vulnerabilities in Ubuntu CVE Tracker using their CVE
-%numbers. In this paper, we use vulnerability and CVE interchangeably.
-%The vulnerability status in Ubuntu CVE Tracker is subjected to change
-%depending on the work progress to fix that vulnerability.
-%
-%Regarding Ubuntu, it has different
-%types of releases e.g. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release.
-%Ubuntu maintains its vulnerability data in Ubuntu CVE tracker, which is referred by Anchore and Clair.
-%There is another vulnerability database i.e. Open Vulnerability and Assessment Language (OVAL) repository,
-%which is maintained by MITRE corporation. Vuls refers to OVAL repository for getting Ubuntu vulnerability feed.
-%The vulnerability data format of both databases is different. OVAL keeps a separate xml file for each release,
-%which contains that release specific vulnerability information.
-Ubuntu CVE Tracker keeps a separate file for each vulnerability, which
-has an entry for all Ubuntu releases combined with the current status
-of that vulnerability in that release.
-In particular, Clair and Anchore show discrepancies for Ubuntu 14.04 which have
-two entries for each vulnerability, one for Ubuntu 14.04 Long Term Support (LTS)
-and second for Ubuntu 14.04 Extended Security Maintenance (ESM) release. As Ubuntu 14.04 LTS
-reached end-of-life on 2019-04-30, so Ubuntu ignores new vulnerabilities in LTS release and
-fix them only in ESM release. Consequently, a same vulnerability may have different vulnerability status in LTS and ESM releases,
-which is causing discrepancies. This is because Anchore refers to Ubuntu 14.04 LTS, whereas Clair refers to
-ESM.
-%Further, in Ubuntu a particular release can be of different types i.e. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release. 
-%Through our experiments, we find that Anchore and Clair report Ubuntu vulnerabilities 
-%differently depending on either the different Ubuntu release type or vulnerability status. 
-It is important to provide an overview of these Ubuntu vulnerability statuses, 
-since Ubuntu is heavily utilized in our experiments. 
-%Ubuntu's Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
-%reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
-%in the form of ESM release.
-%ESM is a paid service that can be requested from Ubuntu to get security 
-%updates even after the EOL of a particular Ubuntu release. ESM and LTS releases of a particular Ubuntu version have different vulnerability
-%databases, because after EOL of a release, a vulnerability is fixed only in packages of ESM; however, it still
-%exists in LTS.
-%
-%As an example, Ubuntu has ended support for some releases, such as 14.04 LTS,
-%17.04, and 17.10, as they reached EOL. However, Ubuntu decided to provide optional extended support for Ubuntu 14.04.
-%To use this extended support, users have to purchase Ubuntu 14.04 ESM release.
-%The images in our experiments have Ubuntu 14.04 LTS, so scanners should refer
-%to LTS release only while collecting data from the vulnerability databases.
-%More interestingly, Clair refers to ESM release vulnerability database, however, this may lead to discrepancies in results.
-%Further, if an image is using a Linux release where EOL has been reached that image may
-%turns to be vulnerable as it is not possible to retrieve any updates.
-%
-In Ubuntu CVE Tracker, for a vulnerability all Ubuntu releases are listed with the package name
-in which that vulnerability exists and are entitled a vulnerability status
-(\url{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}), which is
-encoded in the following form:
-\newline \\
-\noindent <release>\_<source-package>: <status> (<version/notes>)
-\newline\\
-The <version/notes> given with a vulnerability status provide more
-information about the vulnerability.
-For a given release, the vulnerability status can be any one of the following:
+Anchore also refers to National Vulnerability Database (NVD) to get
+metadata of vulnerabilities. Apart from this, like Anchore, Vuls also
+refers NVD database for getting vulnerability metadata \tristan{same
+question}. \tristan{why is it not in the table?}.
 
-\textbf{DNE (Does Not Exist):} The package does not exist in the
-		release.
+For Centos images, Anchore and Clair gives scanning results using Red Hat
+Security Advisory (RHSA) identifiers for Centos images, whereas Vuls uses
+CVE identifiers. RHSA identifiers specifies security patches that are
+pending to apply and CVE identifiers specifies vulnerabilities that exist
+in the system. We mapped RHSA identifiers to corresponding CVE identifiers,
+to allow for a comparison between scanners.
 
-\textbf{needs-triage:} The vulnerability of this package
-		is not known, and hence evaluation is needed.
+Different vulnerabilities may be
+reported by scanners if scanning experiments take place on different dates.
+To avoid such discrepancies, we froze the vulnerability
+databases used by these scanners as of 2019-09-25, when we initiated our
+experiments.\tristan{this contradicts the date used for Clair}
 
-\textbf{not-affected:} The package, while related to the
-		vulnerability in some way, is not affected by the issue.
-	%	The <notes> should
-	%	provide detailed information, if needed.
-		%For instance, if the given
-		%status is "not-affected (1.14.6-1.1)" then this indicates that this specific
-		%package version is not affected.
+\subsection{Image Update}
 
-\textbf{needed:} The package is vulnerable and needs to be fixed.
+A first approach to reduce the number of vulnerabilities in container
+images is to update their packages to the latest version packaged by the OS
+distribution. To study the effect of such updates, we developed a script
+(available
+\href{https://github.com/big-data-lab-team/container-vulnerabilities-paper/blob/master/Scripts/update}{here})
+to identify the package manager in the image, and invoke it to update all
+OS packages. \tristan{what was the date at which update was run?}
 
-\textbf{active:} The package is vulnerable, needs fixing, and is 
-                 actively being worked on.
-
-\textbf{ignored:} The package, while related to the
-		vulnerability in some way, is being ignored for some reason. 
-	%	The
-	%	<notes> should provide that reason.
-	%	For instance, if status looks like
-	%	"ignored (reached end-of-life)", this means that the given Ubuntu release already reached
-	%	end-of-life, so this CVE is ignored by Ubuntu. However, if there
-	%	is extended security support for this release then this
-	%	CVE will be handled in ESM release.
-
-\textbf{pending:} The package is vulnerable and
-                  has been fixed but an update has not been yet uploaded or
-		  published.
-		 % The <version> is given to indicate the particular 
-		 % version where the fix has been done.
-
-\textbf{deferred:} The package is vulnerable, but 
-                   its fix has been deferred for some reason. 
-		  % The <notes>
-		  % should provide further details.
-		  % If a date is mentioned, e.g.
-		  % "deferred (2015-02-02)", the given date specifies the date when
-		  % the CVE was deferred.
-
-\textbf{released:} The package was vulnerable, but
-		an update has been already uploaded and published.
-	%	e.g. "released (1.2.3)",
-	%	<version> indicates the first version where the fix was applied.
-
-\textbf{released-esm:} The package was vulnerable and
-		an update has been already uploaded and published. However,
-		this update is published in the Ubuntu ESM release only and not in LTS.}
-		%The fixed version of such packages is appended by either
-		%+esm or \char`\~esm, indicating that this package version is available
-		%only via ESM.
-\newlne\\
-Figure~\ref{example} illustrates how the information of a vulnerability is represented
-in the Ubuntu CVE Tracker.
-
-\begin{figure}[!ht]
-	\fbox{{\includegraphics[scale=2.5,width=\columnwidth]
-	{Figures/vulnExample2.png}}}
-        \caption{\label{example} Representation of a vulnerability in Ubuntu CVE Tracker}
-\end{figure}
-\vspace*{-7mm}
-\section{Reducing the amount of vulnerabilities}
-
-In this section, we present our approach to reduce the number of
-vulnerabilities in container images  by updating and minimizing these
-images.
-\vspace*{-2mm}
-\subsection{Image Update Process}
-
-If vulnerabilities exist in the container images, then our first approach
-is to update these images in order to see the effects of such updates
-on the vulnerabilities.
-Updating an image involves updating all software packages that are
-inside that image. We use a 
-\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/blob/master/Scripts/update/update.sh}{bash script} 
-to update all images. That script checks which
-package manager is present inside the image, and based on that
-it updates OS packages of the image
-accordingly. However, this action affects the reproducibility
-of that image. For example, if a package is used in an experiment
-and later that package is updated, subsequent instances of the experiment may actually
-get different results.
-\vspace*{-2mm}
-\subsection{Image Minimization Process}
+\subsection{Image Minification}
 
 %We revert to image minimization to reduce the number of vulnerabilities without affecting results reproducibility.
 %An interesting choice to do so would be to use 
@@ -522,305 +355,451 @@ get different results.
 %Consequently, we need to reduce the number of installed packages
 %in the images by deleting unnecessary packages. For that, it is required to figure
 %out which packages we need for the pipeline to function properly.
-\change{We revert to our second approach i.e. image minimization to reduce the number of vulnerabilities in the
-images with the aim to remove unused packages from the images.
-We use Neurodocker for this purpose.
-This tool traces and deletes unnecessary files from an image execution, however
-the removal of a packages file is not reflected in the installation status of
-the package manger.
-Therefore, after minimization, the same amount of vulnerabilities is still
-reported since image scanners report vulnerabilities according to the installed
-packages.
-In order to update the package manager information, it is essential to
-determine which packages are required for the pipeline to function properly}.
-To allow for that, we utilize
-Reprozip~\cite{rampin2016reprozip}, an open-source tool that
-helps scientists to make their research reproducible. This tool traces operating system calls used by the
-application during execution, and then based on this trace, it recognizes binaries, files, environment variables,
-and library dependencies that are used by the application for future re-execution. If the OS is
-Debian or RPM-based, Reprozip also
-uses an available package manager to acquire a list of distribution packages from where these files come from.
-So, a list of packages that are needed for the application re-execution is determined. We run applications
-using specific command lines given on application's Github repository in order to collect Reprozip trace.
-These command lines represent how applications should be used.
-Following that, the list
-is expanded by adding important and required packages that are essential
-for the system to function. Finally, we figure out all the dependencies of these packages using Debtree
-~\cite{debtree}, which is avaiable in Debian and Ubuntu. It's alternative in Centos is Repoquery (\url{https://linux.die.net/man/1/repoquery}), which
-gives a complete dependency tree of a particular package.
-Effectively all needed packages are kept and remaining unnecessary packages are removed. \change{We use
-\href{https://github.com/kaurbhupinder/Vulnerability-Analysis/tree/master/Scripts/minification}{bash scripts} for
-the image size reduction process, which install Reprozip in the image, collect Reprozip trace, and
-finally delete all unnecessary packages. In this script, we use two temporary
-image containers to install Reprozip, collect its trace,
-identify the dependencies of the needed packages and then finally use
-a fresh image container to
-delete unnecessary packages from the image}.
 
-\subsection{Hybrid Approach}
 
-Following the two previous approaches, we employ a hybrid approach, where
-we combine both update and size reduction processes in an attempt to
-lessen number of vulnerabilities or to test the effect of
-combining two approaches. To allow for that, we first update all packages in
-the image, then delete all unnecessary packages. Applying these processes in reverse
-may reduce the needed work; however this is not possible in all cases. For instance,
-some packages, such as \texttt{apt-transport-https}, are required to fetch updates, deleting these packages
-ahead of time will disallow the update process to take place.
-\vspace*{-2mm}
+A second approach to reduce the number of vulnerabilities in the images is
+to remove unnecessary packages, an operation potentially specific to each
+analysis. We used the open-source \reprozip tool~\cite{rampin2016reprozip}
+to capture the list of packages used by an analysis. For this purpose,
+\reprozip first captures the list of files involved in the analysis,
+through system call interception, then retrieves the list of associated
+software packages, by querying the package manager. We extend this list
+with a passlist of packages required for the system to function
+\tristan{can you give an example?}, and with all the dependencies of the
+required packages, retrieved using Debtree~\cite{debtree} (Repoquery
+(\url{https://linux.die.net/man/1/repoquery}) could be used in RPM-based
+distributions instead). Our minification script, available
+\href{https://github.com/big-data-lab-team/container-vulnerabilities-paper/tree/master/Scripts/minification}{here},
+installs \reprozip in the image to minify, runs an analysis to collect a
+\reprozip trace, and finally deletes all unnecessary packages. 
+
+Using this approach, we minified five Debian- or Ubuntu-based BIDS app images,
+using basic analysis examples found in the applications documentation.
+
+% \subsection{Hybrid Approach}
+
+% Following the two previous approaches, we employ a hybrid approach, where
+% we combine both update and size reduction processes in an attempt to
+% lessen number of vulnerabilities or to test the effect of
+% combining two approaches. To allow for that, we first update all packages in
+% the image, then delete all unnecessary packages. Applying these processes in reverse
+% may reduce the needed work; however this is not possible in all cases. For instance,
+% some packages, such as \texttt{apt-transport-https}, are required to fetch updates, deleting these packages
+% ahead of time will disallow the update process to take place.
+
 \section{Results}
 
-In this section,
-we first discuss the detected vulnerabilities in the images and compare the
-results. We then discuss the effect of updating/minimizing the image and applying the hybrid
-approach on the detected vulnerabilities.
-Lastly, we do an analysis of obtained results and explain the reasons behind our
-findings.
-\vspace*{-2mm}
+Figure~\ref{fig:vulnerabilities} summarizes our results. All the collected
+data are available in our GitHub repository at
+\url{https://github.com/big-data-lab-team/container-vulnerabilities-paper}
+with a Jupyter notebook to generate the figures. 
+
 \subsection{Detected Vulnerabilities}
 
-\change{Table~\ref{table1} shows the number of vulnerabilities in the different images,
-detected by each of the scanners. Image labels from a to al represents
-Docker images, whereas remaining ones belong to Singularity.
-Vuls shows \textit{no data} for images \texttt{bids/antscorticalthickness:v2.2.0-1} and \texttt{bids/afni\_proc:latest},
-which have Ubuntu 17.04 and 17.10 OS distribution respectively. This is because Vuls
-cannot support scanning of these two distributions as they reached end of life.
-For Centos images, Anchore and Clair gives scanning results using Red Hat Security Advisory
-(RHSA) identifiers for Centos images, whereas Vuls uses CVE identifiers.
-RHSA identifiers specifies security patches that are pending to apply and
-CVE identifiers specifies vulnerabilities that exist in the system.
-So, we mapped RHSA identifiers to corresponding CVE identifiers to make
-a fair comparison of scanners. Table~\ref{table1} shows
-all vulnerabilities using CVE identifiers.}
-\newline\\
-Figure~\ref{fig:graph1} provides more image-specific information.
-It represents the number of vulnerabilities that are present inside each images.
-The overall trend shows that as the number of packages increases in the image, the number of vulnerabilities
-also get increased.
-This Figure also infers that the Alpine distribution, being a
-lightweight distribution, has the least number of vulnerabilities, whereas more vulnerabilities are reported for
-distributions with more packages such as Ubuntu.
-We also analyze that out of the total Docker images scanned by our experiments, Debian reports more high-level vulnerabilties, as
-classified by databases, than others.
-\begin{table*}
-\csvreader[%
- tabular={|c|c|c|c|c|c|},
-	table head = \hline\textbf{Labels} &\textbf{{Image names}} & \textbf{Anchore} & \textbf{Clair} & \textbf{Vuls} & \textbf{Stools}\\\hline,
-	late after line= \\,
-        late after last line=\\\hline %
-	]{resul.csv}{labels=\labels,names=\names,A=\A,C=\C,V=\V,Stools=\Stools}%
-        {\labels & \names & \A & \C & \V & \Stools}
-       \centering
-	\vspace*{1mm}
-	\caption{\label{table1}Number of vulnerabilities by scanners} 
-\end{table*}
 
 \begin{figure*}
-        {\includegraphics[scale=1.5,width=\textwidth]
-        {Figures/vulngraph.pdf}}
-	\vspace*{-7mm}
-        \caption{\label{fig:graph1} Number of vulnerabilities by packages}
-      \end{figure*}
+\includegraphics[width=\textwidth]{Figures/figure.pdf}
+\caption{\label{fig:vulnerabilities} Number of vulnerabilities detected
+by Anchore in container images. \textbf{(A)} Number of vulnerabilities
+by container image and severity. \textbf{(B)} Combined
+effect of image minification and package update on 5 container images. \textbf{(C, D)}
+Number of vulnerabilities by number of packages, before and after
+package update.}
+\end{figure*}
 
-\begin{figure}
+A substantial number of vulnerabilities were found in the tested container
+ images (Fig~\ref{fig:vulnerabilities}-\textbf{A}), with an average of 466 vulnerabilities
+  per image and a median of 372. In comparison, no vulnerabilities were found in base
+ Docker images \texttt{ubuntu:20.04} and \texttt{centos:7} after package
+ update. Moreover, a significant fraction of detected vulnerabilities are
+ of high severity
+ (\href{https://www.first.org/cvss/specification-document}{CVSS} score
+ >=7.0) and a few of them are of critical severity (CVSS >= 9.0). Remote
+ attackers could possibly exploit these vulnerabilities to execute
+ arbitrary code in the container, by crafting responses to specific network
+ requests. The OS distribution is reported only for illustration purposes,
+ as no obvious association between the OS distribution and numbers of
+ vulnerabilities could be found.
+
+Unsuprisingly, a strong linear relationship is found between the number of
+detected vulnerabilities and the number of packages present in the
+container image (Fig~\ref{fig:vulnerabilities}-\textbf{C}, r=0.83,
+$p\textless10^{-10}$). On average, 1.8 vulnerabilities are introduced for
+each new package installation. This observation motivates a systematic
+review of software dependencies by application developers, to avoid
+unnecessary packages in container images. This is also an argument in favor of lightweight
+distributions such as Alpine. Compared to Ubuntu and Debian distributions,
+CentOS images seem to have a lower number of vulnerabilities by package on
+average, although data is too scarce to conclude.
+
+\subsection{Effect of image udpate}
+
+Updating container images reduces the number of vulnerabilities by package
+by a factor of 3 on average, leading to an extra 0.6 vulnerabilities by
+package (Fig~\ref{fig:vulnerabilities}-\textbf{D}, r=0.81,
+$p\textless10^{-7}$). Six container images are missing on this figure; they
+could not be updated since their OS distributions reached end of life
+\tristan{give more details, one of these images is centos 7 which didnt
+reach EOL}. In spite of the associated reproducibility challenges, updating
+packages therefore appears as a very good way to avoid vulnerabilities. It
+is not an ultimate solution though, as substantial numbers of
+vulnerabilities remain.
+
+\subsection{Effect of minification}
+
+Another approach to reduce the number of vulnerabilities involves deleting
+unnecessary packages from the container images. It is a tedious operation,
+as it requires running an actual data analysis in the container image, to
+identify the packages required by the application. In addition, the
+resulting container image is only valid for the specific type of analysis
+used in the minification process, as other executions might require a
+different set of packages. 
+
+Using the ReproZip-based approach described previously, we minified 5
+different images covering the spectrum of detected vulnerabilities
+(Fig~\ref{fig:vulnerabilities}-\textbf{B}). We find that minification reduces the
+number of vulnerabilities, albeit less systematically than package update.
+For some container images, such as image \textbf{S}, minification removes more
+than 70\% of the detected vulnerabilities. For other images, such as
+image \textbf{f}, it only reduces the number of vulnerabilities by less than 1\%.
+The effect of minification stems from the number of packages
+than can be removed, which varies greatly across images. For
+instance, images \textbf{f} and \textbf{a} have a large number of packages,
+but the last majority of them is required by the analysis, which makes
+minification less useful. In other cases, a limited number of unnecessary packages contain 
+a significant number of vulnerabilities, which makes minification very impactful. 
+This was the case in images \textbf{d}, \textbf{S} and \textbf{U}, where removing compilers
+and kernel headers reduced the number of vulnerabilities by an important fraction. 
+
+\subsection{Combined effect of image update and  minification}
+
+Package update and image minification remove different types of
+vulnerabilities. The former is efficient against vulnerabilities that have
+been fixed by the package maintainers, while the latter targets unused
+software. In four of the five tested images, we find that combining update
+and minification further reduces the number of vulnerabilities compared to
+using only one of these processes
+(Fig~\ref{fig:vulnerabilities}-\textbf{B}) \tristan{revise when
+minification in image f is clarified}. The combined effect of update and
+minification seems to be dependent mostly on the effect of minification: if
+minification is useful, then it is beneficial to run it in combination with
+package update.
+
+\subsection{Discrepancies between scanners}
+
+The results presented so far were obtained with Anchore, a popular
+container image scanning tool. We scanned the images with two other tools,
+Clair and Vuls, to evaluate the stability of our results. 
+
+% \begin{table*}
+% 	\csvreader[%
+% 	 tabular={|c|c|c|c|c|c|},
+% 		table head = \hline\textbf{Labels} &\textbf{{Image names}} & \textbf{Anchore} & \textbf{Clair} & \textbf{Vuls} & \textbf{Stools}\\\hline,
+% 		late after line= \\,
+% 			late after last line=\\\hline %
+% 		]{resul.csv}{labels=\labels,names=\names,A=\A,C=\C,V=\V,Stools=\Stools}%
+% 			{\labels & \names & \A & \C & \V & \Stools}
+% 		   \centering
+% 		\vspace*{1mm}
+% 		\caption{\label{table1}Number of vulnerabilities detected by the four scanners. Vuls shows \textit{no data} for images \texttt{bids/antscorticalthickness:v2.2.0-1} and \texttt{bids/afni\_proc:latest}
+% 		since their OS distributions reached end of life.} 
+% 	\end{table*}
+	\begin{figure}
         {\includegraphics[scale=2.5,width=\columnwidth]
         {Figures/venn.pdf}}
 	\vspace*{-10mm}
 	\caption{\label{fig:venn} Scanner results}
 \end{figure}
 
-\subsection{Discrepancies between Scanners}
+% Table~\ref{table1} shows the number of vulnerabilities detected in the different images
+% by the four scanners. 
+% \change{Our experiments concluded considerable discrepancies in the results obtained by
+% these scanners. %We higlighted all Centos images in the Table~\ref{table1} since.
+% While comparing scanner results, we exluded two images \texttt{bids/antscorticalthickness:v2.2.0-1} and
+% \texttt{bids/afni\_proc:latest} because Vuls
+% cannot scan these image, hence no results are present to compare.
+% %The reason behind excluding
+% %vulnerability identifiers for Centos. Anchore and Clair use Red Hat Security Advisories (RHSAs)
+% %to report pending patches that need to be applied to specific packages,
+% %whereas Vuls uses Common Vulnerabilities and Exposures (CVE) number to report
+% %vulnerabilities in packages. We exluded other two images because Vuls
+% %can not scan these image, hence no results are present to compare.
+% In most cases,
+% Anchore reports more vulnerabilities than Vuls and Clair resulting in 
+% the Jaccard coefficient of 0.63 with Clair, 0.59 with Vuls,
+% whereas Vuls and Clair share more common vulnerability detection resulting to the Jaccard coefficient of 0.86.
+% Figure~\ref{fig:venn} represents the number of vulnerabilities reported by
+% the scanners in Docker images and the overlap between them.
+% This Figure also excludes two non-comparable images, which cannot be scanned with Vuls.
+% It is interesting to note that out of all reported vulnerabilities, 4453 vulnerabilities are only
+% reported by Anchore, 699 by Clair, and 536 by Vuls.}
+% \newline\\
+% As the number and type of vulnerabilities reported by the these scanners are significantly different from each other,
+% we desire to investigate the reasons behind these differences.
+% Following our investigation, we are able to explain some of the reasons behind
+% the differences. 
+% Such reasons were resulted from the way these scanners function or behave 
+% in particular, the following actions by the scanners are indicative:
+% \begin{itemize}
+%    \item scanners ignoring vulnerabilities in Linux-kernel-header packages,
+%    \item scanners referring to different vulnerability databases,
+%    \item different frequency of updating their databases,
+%    \item bugs in scanners. 
+% \end{itemize}
 
-\change{Our experiments concluded considerable discrepancies in the results obtained by
-these scanners. %We higlighted all Centos images in the Table~\ref{table1} since.
-While comparing scanner results, we exluded two images \texttt{bids/antscorticalthickness:v2.2.0-1} and
-\texttt{bids/afni\_proc:latest} because Vuls
-cannot scan these image, hence no results are present to compare.
-%The reason behind excluding
-%vulnerability identifiers for Centos. Anchore and Clair use Red Hat Security Advisories (RHSAs)
-%to report pending patches that need to be applied to specific packages,
-%whereas Vuls uses Common Vulnerabilities and Exposures (CVE) number to report
-%vulnerabilities in packages. We exluded other two images because Vuls
-%can not scan these image, hence no results are present to compare.
-In most cases,
-Anchore reports more vulnerabilities than Vuls and Clair resulting in 
-the Jaccard coefficient of 0.63 with Clair, 0.59 with Vuls,
-whereas Vuls and Clair share more common vulnerability detection resulting to the Jaccard coefficient of 0.86.
-Figure~\ref{fig:venn} represents the number of vulnerabilities reported by
-the scanners in Docker images and the overlap between them.
-This Figure also excludes two non-comparable images, which cannot be scanned with Vuls.
-It is interesting to note that out of all reported vulnerabilities, 4453 vulnerabilities are only
-reported by Anchore, 699 by Clair, and 536 by Vuls.}
-\newline\\
-As the number and type of vulnerabilities reported by the these scanners are significantly different from each other,
-we desire to investigate the reasons behind these differences.
-Following our investigation, we are able to explain some of the reasons behind
-the differences. 
-Such reasons were resulted from the way these scanners function or behave 
-in particular, the following actions by the scanners are indicative:
-\begin{itemize}
-   \item scanners ignoring vulnerabilities in Linux-kernel-header packages,
-   \item scanners referring to different vulnerability databases,
-   \item different frequency of updating their databases,
-   \item bugs in scanners. 
-\end{itemize}
+% Below, we explain these reasons in further details and provide examples
+% for clear illustrations.
 
-Below, we explain these reasons in further details and provide examples
-for clear illustrations.
+% \textbf{Linux-kernel-headers:} Clair and Vuls ignore all vulnerabilities in the Linux-kernel-headers,
+% whereas Anchore reports all of them.
+% We find that 4443 out of 4453 vulnerabilities that are only reported by Anchore are present in Linux-kernel-headers.
+% For example, CVE-2019-9506 present in Linux-libc-dev-4.4.0-31.50, reported by Anchore, is not
+% detected by both Vuls and Clair.
+% Linux-kernel-headers are the header files that only provide function names, their parameters, and their
+% return types.
+% The actual source code of those functions is present in the Linux kernel and is not inside the image.
+% So, vulnerability detection in header files
+% is irrelevant in this case.
 
-\textbf{Linux-kernel-headers:} Clair and Vuls ignore all vulnerabilities in the Linux-kernel-headers,
-whereas Anchore reports all of them.
-We find that 4443 out of 4453 vulnerabilities that are only reported by Anchore are present in Linux-kernel-headers.
-For example, CVE-2019-9506 present in Linux-libc-dev-4.4.0-31.50, reported by Anchore, is not
-detected by both Vuls and Clair.
-Linux-kernel-headers are the header files that only provide function names, their parameters, and their
-return types.
-The actual source code of those functions is present in the Linux kernel and is not inside the image.
-So, vulnerability detection in header files
-is irrelevant in this case.
+% \textbf{Ubuntu vulnerabilities with status as “Not-affected”:} Vuls reports vulnerabilities that have status
+% as "not-affected" in the Ubuntu database. It means that according to Ubuntu the image is not affected
+% by the particular vulnerability. In other words, Vuls reports vulnerabilities that it should not have been reported.
+% For example, when we scan an image having the Trusty release in it and Vuls reports CVE-2015-2305
+% in the package Cups. However, upon checking the Ubuntu vulnerability database, we find that package Cups in Trusty is not
+% affected by this vulnerability.
 
-\textbf{Ubuntu vulnerabilities with status as “Not-affected”:} Vuls reports vulnerabilities that have status
-as "not-affected" in the Ubuntu database. It means that according to Ubuntu the image is not affected
-by the particular vulnerability. In other words, Vuls reports vulnerabilities that it should not have been reported.
-For example, when we scan an image having the Trusty release in it and Vuls reports CVE-2015-2305
-in the package Cups. However, upon checking the Ubuntu vulnerability database, we find that package Cups in Trusty is not
-affected by this vulnerability.
-
-\textbf{Ubuntu vulnerabilities with status as "Ignored (reached end-of-life)":}
-Some vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life. 
-However, in Ubuntu 14.04 ESM release, these vulnerabilities may or may not be present.
-Anchore checks the last status of these vulnerabilities in LTS whether the package was vulnerable
-prior to the end-of-life. Only if it was vulnerable, Anchore reports it, otherwise it does not.
-If this kind of vulnerability is present in ESM release then Clair reports it because it
-only refers to ESM release. On the other hand, if the vulnerability
-status in ESM release is "DNE" (Does Not Exist), then Clair does not report it. 
-For example, CVE-2017-9994 vulnerability in Libav package is ignored in Trusty LTS release due to its end-of-life.
-Consequently, it is not reported by Anchore. This vulnerability has status as "DNE" in Trusty ESM
-release so Clair also does not report it. As Ubuntu 14.04 LTS release is present inside the images,
-Clair's referring to Ubuntu 14.04 ESM release vulnerability database is incorrect.
-
-\begin{figure*}[!ht]
-        {\includegraphics[width=\textwidth]
-        {Figures/vulnwithupdate.pdf}}
-	\vspace*{-7mm}
-        \caption{\label{fig:graph2} Number of vulnerabilities before and
-        after update of the images}
-      \end{figure*}
+% \textbf{Ubuntu vulnerabilities with status as "Ignored (reached end-of-life)":}
+% Some vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life. 
+% However, in Ubuntu 14.04 ESM release, these vulnerabilities may or may not be present.
+% Anchore checks the last status of these vulnerabilities in LTS whether the package was vulnerable
+% prior to the end-of-life. Only if it was vulnerable, Anchore reports it, otherwise it does not.
+% If this kind of vulnerability is present in ESM release then Clair reports it because it
+% only refers to ESM release. On the other hand, if the vulnerability
+% status in ESM release is "DNE" (Does Not Exist), then Clair does not report it. 
+% For example, CVE-2017-9994 vulnerability in Libav package is ignored in Trusty LTS release due to its end-of-life.
+% Consequently, it is not reported by Anchore. This vulnerability has status as "DNE" in Trusty ESM
+% release so Clair also does not report it. As Ubuntu 14.04 LTS release is present inside the images,
+% Clair's referring to Ubuntu 14.04 ESM release vulnerability database is incorrect.
 
 
-\begin{figure*}[!ht]
-        {\includegraphics[scale=1.5,width=\textwidth]
-        {Figures/bargraph.png}}
-	\vspace*{-5mm}
-        \caption{\label{fig:bargraph} Vulnerabilities by different experiments}
-      \end{figure*}
-\textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release:} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
-are not detected by Clair but they affect Ubuntu 14.04 LTS, and hence detected by Vuls and Anchore. The CVE-2017-13758 is an example
-of such vulnerabilities.
 
-\textbf{Misses:} Clair and Vuls
-missed vulnerabilities that they should have detected. For example, the CVE-2016-9082 
-is present in package Cairo in Xenial release and it is not detected by Clair.
-Vuls also missed vulnerabilities such as CVE-2019-5094.
 
-\textbf{Wrong Detections:} 
-Some vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
-present inside the image, however, Clair have reported such vulnerabilities.
-For instance, CVE-2019-1274 is an example of such vulnerabilities. 
-%is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
-%Clair is only referring to Ubuntu 14.04 ESM release. 
-We reported this issue on two Google groups of Clair i.e. CoreOS Dev and
-clair-dev \url{(https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc).}
 
-\textbf{Database difference:} At the time we pulled Clair's database, through \texttt{arminc/clair-db:latest} Docker image, it was one week old.
-                              As a result some vulnerabilities were not updated in the database. For instance, CVE-2019-5094, which
-		              was published on 2019-09-24, was not 
-		              updated in Clair's database. Due to which it is missed by Clair.
-			      Consequently, these discrepancies, even small, are sufficient to change the detection of
-			      the scanners.
+% \textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release:} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
+% are not detected by Clair but they affect Ubuntu 14.04 LTS, and hence detected by Vuls and Anchore. The CVE-2017-13758 is an example
+% of such vulnerabilities.
 
-\textbf{Epoch bug:} There is a bug in the Anchore scanner due to which some vulnerabilities are 
-		not detected by Anchore. This bug gets triggered when a package’s version have epoch 
-		(1:3.3.9-1ubuntu2.3) in it. For example, CVE-2018-1125 in Procps package is not
-		detected by Anchore due to the presence of epoch in the Procps package version.
-		We reported this bug to the Anchore development team through their Slack channel.
+% \textbf{Misses:} Clair and Vuls
+% missed vulnerabilities that they should have detected. For example, the CVE-2016-9082 
+% is present in package Cairo in Xenial release and it is not detected by Clair.
+% Vuls also missed vulnerabilities such as CVE-2019-5094.
 
-\textbf{Ubuntu vulnerabilities with status "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
-		which it is not able to detect some vulnerabilities. Due to this bug, Anchore does not detect 
-		vulnerabilities that have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
-		However, if this vulnerability is present in Ubuntu 14.04 ESM release, it is detected by Clair. 
-		For instance, CVE-2019-13565, which is present in Ubuntu 14.04 LTS, is an example of such vulnerabilities. 
-		We reported this bug as well to the Anchore development team through their Slack
-		channel.
+% \textbf{Wrong Detections:} 
+% Some vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
+% present inside the image, however, Clair have reported such vulnerabilities.
+% For instance, CVE-2019-1274 is an example of such vulnerabilities. 
+% %is showing because these vulnerabilities are present in Ubuntu 14.04 ESM and 
+% %Clair is only referring to Ubuntu 14.04 ESM release. 
+% We reported this issue on two Google groups of Clair i.e. CoreOS Dev and
+% clair-dev \url{(https://groups.google.com/forum/\#!topic/clair-dev/8IqCCfd-EEc).}
 
-\textbf{Rejected CVEs:} There are some CVEs, such as CVE-2017-13753, that are rejected because they are duplicate copies of other CVEs. 
-	So, Anchore and Clair does not report those rejected CVEs, but Vuls reports them.
+% \textbf{Database difference:} At the time we pulled Clair's database, through \texttt{arminc/clair-db:latest} Docker image, it was one week old.
+%                               As a result some vulnerabilities were not updated in the database. For instance, CVE-2019-5094, which
+% 		              was published on 2019-09-24, was not 
+% 		              updated in Clair's database. Due to which it is missed by Clair.
+% 			      Consequently, these discrepancies, even small, are sufficient to change the detection of
+% 			      the scanners.
 
-\subsection{Effect Of Update}
+% \textbf{Epoch bug:} There is a bug in the Anchore scanner due to which some vulnerabilities are 
+% 		not detected by Anchore. This bug gets triggered when a package’s version have epoch 
+% 		(1:3.3.9-1ubuntu2.3) in it. For example, CVE-2018-1125 in Procps package is not
+% 		detected by Anchore due to the presence of epoch in the Procps package version.
+% 		We reported this bug to the Anchore development team through their Slack channel.
 
-As a result of image updating,
-scanning results change significantly.
-Figure~\ref{fig:graph2} represents the number of vulnerabilities that are detected by Anchore before and after 
-image update. 
-In fact, this Figure combines the original results of Figure~\ref{fig:graph1} with the results of the image update
-experiment.
-Clearly, the figure illustrates that when images are updated, the number of vulnerabilities reduces by a
-significant number. Furthermore, a mild slope of vulnerabilities after the image update shows that
-there is a set of packages that contain vulnerabilities and have not been fixed yet. Also, these
-vulnerabilities mostly have \textit{Low, Negligible, or Medium} severity status, meaning that
-\textit{high} severity vulnerabilities are prioritized and fixed fast.
-Besides that, it is also interesting to note that some images in Figure~\ref{fig:graph2}
-do not have update results. This is because some Linux distributions reached end-of-life and
-are not being updated anymore.
-Despite of the significant drop in the number of vulnerabilities as a result of image updating,
-there is still a number of vulnerabilities reported by the scanners. This is due to the
-vulnerabilities which do not have fix yet.
+% \textbf{Ubuntu vulnerabilities with status "Ignored (out of standard support)" bug:} There is another bug in Anchore due to 
+% 		which it is not able to detect some vulnerabilities. Due to this bug, Anchore does not detect 
+% 		vulnerabilities that have a status as “ignored (out of standard support)” in Ubuntu 14.04 LTS. 
+% 		However, if this vulnerability is present in Ubuntu 14.04 ESM release, it is detected by Clair. 
+% 		For instance, CVE-2019-13565, which is present in Ubuntu 14.04 LTS, is an example of such vulnerabilities. 
+% 		We reported this bug as well to the Anchore development team through their Slack
+% 		channel.
 
-\subsection{Effect Of Size Reduction}
+% \textbf{Rejected CVEs:} There are some CVEs, such as CVE-2017-13753, that are rejected because they are duplicate copies of other CVEs. 
+% 	So, Anchore and Clair does not report those rejected CVEs, but Vuls reports them.
 
-Our second approach involves the deletion of unnecessary packages from the images.
-We tested our approach on 5 different images covering the spectrum of Figure~\ref{fig:graph1}.
-We find that the image reduction process brings inconsistent deviation in scanning results.
-%We find that
-%after the size reduction process, sometimes the scanning results deviate only a little from the results
-%without minimization. While the minimization process results in significant reduction
-%in the number of vulnerabilities in some cases, we find that in other cases the effect
-%is negligible. 
-In other words, the image reduction was inconsistent.
-According to our analysis, this can be due to two reasons: \rom{1}) the number of
-deleted packages
-and \rom{2}) the kind of deleted packages. 
-For an instance, if the deletion is for a package that includes a lot of vulnerabilities,
-that particular deletion naturally results in the drop of number of vulnerabilities.
-In other
-words, deleting more packages reduces more vulnerabilities. 
-For instance, we were able to delete only 21 and 25 packages for 
-\textit{bids/ndmg} and \textit{poldracklab/fmriprep:1.2.3} images respectively. Consequently, vulnerabilities
-reduced only by 4 and 17 respectively. 
-Also, if we delete packages that contain a lot of vulnerabilities, it helps in reducing
-vulnerabilities by a significant number. For instance, in case of our experiments
-deleting compilers and Linux-kernel-header packages helped to minimize vulnerabilities
-by a significant number in \textit{bids/example, bids/freesurfer, and bids/mindboggle:0.0.4-1}. 
 
-\subsection{Combined Effect Of Update and Size Reduction}
+% \tristan{integrate this part:
 
-Our last experiment includes updating the image and then removing unnecessary packages from it.
-Figure~\ref{fig:bargraph} displays the results. 
-Our initial expectation was that with the update and size reduction process together, we will be able to
-reduce vulnerabilities even more. However,
-we analyzed that this is not always true. Again, it depends on which packages are deleted and how
-many vulnerabilities they contained. To illustrate, \textit{bids/example} image in Figure~\ref{fig:bargraph}
-shows no effect of size reduction along with update process. It has 181 vulnerabilities for both experiments.
-Meaning that packages, which we deleted after updating the image, were already vulnerability free. Therefore,
-scanning results did not change.
-\vspace*{-2mm}
+% \change{
+
+% The major discrepancies are shown by Anchore and Clair in Ubuntu \tristan{why?}. Both refers to Ubuntu CVE Tracker database for Ubuntu images.
+% The way in which both scanners interpret this database is different.
+% %
+% %There are different vulnerability databases, which have
+% %different formats of data.
+% %Out of which Open Vulnerability and Assessment Language (OVAL) is an international
+% %open standard and a common
+% %means of promoting publicly available security issues. 
+% %It provides details about software vulnerabilities. It helps to determine
+% %whether vulnerabilities exist in local machines or not. Apart from OVAL, operating system
+% %vendors also keep track of their vulnerabilities separately and assign
+% %a status to each vulnerability.
+% %For example, Ubuntu maintains
+% %Ubuntu CVE Tracker, Debian maintains Debian Security Bug Tracker, etc.
+% %Each vulnerability is assigned a unique Common Vulnerabilities and Exposures (CVE) number
+% %by the MITRE corporation, who maintains a list of all vulnerabilities of all distributions.
+% %In this paper, we use vulnerability and CVE interchangeably.
+% %Ubuntu CVE Tracker is used by Anchore and Clair in our experiments
+% %and there is discrepancies in the way both scanners interpret results.
+% %
+% %BIDS apps and Boutiques images in our experiments have four Linux
+% %distributions i.e. Ubuntu, CentOS, Debian, and Alpine. 
+% %Out of these distributions, Ubuntu assigns a vulnerability status to
+% %all vulnerabilities before keeping them in its vulnerability database.
+% %Each vulnerability is assigned a unique Common Vulnerabilities and Exposures (CVE) number
+% %by the MITRE corporation, who maintains a list of all vulnerabilities of all distributions.
+% %Ubuntu keeps a record of Ubuntu-specific vulnerabilities in Ubuntu CVE Tracker using their CVE
+% %numbers. In this paper, we use vulnerability and CVE interchangeably.
+% %The vulnerability status in Ubuntu CVE Tracker is subjected to change
+% %depending on the work progress to fix that vulnerability.
+% %
+% %Regarding Ubuntu, it has different
+% %types of releases e.g. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release.
+% %Ubuntu maintains its vulnerability data in Ubuntu CVE tracker, which is referred by Anchore and Clair.
+% %There is another vulnerability database i.e. Open Vulnerability and Assessment Language (OVAL) repository,
+% %which is maintained by MITRE corporation. Vuls refers to OVAL repository for getting Ubuntu vulnerability feed.
+% %The vulnerability data format of both databases is different. OVAL keeps a separate xml file for each release,
+% %which contains that release specific vulnerability information.
+% Ubuntu CVE Tracker keeps a separate file for each vulnerability, which
+% has an entry for all Ubuntu releases combined with the current status
+% of that vulnerability in that release.
+% In particular, Clair and Anchore show discrepancies for Ubuntu 14.04 which have
+% two entries for each vulnerability, one for Ubuntu 14.04 Long Term Support (LTS)
+% and second for Ubuntu 14.04 Extended Security Maintenance (ESM) release. As Ubuntu 14.04 LTS
+% reached end-of-life on 2019-04-30, so Ubuntu ignores new vulnerabilities in LTS release and
+% fix them only in ESM release. Consequently, a same vulnerability may have different vulnerability status in LTS and ESM releases,
+% which is causing discrepancies. This is because Anchore refers to Ubuntu 14.04 LTS, whereas Clair refers to
+% ESM.
+% %Further, in Ubuntu a particular release can be of different types i.e. Regular, Long Term Support (LTS), and Extended Security Maintenance (ESM) release. 
+% %Through our experiments, we find that Anchore and Clair report Ubuntu vulnerabilities 
+% %differently depending on either the different Ubuntu release type or vulnerability status. 
+% It is important to provide an overview of these Ubuntu vulnerability statuses, 
+% since Ubuntu is heavily utilized in our experiments. 
+% %Ubuntu's Regular release is supported only for 9 months, whereas LTS is supported for 5 years. Once LTS support
+% %reaches End-Of-Life (EOL), Ubuntu decides whether to provide extended security support or not, which comes
+% %in the form of ESM release.
+% %ESM is a paid service that can be requested from Ubuntu to get security 
+% %updates even after the EOL of a particular Ubuntu release. ESM and LTS releases of a particular Ubuntu version have different vulnerability
+% %databases, because after EOL of a release, a vulnerability is fixed only in packages of ESM; however, it still
+% %exists in LTS.
+% %
+% %As an example, Ubuntu has ended support for some releases, such as 14.04 LTS,
+% %17.04, and 17.10, as they reached EOL. However, Ubuntu decided to provide optional extended support for Ubuntu 14.04.
+% %To use this extended support, users have to purchase Ubuntu 14.04 ESM release.
+% %The images in our experiments have Ubuntu 14.04 LTS, so scanners should refer
+% %to LTS release only while collecting data from the vulnerability databases.
+% %More interestingly, Clair refers to ESM release vulnerability database, however, this may lead to discrepancies in results.
+% %Further, if an image is using a Linux release where EOL has been reached that image may
+% %turns to be vulnerable as it is not possible to retrieve any updates.
+% %
+% In Ubuntu CVE Tracker, for a vulnerability all Ubuntu releases are listed with the package name
+% in which that vulnerability exists and are entitled a vulnerability status
+% (\url{https://git.launchpad.net/ubuntu-cve-tracker/plain/README}), which is
+% encoded in the following form:
+% \newline \\
+% \noindent <release>\_<source-package>: <status> (<version/notes>)
+% \newline\\
+% The <version/notes> given with a vulnerability status provide more
+% information about the vulnerability.
+% For a given release, the vulnerability status can be any one of the following:
+
+% \textbf{DNE (Does Not Exist):} The package does not exist in the
+% 		release.
+
+% \textbf{needs-triage:} The vulnerability of this package
+% 		is not known, and hence evaluation is needed.
+
+% \textbf{not-affected:} The package, while related to the
+% 		vulnerability in some way, is not affected by the issue.
+% 	%	The <notes> should
+% 	%	provide detailed information, if needed.
+% 		%For instance, if the given
+% 		%status is "not-affected (1.14.6-1.1)" then this indicates that this specific
+% 		%package version is not affected.
+
+% \textbf{needed:} The package is vulnerable and needs to be fixed.
+
+% \textbf{active:} The package is vulnerable, needs fixing, and is 
+%                  actively being worked on.
+
+% \textbf{ignored:} The package, while related to the
+% 		vulnerability in some way, is being ignored for some reason. 
+% 	%	The
+% 	%	<notes> should provide that reason.
+% 	%	For instance, if status looks like
+% 	%	"ignored (reached end-of-life)", this means that the given Ubuntu release already reached
+% 	%	end-of-life, so this CVE is ignored by Ubuntu. However, if there
+% 	%	is extended security support for this release then this
+% 	%	CVE will be handled in ESM release.
+
+% \textbf{pending:} The package is vulnerable and
+%                   has been fixed but an update has not been yet uploaded or
+% 		  published.
+% 		 % The <version> is given to indicate the particular 
+% 		 % version where the fix has been done.
+
+% \textbf{deferred:} The package is vulnerable, but 
+%                    its fix has been deferred for some reason. 
+% 		  % The <notes>
+% 		  % should provide further details.
+% 		  % If a date is mentioned, e.g.
+% 		  % "deferred (2015-02-02)", the given date specifies the date when
+% 		  % the CVE was deferred.
+
+% \textbf{released:} The package was vulnerable, but
+% 		an update has been already uploaded and published.
+% 	%	e.g. "released (1.2.3)",
+% 	%	<version> indicates the first version where the fix was applied.
+
+% \textbf{released-esm:} The package was vulnerable and
+% 		an update has been already uploaded and published. However,
+% 		this update is published in the Ubuntu ESM release only and not in LTS.}
+% 		%The fixed version of such packages is appended by either
+% 		%+esm or \char`\~esm, indicating that this package version is available
+% 		%only via ESM.
+
+% 		% \newlne\\
+% % Figure~\ref{example} illustrates how the information of a vulnerability is represented
+% % in the Ubuntu CVE Tracker.
+
+% % \begin{figure}[!ht]
+% % 	\fbox{{\includegraphics[scale=2.5,width=\columnwidth]
+% % 	{Figures/vulnExample2.png}}}
+% %         \caption{\label{example} Representation of a vulnerability in Ubuntu CVE Tracker}
+% % \end{figure}
+% % \vspace*{-7mm}
+% }
+
+
 \section{Discussion}
+
+% files vs packages
+
+% reproducibility vs update
+However, this action affects the reproducibility
+of that image. For example, if a package is used in an experiment
+and later that package is updated, subsequent instances of the experiment may actually
+get different results.
+
+% minification is specific to the analysis
+% tried neurodocker
+% don't point at specific applications, it's a general issue
 
 As we noticed that none of the Boutiques and BIDS images at the time of the study are free of vulnerabilities, out of which
 so many are high severity vulnerabilities as well. Yet there is not a single image scanner on which we can rely upon for
 scanning. Additionally, we cannot update all images because some OS releases, which are used inside images, 
 already reached end-of-life and are
-no longer getting updates. Furthermore, the minimization of images is a time consuming process. As we have to run
+no longer getting updates. Furthermore, the minification of images is a time consuming process. As we have to run
 the pipeline to get Reprozip trace that can take up to several hours. Also, the user should have proper knowledge
 of running the pipeline because it is image-specific. In addition to that, Reprozip can be only installed
 in the images having Python version 2.7.3 or greater, or 3.3 or greater. Above all, there is no guarantee that
