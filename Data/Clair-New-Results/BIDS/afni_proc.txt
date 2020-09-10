@@ -1,0 +1,130 @@
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| STATUS     | CVE SEVERITY          | PACKAGE NAME  | PACKAGE VERSION    | CVE DESCRIPTION                                              |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-0500  | curl          | 7.55.1-1ubuntu2.5  | Curl_smtp_escape_eob in lib/smtp.c in curl 7.54.1            |
+|            |                       |               |                    | to and including curl 7.60.0 has a heap-based buffer         |
+|            |                       |               |                    | overflow that might be exploitable by an attacker who        |
+|            |                       |               |                    | can control the data that curl transmits over SMTP           |
+|            |                       |               |                    | with certain settings (i.e., use of a nonstandard            |
+|            |                       |               |                    | --limit-rate argument or CURLOPT_BUFFERSIZE value).          |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-0500  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-1122  | procps        | 2:3.3.12-1ubuntu2  | procps-ng before version 3.3.15 is vulnerable to a local     |
+|            |                       |               |                    | privilege escalation in top. If a user runs top with HOME    |
+|            |                       |               |                    | unset in an attacker-controlled directory, the attacker      |
+|            |                       |               |                    | could achieve privilege escalation by exploiting one of      |
+|            |                       |               |                    | several vulnerabilities in the config_file() function.       |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-1122  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-1124  | procps        | 2:3.3.12-1ubuntu2  | procps-ng before version 3.3.15 is vulnerable                |
+|            |                       |               |                    | to multiple integer overflows leading to a heap              |
+|            |                       |               |                    | corruption in file2strvec function. This allows a            |
+|            |                       |               |                    | privilege escalation for a local attacker who can            |
+|            |                       |               |                    | create entries in procfs by starting processes,              |
+|            |                       |               |                    | which could result in crashes or arbitrary code              |
+|            |                       |               |                    | execution in proc utilities run by other users.              |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-1124  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-1126  | procps        | 2:3.3.12-1ubuntu2  | procps-ng before version 3.3.15 is vulnerable                |
+|            |                       |               |                    | to an incorrect integer size in proc/alloc.*                 |
+|            |                       |               |                    | leading to truncation/integer overflow issues.               |
+|            |                       |               |                    | This flaw is related to CVE-2018-1124.                       |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-1126  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-1125  | procps        | 2:3.3.12-1ubuntu2  | procps-ng before version 3.3.15 is vulnerable to a           |
+|            |                       |               |                    | stack buffer overflow in pgrep. This vulnerability           |
+|            |                       |               |                    | is mitigated by FORTIFY, as it involves strncat()            |
+|            |                       |               |                    | to a stack-allocated string. When pgrep is compiled          |
+|            |                       |               |                    | with FORTIFY (as on Red Hat Enterprise Linux                 |
+|            |                       |               |                    | and Fedora), the impact is limited to a crash.               |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-1125  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-13785 | libpng1.6     | 1.6.34-1           | In libpng 1.6.34, a wrong calculation of                     |
+|            |                       |               |                    | row_factor in the png_check_chunk_length function            |
+|            |                       |               |                    | (pngrutil.c) may trigger an integer overflow                 |
+|            |                       |               |                    | and resultant divide-by-zero while processing a              |
+|            |                       |               |                    | crafted PNG file, leading to a denial of service.            |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-13785 |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-12015 | perl          | 5.26.0-8ubuntu1.1  | In Perl through 5.26.2, the Archive::Tar module allows       |
+|            |                       |               |                    | remote attackers to bypass a directory-traversal             |
+|            |                       |               |                    | protection mechanism, and overwrite arbitrary                |
+|            |                       |               |                    | files, via an archive file containing a                      |
+|            |                       |               |                    | symlink and a regular file with the same name.               |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-12015 |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-1123  | procps        | 2:3.3.12-1ubuntu2  | procps-ng before version 3.3.15 is vulnerable to a           |
+|            |                       |               |                    | denial of service in ps via mmap buffer overflow. Inbuilt    |
+|            |                       |               |                    | protection in ps maps a guard page at the end of the         |
+|            |                       |               |                    | overflowed buffer, ensuring that the impact of this flaw     |
+|            |                       |               |                    | is limited to a crash (temporary denial of service).         |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-1123  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Medium CVE-2018-12020 | gnupg2        | 2.1.15-1ubuntu8    | mainproc.c in GnuPG before 2.2.8 mishandles the              |
+|            |                       |               |                    | original filename during decryption and verification         |
+|            |                       |               |                    | actions, which allows remote attackers to spoof              |
+|            |                       |               |                    | the output that GnuPG sends on file descriptor 2 to          |
+|            |                       |               |                    | other programs that use the "--status-fd 2" option.          |
+|            |                       |               |                    | For example, the OpenPGP data might represent an             |
+|            |                       |               |                    | original filename that contains line feed characters         |
+|            |                       |               |                    | in conjunction with GOODSIG or VALIDSIG status codes.        |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-12020 |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2018-0737     | openssl       | 1.0.2g-1ubuntu13.5 | The OpenSSL RSA Key generation algorithm has been            |
+|            |                       |               |                    | shown to be vulnerable to a cache timing side channel        |
+|            |                       |               |                    | attack. An attacker with sufficient access to mount          |
+|            |                       |               |                    | cache timing attacks during the RSA key generation           |
+|            |                       |               |                    | process could recover the private key. Fixed in              |
+|            |                       |               |                    | OpenSSL 1.1.0i-dev (Affected 1.1.0-1.1.0h). Fixed            |
+|            |                       |               |                    | in OpenSSL 1.0.2p-dev (Affected 1.0.2b-1.0.2o).              |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-0737  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2018-0495     | openssl       | 1.0.2g-1ubuntu13.5 | Libgcrypt before 1.7.10 and 1.8.x before 1.8.3 allows        |
+|            |                       |               |                    | a memory-cache side-channel attack on ECDSA signatures       |
+|            |                       |               |                    | that can be mitigated through the use of blinding during     |
+|            |                       |               |                    | the signing process in the _gcry_ecc_ecdsa_sign function     |
+|            |                       |               |                    | in cipher/ecc-ecdsa.c, aka the Return Of the Hidden          |
+|            |                       |               |                    | Number Problem or ROHNP. To discover an ECDSA key, the       |
+|            |                       |               |                    | attacker needs access to either the local machine or a       |
+|            |                       |               |                    | different virtual machine on the same physical host.         |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-0495  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2018-10779    | tiff          | 4.0.8-5ubuntu0.1   | TIFFWriteScanline in tif_write.c in LibTIFF 3.8.2 has a      |
+|            |                       |               |                    | heap-based buffer over-read, as demonstrated by bmp2tiff.    |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-10779 |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2018-12900    | tiff          | 4.0.8-5ubuntu0.1   | Heap-based buffer overflow in the cpSeparateBufToContigBuf   |
+|            |                       |               |                    | function in tiffcp.c in LibTIFF 4.0.9 allows remote          |
+|            |                       |               |                    | attackers to cause a denial of service (crash) or possibly   |
+|            |                       |               |                    | have unspecified other impact via a crafted TIFF file.       |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-12900 |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2018-1152     | libjpeg-turbo | 1.5.2-0ubuntu5     | libjpeg-turbo 1.5.90 is vulnerable to a denial               |
+|            |                       |               |                    | of service vulnerability caused by a divide                  |
+|            |                       |               |                    | by zero when processing a crafted BMP image.                 |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-1152  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2017-15232    | libjpeg-turbo | 1.5.2-0ubuntu5     | libjpeg-turbo 1.5.2 has a NULL Pointer Dereference           |
+|            |                       |               |                    | in jdpostct.c and jquant1.c via a crafted JPEG file.         |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-15232 |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2018-0495     | libgcrypt20   | 1.7.8-2ubuntu1     | Libgcrypt before 1.7.10 and 1.8.x before 1.8.3 allows        |
+|            |                       |               |                    | a memory-cache side-channel attack on ECDSA signatures       |
+|            |                       |               |                    | that can be mitigated through the use of blinding during     |
+|            |                       |               |                    | the signing process in the _gcry_ecc_ecdsa_sign function     |
+|            |                       |               |                    | in cipher/ecc-ecdsa.c, aka the Return Of the Hidden          |
+|            |                       |               |                    | Number Problem or ROHNP. To discover an ECDSA key, the       |
+|            |                       |               |                    | attacker needs access to either the local machine or a       |
+|            |                       |               |                    | different virtual machine on the same physical host.         |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-0495  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
+| [1;31mUnapproved[0m | Low CVE-2018-0732     | openssl       | 1.0.2g-1ubuntu13.5 | During key agreement in a TLS handshake using a DH(E)        |
+|            |                       |               |                    | based ciphersuite a malicious server can send a very large   |
+|            |                       |               |                    | prime value to the client. This will cause the client to     |
+|            |                       |               |                    | spend an unreasonably long period of time generating a key   |
+|            |                       |               |                    | for this prime resulting in a hang until the client has      |
+|            |                       |               |                    | finished. This could be exploited in a Denial Of Service     |
+|            |                       |               |                    | attack. Fixed in OpenSSL 1.1.0i-dev (Affected 1.1.0-1.1.0h). |
+|            |                       |               |                    | Fixed in OpenSSL 1.0.2p-dev (Affected 1.0.2-1.0.2o).         |
+|            |                       |               |                    | http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-0732  |
++------------+-----------------------+---------------+--------------------+--------------------------------------------------------------+
