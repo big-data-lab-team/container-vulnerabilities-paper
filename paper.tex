@@ -97,22 +97,19 @@ ar,shots47s/bids-fmriprep-1.2.3,,,,453
 \maketitle
 
 \begin{abstract}
-Software containers have become key to the deployment of
-scientific data analyses on high-performance computing (HPC)
-infrastructures, due to their positive impact on the portability, deployment, and
-reproducibility of computations. Container images, however, often contain slightly outdated
-software packages compared to HPC environments maintained by professional
- system administrators, and they often carry more
-software packages than required by analyses, including compilers or unused
-system librairies. As a result, container images are likely to contain
-important amounts of security vulnerability, increasing the attack surface
-for the entire infrastructure. This paper presents a vulnerability analysis
-of container images for scientific data analysis. We analyze container
-images with four vulnerability scanners, focusing on the use case of
-neuroscience data analyses. We quantify the effect of images updates and
-size reduction on the number of vulnerabilities, and conclude with
-recommendations on how to build container images with a reduced amount of
-vulnerabilities.
+Software containers greatly facilitate the deployment of scientific
+data analyses on high-performance computing (HPC) infrastructures, due
+to their positive impact on the portability, deployment, and
+reproducibility of computations. However, container images often
+contain outdated or unnecessary software packages, which increases the
+number of security vulnerabilities present in the images, and widens
+the attack surface for the entire infrastructure. This paper presents a
+vulnerability analysis of container images for scientific data
+analysis. We analyze container images with four vulnerability scanners,
+focusing on the use case of neuroscience data analyses, and quantifying
+the effect of images updates and minification on the number of
+vulnerabilities. We conclude with recommendations on how to build
+container images with a reduced amount of vulnerabilities.
 
 
 \end{abstract}
