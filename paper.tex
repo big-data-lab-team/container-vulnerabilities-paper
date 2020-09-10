@@ -97,7 +97,7 @@ ar,shots47s/bids-fmriprep-1.2.3,,,,453
 \maketitle
 
 \begin{abstract}
-Software containers have become key technologies for the deployment of
+Software containers have become key to the deployment of
 scientific data analyses on high-performance computing (HPC)
 infrastructures, due to their positive impact on the portability, deployment, and
 reproducibility of computations. Container images, however, often contain slightly outdated
@@ -223,7 +223,7 @@ out of which one wasn't available on DockerHub. Boutiques had 49 images,
 however, only 23 unique images were listed, out of which 3 couldn't be retrieved and 2
 were already included in BIDS apps. All the final 26 images
 from BIDS apps were Docker images, whereas Boutiques contained 18 Docker images
-and 6 Singularity images.
+and 6 Singularity images. \tristan{check the numbers, we have 38 images in the results}
 
 \subsection{Image Scanners}
 
@@ -356,6 +356,7 @@ OS packages. \tristan{what was the date at which update was run?}
 %in the images by deleting unnecessary packages. For that, it is required to figure
 %out which packages we need for the pipeline to function properly.
 
+\todo{mention neuro docker}
 
 A second approach to reduce the number of vulnerabilities in the images is
 to remove unnecessary packages, an operation potentially specific to each
@@ -781,61 +782,140 @@ Clair and Vuls, to evaluate the stability of our results.
 
 \section{Discussion}
 
-% files vs packages
+There is a widespread issue with security vulnerabilities in container
+images for neuroimaging analyses, and it is likely to impact other
+scientific disciplines as well. Indeed, it is common for container images
+to hold hundreds of vulnerabilities, including several of critical
+severity. Container images are impacted regardless of the type of analyses
+that they support, and the main OS distributions Ubuntu, Debian and CentOS
+are all impacted.
 
-% reproducibility vs update
-However, this action affects the reproducibility
-of that image. For example, if a package is used in an experiment
-and later that package is updated, subsequent instances of the experiment may actually
-get different results.
+Software updates remove about two-thirds of the vulnerabilities found and
+should certainly be considered the primary solution to this problem.
+However, in neuroimaging as in other disciplines, software updates are
+generally discouraged because they can affect analysis results by
+introducing numerical perturbations in the
+computations~\cite{gronenschild2012effects,glatard2015reproducibility}. We
+believe that this position is not viable from an IT security perspective,
+and that it could endanger the entire Big Data processing infrastructure,
+starting with the HPC centers. Instead, we advocate a more systematic
+analysis of the numerical schemes involved in data analyses, which, coupled
+with software testing, would make the analyses robust to software updates.
+As a first step, the packages impacting the analyses could be specifically
+identified and the others updated, which would largely remove
+vulnerabilities.
 
-% minification is specific to the analysis
-% tried neurodocker
-% don't point at specific applications, it's a general issue
+Ultimately, software updates should even occur at runtime rather than when
+the container image is built. Indeed, it is likely that container images
+used for scientific data analyses be built only occasionally, perhaps every
+few weeks when a release becomes available, which may not be compatible
+with the frequency of required security updates. In fact, there is no
+definite reason for the application software release cycle to be
+synchronized with security updates, and security updates shouldn't be
+dependent on application software developers. Instead, we think it would be
+relevant for analytics engines to (1) systematically apply security updates
+when containers start, and (2) run software tests provided by application
+developers, including numerical tests, before running analyses. 
 
-As we noticed that none of the Boutiques and BIDS images at the time of the study are free of vulnerabilities, out of which
-so many are high severity vulnerabilities as well. Yet there is not a single image scanner on which we can rely upon for
-scanning. Additionally, we cannot update all images because some OS releases, which are used inside images, 
-already reached end-of-life and are
-no longer getting updates. Furthermore, the minification of images is a time consuming process. As we have to run
-the pipeline to get Reprozip trace that can take up to several hours. Also, the user should have proper knowledge
-of running the pipeline because it is image-specific. In addition to that, Reprozip can be only installed
-in the images having Python version 2.7.3 or greater, or 3.3 or greater. Above all, there is no guarantee that
-the commands that you run to get Reprozip trace covers the whole program, maybe it runs a particular
-branch of the program. So, there should be some kind of coverage measurement.
-Besides this, as scanners report vulnerabilities according to the versions of the installed packages,
-they are likely to miss packages that are not installed using package manager. 
-Therefore, we suggest some particular rules that can be
-followed to keep container images safe.
-\begin{itemize}
-	\item Update packages regularly inside images.
-	\item Remove unnecessary packages, in particular the ones used for installation (compilers, source packages, etc.).
-	\item Choose your base OS image wisely.
-	\item Run image scanning tools in CI scripts. For instance Anchore.
-	\item Protect your GitHub/DockerHub credentials because if automated builds is set up
-in Docker Hub, it can automatically build images from external repositories, for instance GitHub.
-\item Minimize dependencies inside images.
-\item Avoid static linking because it obfuscates vulnerability scanning.
-\item Use the package manager to facilitate vulnerability detection.
-\item Use OS releases that have LTS support.
-\end{itemize}
-\vspace*{-2mm}
-\section{Conclusions and Future Work}
+Implementing such a workflow, however, requires a long-term endeavour to
+evaluate broadly the stability of data analysis pipelines, and to develop
+the associated software tests. For the shorter term, we identified the
+following recommendations for application developers to reduce the number
+of security vulnerabilities in container images:
 
-In this paper, we performed various experiments to study the security state of the Docker
-and Singularity images, which are used in the neuroimaging field. We found out strong correlation
-between the number of packages and the number of vulnerabilities in the images, which implies
-that the number of vulnerabilities increases with the number of packages. We also found out that
-updating images reduces the number of vulnerabilities by a significant number. However, for some
-vulnerabilities there are no fixes available yet so the images cannot 
-be made totally invulnerable. Continuing with our next two experiments, we analyzed that the
-image size reduction process also reduces vulnerabilities a lot. However, we found out that this is not
-always true. It depends on two factors: the kind of packages and the number of packages that we are
-deleting.
+\begin{enumerate}[leftmargin=0pt,itemindent=*]
+\item \emph{Introduce software dependencies cautiously}. Software
+dependencies come with a potential security toll that is often neglected.
+For instance, it can be tempting to add a complete toolbox to implement a
+relatively minor operation in a data analysis pipeline, such as a data
+format conversion, while the same functionality might be available in the
+existing dependencies of the pipeline, albeit in a less convenient way.
+\item \emph{Use lightweight base images such as Alpine Linux}. Base
+images often come with packages that are useful in personnal computers or
+servers, but not in containers dedicated to a specific data analysis. In
+addition, lightweight distributions define packages with a fine
+granularity, allowing developers to avoid installing unnecessary
+dependencies. For instance, the compressed size of the Alpine Linux base
+image on DockerHub is only 2.7~MB while that of the Ubuntu base image is
+27~MB.
+\item \emph{Use OS releases with long-term support.} Security updates are
+not provided for OS distributions that reached end of life. When a given
+release of a data analysis pipeline is expected to be used over a long
+period of time, typically several years as it is common in neurosciences,
+the life cycle of the distribution release should be considered when
+choosing a base container image. OS distributions have very different life
+cycle durations, as long and short life cycles serve different purposes.
+For instance, among RedHat-based distributions Fedora release a new version
+every 6 months and provide maintenance for about a year, while CentOS
+releases every 3-5 years and provide maintenance for 10 years. Similarly,
+Ubuntu LTS (long-term support) distributions provide free security updates
+for 5 years, and Debian stable releases are maintained for 3 years (the
+Debian LTS project intends to extend this duration to 5 years). Commercial
+offers for extended maintenance periods are common. 
+\item \emph{Install packages, not files}. Vulnerability scanners such as
+Anchore, Clair or Vuls detect vulnerabilities from the list of packages
+installed in a container image. Therefore, vulnerabilities contained in
+software tools installed through direct file download rather than through
+the package manager would go completely undetected. Domain-specific
+distributions such as \href{http://neuro.debian.net}{NeuroDebian} or
+\href{https://docs.fedoraproject.org/en-US/neurofedora/overview/}{NeuroFedora}
+in neuroimaging are useful in this respect.
+\item \emph{Minify container images.} The automated minification
+process that we used in our study is unwieldy for a routine use, as it
+requires capturing execution traces with ReproZip to reconstruct the graph
+of package dependencies required for the analysis. In practice, it would be
+more practical for software developers to identify and remove unnecessary
+dependencies when they build containers, based on their knowledge of the
+application.
+\item \emph{Run image scanners during continuous integration.} Scanning
+container images cann be a cumbersome process (for instance, scanning the
+\todo{x} images involved in this study takes about \todo{y} hours) that
+could be asynchronously executed during continuous integration (CI),
+through tools such as Travis CI or Circle CI. Including security scans in
+CI also allows developers to identify vulnerabilities quickly,
+before new software contributions are released.
+\end{enumerate}
 
-In future work we would like to see how these vulnerabilities can be leveraged
-to design attacks from containers. Particularly, we want
-to consider web servers and clusters that processes data using containers.
+Describing specific attacks against HPC systems that would exploit
+vulnerabilities in container images is out of the scope of our study. We
+believe that such attacks are likely to exist, although attacking HPC
+systems through containers is challenging due to their relative isolation
+from the host system. First, under the safe assumption that legitimate HPC
+users can be trusted, attackers would have to be remote to the container,
+either in the same network or on a remote network. Two main types of
+attacks can be envisaged in these conditions: network-based attacks,
+exploiting vulnerabilities in network clients installed in the container,
+and data-based attacks, exploiting vulnerabilities through the processing
+of malicious data injected through third-party systems.
+
+Several types of escalation attacks could be envisaged once remote
+attackers gain access to the container, in particular related to (1) using
+the resources allocated to the container for malicious use, such as storing
+data in the file system or using CPU cycles, resulting in denial of service
+for the user running the container, and possibly for other HPC users, and
+(2) attacking a host network service, for instance a scheduler or a file
+system daemon. Exploits in the host kernel to break out of the container
+are always possible but unlikely assuming that the host system is
+maintained by professional system administrators.
+
+\section{Conclusion}
+
+Container images deployed on HPC clusters for scientific data analyses are
+likely to contain hundreds of security vulnerabilities, many of which are
+critical. In the short term, application software developers can address
+this issue by: (1) minifying container images, by using lightweight OS
+distributions and reducing software dependencies, and (2) applying regular
+security updates, which requires using OS distributions with long-term
+support. Longer term, data analysis pipelines would benefit from in-depth
+stability analysis, to ensure that analytical results are not affected by
+security updates.
+
+This conclusion is not an alarming message urging HPC administrators  
+to ban containers from their systems. User-controlled container images are
+just one of many end-user artifacts that could serve as attack vectors,
+and to our knowledge no attack has been described to exploit them. Other,
+more traditional types of attacks targeting user credentials or network
+connections are likely to remain more common.
 
 \bibliography{bibliography}
 \end{document}
