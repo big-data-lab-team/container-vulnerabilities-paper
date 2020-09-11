@@ -36,7 +36,7 @@
 \newcommand{\tristan}[1]{\color{blue}From Tristan: #1\color{black}}
 
 \renewcommand{\labelitemi}{$\textendash$}
-\title{Security Vulnerabilities in Neuroimaging Container Images}
+\title{An Analysis of Security Vulnerabilities in Container Images for Scientific Data Analysis}
 \begin{filecontents*}{resul.csv}
 labels,names,A,C,V,Stools
 a,bids/example:latest,838,663,683,
@@ -235,7 +235,7 @@ packages, non-OS packages (Python, Java, Gem, and Npm), and files.
 In our experiments, we use Anchore Engine version 0.5.0 through Docker image \texttt{anchore/anchore-engine:v0.5.0}, and
 Anchore vulnerability database version 0.0.11.
 
-\begin{figure*}
+\begin{table*}
 \begin{tabular}{|c|c|c|c|}
  \hline
 \textbf{OS} &	\textbf{Anchore} &	\textbf{Vuls} &	\textbf{Clair} \\
@@ -251,7 +251,7 @@ Anchore vulnerability database version 0.0.11.
 \end{tabular}
 \caption{Vulnerability databases used by scanners for different OS distributions}
 \label{database}
-\end{figure*}
+\end{table*}
 
 Vuls is an open-source vulnerability scanner for Linux and FreeBSD. It
 offers both static and dynamic scanning, and both local and remote
@@ -487,7 +487,18 @@ package update.
 
 The results presented so far were obtained with Anchore, a popular
 container image scanning tool. We scanned the images with two other tools,
-Clair and Vuls, to evaluate the stability of our results. 
+Clair and Vuls, to evaluate the stability of our results. Important
+discrepancies were found between scanners (Fig~\ref{fig:venn}), in particular between Anchore
+and the other two, for which Jaccard coefficients are as low as 0.6, meaning
+that only 60\% of all the detected vulnerabilities are detected by both
+Anchore and the other scanner. Vuls and Clair appear to be in better
+agreement, with a Jaccard coefficient of 0.8.
+
+% where do the discrepancies come from?
+The vulnerabilities detected only by Anchore (region
+\textbf{(1)} in Fig~\ref{fig:venn}) are all in the development package
+(headers) of the C library (\texttt{linux-libc-dev} in Ubuntu). 
+
 
 % \begin{table*}
 % 	\csvreader[%
@@ -504,22 +515,13 @@ Clair and Vuls, to evaluate the stability of our results.
 % 	\end{table*}
 	\begin{figure}
         \includegraphics[width=\columnwidth]{Figures/venn.pdf}
-	\caption{\label{fig:venn} Comparison between image scanners.}
+	\caption{\label{fig:venn} Discrepancies in the vulnerabilities detected
+	by the different scanners. The Jaccard coefficients between the sets of
+	detected vulnerabilities are quite low, showing important discrepancies
+	between the scanners: Jaccard(Anchor, Clair) = 0.59, Jaccard(Anchore, Vuls) =
+	0.59, Jaccard(Vuls, Clair) = 0.82. Two Ubunty 17.04 images weren't included in this comparison as they cannot be scanned by Vuls. \todo{add Centos images}}
 \end{figure}
 
-% Table~\ref{table1} shows the number of vulnerabilities detected in the different images
-% by the four scanners. 
-% \change{Our experiments concluded considerable discrepancies in the results obtained by
-% these scanners. %We higlighted all Centos images in the Table~\ref{table1} since.
-% While comparing scanner results, we exluded two images \texttt{bids/antscorticalthickness:v2.2.0-1} and
-% \texttt{bids/afni\_proc:latest} because Vuls
-% cannot scan these image, hence no results are present to compare.
-% %The reason behind excluding
-% %vulnerability identifiers for Centos. Anchore and Clair use Red Hat Security Advisories (RHSAs)
-% %to report pending patches that need to be applied to specific packages,
-% %whereas Vuls uses Common Vulnerabilities and Exposures (CVE) number to report
-% %vulnerabilities in packages. We exluded other two images because Vuls
-% %can not scan these image, hence no results are present to compare.
 % In most cases,
 % Anchore reports more vulnerabilities than Vuls and Clair resulting in 
 % the Jaccard coefficient of 0.63 with Clair, 0.59 with Vuls,
