@@ -1,0 +1,145 @@
+[90m[Sep 25 20:27:53][0m [32m INFO[0m[39m [localhost][0m [39mValidating config...[0m
+[90m[Sep 25 20:27:53][0m [32m INFO[0m[39m [localhost][0m [39mLoaded: /vuls/results/2019-09-25T16:18:56-04:00[0m
+[90m[Sep 25 20:27:53][0m [32m INFO[0m[39m [localhost][0m [39mValidating db config...[0m
+[36mINFO[0m[0000] -cvedb-type: sqlite3, -cvedb-url: , -cvedb-path: /vuls/cve.sqlite3 
+[36mINFO[0m[0000] -ovaldb-type: sqlite3, -ovaldb-url: , -ovaldb-path: /vuls/oval.sqlite3 
+[36mINFO[0m[0000] -gostdb-type: sqlite3, -gostdb-url: , -gostdb-path: /vuls/gost.sqlite3 
+[36mINFO[0m[0000] -exploitdb-type: sqlite3, -exploitdb-url: , -exploitdb-path: /vuls/go-exploitdb.sqlite3 
+[32mINFO[0m[09-25|20:27:53] Opening DB.                              [32mdb[0m=sqlite3
+[32mINFO[0m[09-25|20:27:53] Migrating DB.                            [32mdb[0m=sqlite3
+[32mINFO[0m[09-25|20:27:53] Opening Database.                        [32mdb[0m=sqlite3
+[32mINFO[0m[09-25|20:27:53] Migrating DB.                            [32mdb[0m=sqlite3
+
+
+One Line Summary
+================
+boutiques-bt5e@host           	Total: 336 (High:84 Medium:237 Low:15 ?:0) 	0/336 Fixed	188 installed, 0 updatable	16 exploits	en: 0, ja: 3 alerts 
+boutiques-creaphase@host      	Total: 186 (High:35 Medium:132 Low:19 ?:0) 	0/186 Fixed	288 installed, 0 updatable	8 exploits 	en: 0, ja: 2 alerts 
+boutiques-docker-fsl@host     	Total: 201 (High:46 Medium:143 Low:12 ?:0) 	0/201 Fixed	143 installed, 0 updatable	10 exploits	en: 2, ja: 13 alerts
+boutiques-dwipreproc@host     	Total: 263 (High:40 Medium:208 Low:15 ?:0) 	0/263 Fixed	269 installed             	3 exploits 	en: 0, ja: 0 alerts 
+boutiques-freesurferbuils@host	Total: 157 (High:37 Medium:103 Low:17 ?:0) 	0/157 Fixed	254 installed, 0 updatable	10 exploits	en: 0, ja: 1 alerts 
+boutiques-fslbuild@host       	Total: 157 (High:37 Medium:103 Low:17 ?:0) 	0/157 Fixed	240 installed, 0 updatable	10 exploits	en: 0, ja: 1 alerts 
+boutiques-ica@host            	Total: 202 (High:47 Medium:143 Low:12 ?:0) 	0/202 Fixed	159 installed, 0 updatable	11 exploits	en: 2, ja: 13 alerts
+boutiques-mask2boundary@host  	Total: 11 (High:1 Medium:9 Low:1 ?:0)      	11/11 Fixed	61 installed, 49 updatable	0 exploits 	en: 0, ja: 0 alerts 
+boutiques-ndmg-v0@host        	Total: 782 (High:138 Medium:599 Low:45 ?:0)	0/782 Fixed	537 installed             	11 exploits	en: 0, ja: 1 alerts 
+boutiques-onevoxel@host       	Total: 2 (High:2 Medium:0 Low:0 ?:0)       	2/2 Fixed  	71 installed, 11 updatable	0 exploits 	en: 0, ja: 0 alerts 
+boutiques-pold-fmri@host      	Total: 447 (High:74 Medium:341 Low:32 ?:0) 	0/447 Fixed	441 installed             	9 exploits 	en: 0, ja: 0 alerts 
+boutiques-qeeg@host           	Total: 142 (High:29 Medium:97 Low:16 ?:0)  	0/142 Fixed	171 installed, 0 updatable	5 exploits 	en: 0, ja: 1 alerts 
+fervent_booth@host            	Total: 1 (High:1 Medium:0 Low:0 ?:0)       	1/1 Fixed  	16 installed, 2 updatable 	0 exploits 	en: 0, ja: 0 alerts 
+host                          	Total: 323 (High:41 Medium:260 Low:21 ?:1) 	0/323 Fixed	2188 installed            	3 exploits 	en: 0, ja: 0 alerts 
+
+Warning for boutiques-bt5e@host: [Failed to scan updatable packages:
+    github.com/future-architect/vuls/scan.(*redhatBase).scanPackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:246
+  - Failed to SSH: execResult: servername: boutiques-bt5e@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 a0818a829b1f /bin/sh -c 'repoquery --all --pkgnarrow=updates --qf='%{NAME} %{EPOCH} %{VERSION} %{RELEASE} %{REPO}''
+      exitstatus: 127
+      stdout: %{EPOCH}: repoquery: command not found
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*redhatBase).scanUpdatablePackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:378]
+
+Warning for boutiques-creaphase@host: [Failed to detect IP address: execResult: servername: boutiques-creaphase@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 5c0c4947b618 /bin/sh -c '/sbin/ip -o addr'
+      exitstatus: 127
+      stdout: /bin/sh: /sbin/ip: No such file or directory
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*base).ip
+        /go/src/github.com/future-architect/vuls/scan/base.go:286 Failed to scan updatable packages:
+    github.com/future-architect/vuls/scan.(*redhatBase).scanPackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:246
+  - Unknown format: GraphicsMagick, fields: [GraphicsMagick]:
+    github.com/future-architect/vuls/scan.(*redhatBase).parseUpdatablePacksLine
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:413]
+
+Warning for boutiques-docker-fsl@host: [Failed to detect IP address: execResult: servername: boutiques-docker-fsl@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 7d56a6dfc192 /bin/sh -c '/sbin/ip -o addr'
+      exitstatus: 127
+      stdout: /bin/sh: /sbin/ip: No such file or directory
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*base).ip
+        /go/src/github.com/future-architect/vuls/scan/base.go:286 Failed to scan updatable packages:
+    github.com/future-architect/vuls/scan.(*redhatBase).scanPackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:246
+  - Unknown format: acl, fields: [acl]:
+    github.com/future-architect/vuls/scan.(*redhatBase).parseUpdatablePacksLine
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:413]
+
+Warning for boutiques-freesurferbuils@host: [Failed to detect IP address: execResult: servername: boutiques-freesurferbuils@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 e48e9dfd828a /bin/sh -c '/sbin/ip -o addr'
+      exitstatus: 127
+      stdout: /bin/sh: /sbin/ip: No such file or directory
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*base).ip
+        /go/src/github.com/future-architect/vuls/scan/base.go:286 Failed to scan updatable packages:
+    github.com/future-architect/vuls/scan.(*redhatBase).scanPackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:246
+  - Failed to SSH: execResult: servername: boutiques-freesurferbuils@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 e48e9dfd828a /bin/sh -c 'repoquery --all --pkgnarrow=updates --qf='%{NAME} %{EPOCH} %{VERSION} %{RELEASE} %{REPO}''
+      exitstatus: 127
+      stdout: %{EPOCH}: repoquery: command not found
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*redhatBase).scanUpdatablePackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:378]
+
+Warning for boutiques-fslbuild@host: [Failed to detect IP address: execResult: servername: boutiques-fslbuild@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 77b792c64812 /bin/sh -c '/sbin/ip -o addr'
+      exitstatus: 127
+      stdout: /bin/sh: /sbin/ip: No such file or directory
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*base).ip
+        /go/src/github.com/future-architect/vuls/scan/base.go:286 Failed to scan updatable packages:
+    github.com/future-architect/vuls/scan.(*redhatBase).scanPackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:246
+  - Failed to SSH: execResult: servername: boutiques-fslbuild@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 77b792c64812 /bin/sh -c 'repoquery --all --pkgnarrow=updates --qf='%{NAME} %{EPOCH} %{VERSION} %{RELEASE} %{REPO}''
+      exitstatus: 127
+      stdout: %{EPOCH}: repoquery: command not found
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*redhatBase).scanUpdatablePackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:378]
+
+Warning for boutiques-ica@host: [Failed to detect IP address: execResult: servername: boutiques-ica@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 60df734d90a0 /bin/sh -c '/sbin/ip -o addr'
+      exitstatus: 127
+      stdout: /bin/sh: /sbin/ip: No such file or directory
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*base).ip
+        /go/src/github.com/future-architect/vuls/scan/base.go:286 Failed to scan updatable packages:
+    github.com/future-architect/vuls/scan.(*redhatBase).scanPackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:246
+  - Unknown format: acl, fields: [acl]:
+    github.com/future-architect/vuls/scan.(*redhatBase).parseUpdatablePacksLine
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:413]
+
+Warning for boutiques-qeeg@host: [Failed to detect IP address: execResult: servername: boutiques-qeeg@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 5294e463afc6 /bin/sh -c '/sbin/ip -o addr'
+      exitstatus: 127
+      stdout: /bin/sh: /sbin/ip: No such file or directory
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*base).ip
+        /go/src/github.com/future-architect/vuls/scan/base.go:286 Failed to scan updatable packages:
+    github.com/future-architect/vuls/scan.(*redhatBase).scanPackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:246
+  - Unknown format: acl, fields: [acl]:
+    github.com/future-architect/vuls/scan.(*redhatBase).parseUpdatablePacksLine
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:413]
+

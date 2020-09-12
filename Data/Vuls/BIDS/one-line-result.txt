@@ -1,0 +1,56 @@
+[90m[Sep 25 16:00:43][0m [32m INFO[0m[39m [localhost][0m [39mValidating config...[0m
+[90m[Sep 25 16:00:44][0m [32m INFO[0m[39m [localhost][0m [39mLoaded: /vuls/results/2019-09-25T15:53:08-04:00[0m
+[90m[Sep 25 16:00:44][0m [32m INFO[0m[39m [localhost][0m [39mValidating db config...[0m
+[36mINFO[0m[0001] -cvedb-type: sqlite3, -cvedb-url: , -cvedb-path: /vuls/cve.sqlite3 
+[36mINFO[0m[0001] -ovaldb-type: sqlite3, -ovaldb-url: , -ovaldb-path: /vuls/oval.sqlite3 
+[36mINFO[0m[0001] -gostdb-type: sqlite3, -gostdb-url: , -gostdb-path: /vuls/gost.sqlite3 
+[36mINFO[0m[0001] -exploitdb-type: sqlite3, -exploitdb-url: , -exploitdb-path: /vuls/go-exploitdb.sqlite3 
+[32mINFO[0m[09-25|16:00:44] Opening DB.                              [32mdb[0m=sqlite3
+[32mINFO[0m[09-25|16:00:44] Migrating DB.                            [32mdb[0m=sqlite3
+[32mINFO[0m[09-25|16:00:44] Opening Database.                        [32mdb[0m=sqlite3
+[32mINFO[0m[09-25|16:00:44] Migrating DB.                            [32mdb[0m=sqlite3
+
+
+One Line Summary
+================
+anchore_anchore-db_1@host    	Total: 142 (High:26 Medium:86 Low:20 ?:10)   	0/142 Fixed 	177 installed             	2 exploits 	en: 0, ja: 0 alerts 
+anchore_anchore-engine_1@host	Total: 199 (High:23 Medium:162 Low:14 ?:0)   	0/199 Fixed 	268 installed             	1 exploits 	en: 0, ja: 0 alerts 
+bids-aa@host                 	Total: 233 (High:65 Medium:145 Low:23 ?:0)   	0/233 Fixed 	353 installed             	6 exploits 	en: 0, ja: 0 alerts 
+bids-brainiak@host           	Total: 503 (High:118 Medium:358 Low:27 ?:0)  	0/503 Fixed 	258 installed             	16 exploits	en: 0, ja: 14 alerts
+bids-broccoli@host           	Total: 117 (High:33 Medium:80 Low:4 ?:0)     	0/117 Fixed 	252 installed, 0 updatable	9 exploits 	en: 0, ja: 9 alerts 
+bids-cpac@host               	Total: 535 (High:81 Medium:418 Low:36 ?:0)   	0/535 Fixed 	599 installed             	13 exploits	en: 0, ja: 1 alerts 
+bids-dparsf@host             	Total: 757 (High:129 Medium:588 Low:40 ?:0)  	0/757 Fixed 	506 installed             	11 exploits	en: 0, ja: 5 alerts 
+bids-example@host            	Total: 683 (High:105 Medium:544 Low:34 ?:0)  	0/683 Fixed 	527 installed             	8 exploits 	en: 0, ja: 0 alerts 
+bids-fibredensity@host       	Total: 868 (High:160 Medium:657 Low:51 ?:0)  	0/868 Fixed 	565 installed             	14 exploits	en: 0, ja: 1 alerts 
+bids-freesurfer@host         	Total: 192 (High:38 Medium:142 Low:12 ?:0)   	0/192 Fixed 	297 installed             	3 exploits 	en: 0, ja: 0 alerts 
+bids-hcppipelines@host       	Total: 620 (High:112 Medium:450 Low:34 ?:24) 	0/620 Fixed 	377 installed             	8 exploits 	en: 0, ja: 2 alerts 
+bids-hyperalignment@host     	Total: 1433 (High:221 Medium:1128 Low:84 ?:0)	0/1433 Fixed	814 installed             	23 exploits	en: 0, ja: 14 alerts
+bids-magetbrain@host         	Total: 126 (High:30 Medium:80 Low:16 ?:0)    	0/126 Fixed 	167 installed             	5 exploits 	en: 0, ja: 0 alerts 
+bids-mindboggle@host         	Total: 569 (High:109 Medium:410 Low:36 ?:14) 	0/569 Fixed 	276 installed             	11 exploits	en: 0, ja: 0 alerts 
+bids-mrtrix@host             	Total: 158 (High:21 Medium:124 Low:13 ?:0)   	0/158 Fixed 	346 installed             	1 exploits 	en: 0, ja: 0 alerts 
+bids-ndmg@host               	Total: 782 (High:138 Medium:599 Low:45 ?:0)  	0/782 Fixed 	537 installed             	11 exploits	en: 0, ja: 1 alerts 
+bids-niak@host               	Total: 1420 (High:208 Medium:1135 Low:77 ?:0)	0/1420 Fixed	889 installed             	22 exploits	en: 0, ja: 9 alerts 
+bids-nipypelines@host        	Total: 451 (High:87 Medium:319 Low:28 ?:17)  	0/451 Fixed 	157 installed             	7 exploits 	en: 0, ja: 1 alerts 
+bids-oppni@host              	Total: 723 (High:118 Medium:561 Low:44 ?:0)  	0/723 Fixed 	762 installed             	15 exploits	en: 0, ja: 0 alerts 
+bids-pold-fmriprep@host      	Total: 393 (High:61 Medium:311 Low:21 ?:0)   	0/393 Fixed 	443 installed             	4 exploits 	en: 0, ja: 0 alerts 
+bids-poldracklab@host        	Total: 332 (High:53 Medium:259 Low:20 ?:0)   	0/332 Fixed 	359 installed             	4 exploits 	en: 0, ja: 0 alerts 
+bids-rshrf@host              	Total: 3 (High:2 Medium:1 Low:0 ?:0)         	3/3 Fixed   	35 installed, 6 updatable 	0 exploits 	en: 0, ja: 0 alerts 
+bids-signal@host             	Total: 473 (High:90 Medium:366 Low:17 ?:0)   	0/473 Fixed 	241 installed             	12 exploits	en: 0, ja: 14 alerts
+bids-spm@host                	Total: 235 (High:66 Medium:146 Low:23 ?:0)   	0/235 Fixed 	348 installed             	6 exploits 	en: 0, ja: 0 alerts 
+bids-tracula@host            	Total: 683 (High:105 Medium:544 Low:34 ?:0)  	0/683 Fixed 	530 installed             	8 exploits 	en: 0, ja: 0 alerts 
+clever_feynman@host          	Total: 1 (High:1 Medium:0 Low:0 ?:0)         	1/1 Fixed   	16 installed, 2 updatable 	0 exploits 	en: 0, ja: 0 alerts 
+host                         	Total: 323 (High:41 Medium:260 Low:21 ?:1)   	0/323 Fixed 	2188 installed            	3 exploits 	en: 0, ja: 0 alerts 
+
+Warning for bids-broccoli@host: [Failed to scan updatable packages:
+    github.com/future-architect/vuls/scan.(*redhatBase).scanPackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:246
+  - Failed to SSH: execResult: servername: bids-broccoli@host
+      cmd: /usr/bin/ssh -tt -o StrictHostKeyChecking=yes -o LogLevel=quiet -o ConnectionAttempts=3 -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=/root/.vuls/controlmaster-%r-host.%p -o Controlpersist=10m bhupinder@172.17.0.1 -p 22 -i /root/.ssh/rsa_nopass -o PasswordAuthentication=no stty cols 1000; docker exec --user 0 e13874544862 /bin/sh -c 'repoquery --all --pkgnarrow=updates --qf='%{NAME} %{EPOCH} %{VERSION} %{RELEASE} %{REPO}''
+      exitstatus: 127
+      stdout: %{EPOCH}: repoquery: command not found
+    
+      stderr: 
+      err: %!s(<nil>):
+    github.com/future-architect/vuls/scan.(*redhatBase).scanUpdatablePackages
+        /go/src/github.com/future-architect/vuls/scan/redhatbase.go:378]
+

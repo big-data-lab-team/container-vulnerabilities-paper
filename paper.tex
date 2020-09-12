@@ -158,22 +158,21 @@ that vulnerabilities are often due to outdated
 packages~\cite{zerouali2019relation}.
 
 In this study, we focus on the vulnerability analysis of container images
-used in HPC clusters.  
-Our research questions are the following:
+used in HPC clusters, focussing on the following questions:
 
-\textit{RQ1: What is the current amount of known vulnerabilities in
+\textit{What is the current amount of known vulnerabilities in
 container images deployed on HPC clusters?} Vulnerabilities are possible
 attack vectors that may seriously compromise the security of HPC clusters
 and the integrity of user data. We report vulnerability analyses produced
 by four popular image scanning tools, Anchore, Vuls, Clair, and Stools.
 
-\textit{RQ2: Can the amount of vulnerabilities be reduced by updating the images?}  
+\textit{Can the amount of vulnerabilities be reduced by updating the images?}  
 For many reasons related to reproducibility and the life-cycle of research
 projects, container images deployed on HPC clusters often include outdated
 software. We report on the effect of software updates on the vulnerability
 analysis of RQ1.
 
-\textit{RQ3: Can the amount of vulnerabilities be reduced by minifying the images?} 
+\textit{Can the amount of vulnerabilities be reduced by minifying the images?} 
 Container images often include more software packages than required for a
 typical analysis. We report on the impact of this additional software on
 the presence of vulnerabilities.
@@ -559,6 +558,8 @@ The vulnerabilities detected only by Anchore (region
 % So, vulnerability detection in header files
 % is irrelevant in this case.
 
+
+% REGION (7)
 % \textbf{Ubuntu vulnerabilities with status as “Not-affected”:} Vuls reports vulnerabilities that have status
 % as "not-affected" in the Ubuntu database. It means that according to Ubuntu the image is not affected
 % by the particular vulnerability. In other words, Vuls reports vulnerabilities that it should not have been reported.
@@ -566,6 +567,7 @@ The vulnerabilities detected only by Anchore (region
 % in the package Cups. However, upon checking the Ubuntu vulnerability database, we find that package Cups in Trusty is not
 % affected by this vulnerability.
 
+% HOW ABOUT VULS?
 % \textbf{Ubuntu vulnerabilities with status as "Ignored (reached end-of-life)":}
 % Some vulnerabilities are ignored in Ubuntu 14.04 LTS as it reached end-of-life. 
 % However, in Ubuntu 14.04 ESM release, these vulnerabilities may or may not be present.
@@ -579,19 +581,18 @@ The vulnerabilities detected only by Anchore (region
 % release so Clair also does not report it. As Ubuntu 14.04 LTS release is present inside the images,
 % Clair's referring to Ubuntu 14.04 ESM release vulnerability database is incorrect.
 
-
-
-
-
+% REGION (4)
 % \textbf{Vulnerabilities not present in Ubuntu 14.04 ESM release:} These vulnerabilities are not present in Ubuntu 14.04 ESM so they 
 % are not detected by Clair but they affect Ubuntu 14.04 LTS, and hence detected by Vuls and Anchore. The CVE-2017-13758 is an example
 % of such vulnerabilities.
 
+% CHECK THAT
 % \textbf{Misses:} Clair and Vuls
 % missed vulnerabilities that they should have detected. For example, the CVE-2016-9082 
 % is present in package Cairo in Xenial release and it is not detected by Clair.
 % Vuls also missed vulnerabilities such as CVE-2019-5094.
 
+% REGION (3)
 % \textbf{Wrong Detections:} 
 % Some vulnerabilities are not linked to Ubuntu 14.04 LTS which is 
 % present inside the image, however, Clair have reported such vulnerabilities.
@@ -608,6 +609,7 @@ The vulnerabilities detected only by Anchore (region
 % 			      Consequently, these discrepancies, even small, are sufficient to change the detection of
 % 			      the scanners.
 
+% REGION (6)
 % \textbf{Epoch bug:} There is a bug in the Anchore scanner due to which some vulnerabilities are 
 % 		not detected by Anchore. This bug gets triggered when a package’s version have epoch 
 % 		(1:3.3.9-1ubuntu2.3) in it. For example, CVE-2018-1125 in Procps package is not

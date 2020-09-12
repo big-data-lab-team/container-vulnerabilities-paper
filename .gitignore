@@ -7,3 +7,6 @@ paper.fdb_latexmk
 Figures/by_status.pdf
 Figures/update.pdf
 Figures/update_and_minif.pdf
+Figures/by_status*
+.ipynb_checkpoints
+paper.synctex.gz
