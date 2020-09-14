@@ -87,30 +87,30 @@ ar,shots47s/bids-fmriprep-1.2.3,,,,453
   
 \begin{document}
 
-\author[1]{Bhupinder Kaur}
-\author[1]{Mathieu Dugr\'e}
-\author[1]{Aiman Hanna}
-\author[1]{Tristan Glatard}
+\author{Bhupinder Kaur}
+\author{Mathieu Dugr\'e}
+\author{Aiman Hanna}
+\author{Tristan Glatard}
 
-\affil[1]{Department of Computer Science and Software Engineering, Concordia University, Montreal, Canada}
+\affil{Department of Computer Science and Software Engineering, Concordia University, Montreal, Canada}
 
 \maketitle
 
 \begin{abstract}
-Software containers greatly facilitate the deployment of scientific
-data analyses on high-performance computing (HPC) infrastructures, due
-to their positive impact on the portability, deployment, and
-reproducibility of computations. However, container images often
-contain outdated or unnecessary software packages, which increases the
-number of security vulnerabilities present in the images, and widens
-the attack surface for the entire infrastructure. This paper presents a
-vulnerability analysis of container images for scientific data
-analysis. We analyze container images with four vulnerability scanners,
-focusing on the use case of neuroscience data analyses, and quantifying
-the effect of images updates and minification on the number of
-vulnerabilities. We conclude with recommendations on how to build
-container images with a reduced amount of vulnerabilities.
-
+Software containers greatly facilitate the deployment and reproducibility
+of scientific data analyses on high-performance computing clusters
+(HPC). However, container images often contain outdated or unnecessary
+software packages, which increases the number of security vulnerabilities
+in the images and widens the attack surface of the infrastructure. This
+paper presents a vulnerability analysis of container images for scientific
+data analysis. We analyze container images with four vulnerability
+scanners, focusing on the use case of neuroscience data analyses, and
+quantifying the effect of images updates and minification on the number of
+vulnerabilities. We find that container images used for data analysis
+contain hundreds of vulnerabilities, that software updates remove about two
+thirds of these vulnerabilities, and that removing unused packages is also
+effective. We conclude with recommendations on how to build container
+images with a reduced amount of vulnerabilities.
 
 \end{abstract}
 
@@ -120,82 +120,66 @@ Containers; Docker; Singularity; Security Vulnerabilities; Neuroimaging.
 
 \section{Introduction}
 
-% Containers are popular on HPC, in particular Singularity
 Software containers have emerged has an efficient solution to deploy
-scientific data analyses on High Performance Computing (HPC) clusters, due
-to their portability, ease of use, and limited overhead. The
+scientific data analyses on HPC clusters, due
+to their portability, ease of use, and limited overhead. On HPC systems, the
 Singularity~\cite{kurtzer2017singularity} framework is often preferred to
-Docker\footnote{\url{http://docker.com}} for HPC deployments, due to its
-secure handling of multi-user environments, and its convenient support for
+\href{http://docker.com}{Docker} because of its
+secure handling of multi-user environments and convenient support for
 Docker images. Singularity is now available in dozens of HPC
-clusters around the globe, and used routinely for Big Data analyses.
+clusters around the world and routinely used for Big Data analysis.
 
-% Containers are meant to isolate applications from the host, but security
-% remains an issue
-Leveraging core features of the Linux kernel such as namespaces, control
-groups and chroot, containers isolate processes from the host computer,  
-and control the memory, CPU, network and file-system resources assigned to
-them. Nevertheless, containers still share the kernel, mounted file systems
-and some devices with the host, which raises security
-issues~\cite{martin2018docker, sultan2019container, combe2016docker} and
-opens the door to privilege escalation, denial of service, information
-leak and other types of attacks~\cite{gantikow2016providing}. 
+Taking advantage of core Linux kernel features such as namespaces, control
+groups and chroot, containers isolate processes from the host computer, and
+control the memory, CPU, network and file-system resources assigned to
+them. However, containers still share the kernel, mounted file systems and
+some devices with the host, which raises security
+concerns~\cite{martin2018docker, sultan2019container, combe2016docker} and
+opens the door to privilege escalation, denial of service, information leak
+and other types of attacks~\cite{gantikow2016providing}. 
 
+Container images typically include full operating system distributions in
+addition to data analysis software and their dependencies. They are rarely
+updated because there is concern that software updates will interfere with
+the results~\cite{gronenschild2012effects, glatard2015reproducibility}.
+Images also typically include more dependencies than required, to make them
+easier to reuse between experiments. As a result, over 30\% of official
+images in DockerHub have been shown to contain high priority security
+vulnerabilities~\cite{gummaraju2015over}, images on average contain over
+180 vulnerabilities~\cite{Shu2017}, and vulnerabilities are often caused by
+outdated packages~\cite{zerouali2019relation}.
 
-% Container images, our study
-Container images often include nearly complete operating-system
-distributions in addition to the data analysis software and its required
-dependencies. Images are rarely updated, as they are often built once for
-the entire duration of an analysis, to avoid results perturbations due to
-software updates~\cite{gronenschild2012effects,
-glatard2015reproducibility}. Images also commonly include more dependencies
-than required by a specific analysis, to facilitate reusability across
-experiments. As a result, it has been shown that over 30\% of official
-images in DockerHub contain high priority security
-vulnerabilities~\cite{gummaraju2015over}, that both official and community
-images contain more than 180 vulnerabilities on average~\cite{Shu2017}, and
-that vulnerabilities are often due to outdated
-packages~\cite{zerouali2019relation}.
+In this study, we focus on the vulnerabilities present in container images
+deployed on HPC clusters for scientific data analysis, and we answer the
+following questions:
 
-In this study, we focus on the vulnerability analysis of container images
-used in HPC clusters, focussing on the following questions:
-
-\textit{What is the current amount of known vulnerabilities in
+\textit{What is the current amount of vulnerabilities in
 container images deployed on HPC clusters?} Vulnerabilities are possible
-attack vectors that may seriously compromise the security of HPC clusters
-and the integrity of user data. We report vulnerability analyses produced
-by four popular image scanning tools, Anchore, Vuls, Clair, and Stools.
+attack vectors that can seriously compromise the security of HPC clusters
+and the integrity of user data. We report vulnerability scans produced
+by four popular image scanning tools: Anchore, Vuls, Clair, and Stools.
 
 \textit{Can the amount of vulnerabilities be reduced by updating the images?}  
-For many reasons related to reproducibility and the life-cycle of research
+For many reasons related to reproducibility and lifecycle of research
 projects, container images deployed on HPC clusters often include outdated
-software. We report on the effect of software updates on the vulnerability
-analysis of RQ1.
+software. We report on the effect of software updates on the amount of
+vulnerabilities found in images.
 
-\textit{Can the amount of vulnerabilities be reduced by minifying the images?} 
-Container images often include more software packages than required for a
-typical analysis. We report on the impact of this additional software on
+\textit{Can the amount of vulnerabilities be reduced by minifying images?} 
+Container images often include more software packages than necessary for 
+typical analysis. We report on the impact of unused software packages on
 the presence of vulnerabilities.
 
-We answer these questions by taking the particular example of neuroimaging,
-a domain that has entered the Big Data era as many other
-ones~\cite{van2014human}. The next section describes the materials and
-tools used in the experiments, including container images and image
-scanners. We then describe our image update and minification methodology to
-reduce vulnerabilities. Results present the detected vulnerabilities in
-container images, explain observed discrepancies between scanners, and
-report on the efficiency of image update and size reduction. As a
-conclusion, we provide a set of image creation guidelines for a more secure
-deployment on HPC clusters.
-
-
-% We focus on the analysis of container images
-% present in BIDS apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques}, two containerized
-% application frameworks commonly used in neuroimaging. 
-
-
-
-
+We answer these questions through the example of neuroimaging, a field that
+has entered the era of Big Data as many others~\cite{van2014human}. The
+following section describes the materials and tools used in the
+experiments, including container images and image scanners. We then
+describe our methodology for updating and minifying images to reduce
+vulnerabilities. The results present the vulnerabilities detected in container
+images, quantify the effectiveness of updating and minifying images, and
+explain the differences observed between scanners. In conclusion, we
+provide a set of image creation guidelines for a more secure deployment of
+containers on HPC clusters.
 
 \section{Materials and Tools}
 
@@ -518,7 +502,7 @@ The vulnerabilities detected only by Anchore (region
 	by the different scanners. The Jaccard coefficients between the sets of
 	detected vulnerabilities are quite low, showing important discrepancies
 	between the scanners: Jaccard(Anchor, Clair) = 0.59, Jaccard(Anchore, Vuls) =
-	0.59, Jaccard(Vuls, Clair) = 0.82. Two Ubunty 17.04 images weren't included in this comparison as they cannot be scanned by Vuls. \todo{add Centos images}}
+	0.59, Jaccard(Vuls, Clair) = 0.82. Two Ubuntu 17.04 images weren't included in this comparison as they cannot be scanned by Vuls. \todo{add Centos images}}
 \end{figure}
 
 % In most cases,
