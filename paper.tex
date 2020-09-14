@@ -138,7 +138,7 @@ concerns~\cite{martin2018docker, sultan2019container, combe2016docker} and
 opens the door to privilege escalation, denial of service, information leak
 and other types of attacks~\cite{gantikow2016providing}. 
 
-Container images typically include full operating system distributions in
+Container images typically include full operating system (OS) distributions in
 addition to data analysis software and their dependencies. They are rarely
 updated because there is concern that software updates will interfere with
 the results~\cite{gronenschild2012effects, glatard2015reproducibility}.
@@ -185,9 +185,9 @@ containers on HPC clusters.
 
 To detect security vulnerabilities
 in container images and examine the effect of different
-manipulations on these images, we used container
+manipulations on those images, we used container
 images from two popular application frameworks, as well as
-four of the main image scanners.
+four of the major image scanners.
 
 \subsection{Container Images}
 
@@ -195,26 +195,23 @@ We scanned all container images available at the time of this study on two conta
 used in neuroscience: BIDS
 apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques},
 totalling
-44 container images.
-Out of these 44 images, 26 were obtained from BIDS apps 
-and 18 from Boutiques. At the time of the study, BIDS apps had 27 images,
+44 container images: 26 from BIDS apps, and 18 from Boutiques. At the time of the study, BIDS apps had 27 images,
 out of which one wasn't available on DockerHub. Boutiques had 49 images,
 %listed using Boutiques \texttt{bosh search} command,
 however, only 23 unique images were listed, out of which 3 couldn't be retrieved and 2
 were already included in BIDS apps. All the final 26 images
 from BIDS apps were Docker images, whereas Boutiques contained 18 Docker images
-and 6 Singularity images. \tristan{check the numbers, we have 38 images in the results}
+and 6 Singularity images. \tristan{Check the numbers: that makes 24 Boutiques images, not 18.}
 
 \subsection{Image Scanners}
 
-We used four popular image scanners, namely Anchore~\cite{github_2019},
-Vuls~\cite{future-architect_2019}, Clair~\cite{arminc_2019} and
-Singularity Container Tools --- Stools~\cite{stools}. Anchore, Vuls and Clair support Docker
-images while Stools support Singularity. 
+We used four popular image scanners, namely Anchore,
+Vuls and Clair, supporting Docker, and
+Singularity Container Tools --- Stools~\cite{stools}, supporting Singularity. 
 
-Anchore is an end-to-end, open-source container security platform. It
-analyzes container images and lists OS
-packages, non-OS packages (Python, Java, Gem, and Npm), and files.
+\href{https://github.com/anchore/anchore-engine}{Anchore} is an end-to-end, open-source container security platform. It
+analyzes container images and lists vulnerable OS
+packages, non-OS packages (Python, Java, Gem, and npm), and files.
 In our experiments, we use Anchore Engine version 0.5.0 through Docker image \texttt{anchore/anchore-engine:v0.5.0}, and
 Anchore vulnerability database version 0.0.11.
 
@@ -233,21 +230,22 @@ Anchore vulnerability database version 0.0.11.
  \hline
 \end{tabular}
 \caption{Vulnerability databases used by scanners for different OS distributions}
-\label{database}
+\label{table:databases}
 \end{table*}
 
-Vuls is an open-source vulnerability scanner for Linux and FreeBSD. It
+\href{https://github.com/future-architect/vuls}{Vuls} is an open-source vulnerability scanner for Linux and FreeBSD. It
 offers both static and dynamic scanning, and both local and remote
 scanning. In our experiments,we used Vuls 0.9.0, executed through Docker image
 \texttt{vuls/vuls:0.9.0} in remote dynamic mode.
 
-Clair (\url{https://github.com/quay/clair}) is an open-source and extensible
-vulnerability scanner for Docker and appc container images, developed by
-CoreOS (now Container Linux), a Linux distribution to deploy container
-clusters. Clair has a client-server architecture, in which the server
-scans Docker images layer by layer and maintains a database of vulnerabilities. We used Clair through Clair-scanner
-(\url{https://github.com/arminc/clair-scanner}), a tool to facilitate the testing
-of container images against a local Clair server. 
+\href{https://github.com/quay/clair}{Clair} is an open-source and
+extensible vulnerability scanner for Docker and appc container images,
+developed by CoreOS (now Container Linux), a Linux distribution to deploy
+container clusters. Clair has a client-server architecture, in which the
+server scans Docker images layer by layer and maintains a database of
+vulnerabilities. We used Clair through
+\href{https://github.com/arminc/clair-scanner}{Clair-scanner}, a tool to
+facilitate the testing of container images against a local Clair server. 
 % Clair-scanner scans the image,
 % prepares a list of vulnerabilities, compares that list against a
 % whitelist, and flags vulnerabilities that are not present in the whitelist.
@@ -263,7 +261,7 @@ Docker image \texttt{arminc/clair-local-scan:v2.0.6}. For the vulnerability
 database, we use Docker image \texttt{arminc/clair-db:latest}, last
 updated on 2019-09-18.
 
-Singularity Tools (Stools)
+\href{https://github.com/singularityhub/stools}{Singularity Tools} (Stools)
 are an extension of Clair for Singularity images. Stools
 exports Singularity images to \texttt{tar.gz} format, acting as a single layer Docker image
 to circumvent the Docker-specific requirements in the Clair API.
@@ -279,38 +277,40 @@ To scan Singularity images, we followed the steps mentioned in
 
 \subsection{Vulnerability Databases}
 
-Scanners refer to two types of vulnerability databases. The first one is
-the Open Vulnerability and Assessment Language (OVAL) database, an
-international open standard that supports various OS distributions
-including Ubuntu, Debian and Centos but not Alpine. The second one are vulnerability
-databases from specific OS distributions, such as Alpine-SecDB, Debian
-Security Bug Tracker, Ubuntu CVE Tracker, or Red Hat Security Data. OS
-distributions often assign a status to each vulnerability, to keep track of
-required and available security fixes in different versions of the
-distribution. Figure~\ref{database} shows the vulnerabilities databases used by each scanner 
-by OS distribution. Vuls uses OVAL databases for all distributions except Alpine, since Alpine is not available in OVAL. On the contrary, 
-Clair exclusively refers to distribution-specific databases. Anchore uses OVAL only for CentOS \tristan{why?}. It is also worth noting that there is
-no vulnerability data for Ubuntu 17.04 and 17.10 distributions in the OVAL database, since these distributions have reached end of life, meaning that images
-with these distributions cannot be scanned with Vuls \tristan{why doesn't vuls use Ubuntu CVE tracker?}.
+Table~\ref{table:databases} shows the vulnerabilities databases used by
+each scanner by OS distribution. Scanners refer to two types of
+vulnerability databases. The first one is the Open Vulnerability and
+Assessment Language (OVAL) database, an international open standard that
+supports various OS distributions including Ubuntu, Debian and Centos but
+not Alpine. The second one are vulnerability databases from specific OS
+distributions, such as Alpine-SecDB, Debian Security Bug Tracker, Ubuntu
+CVE Tracker, or Red Hat Security Data. OS distributions often assign a
+status to each vulnerability, to keep track of required and available
+security fixes in different versions of the distribution. Vuls uses OVAL
+databases for all distributions except Alpine, since Alpine is not
+available in OVAL. On the contrary, Clair exclusively refers to
+distribution-specific databases. Anchore uses OVAL only for CentOS
+\tristan{any idea why?}. It is also worth noting that there is no vulnerability data
+for Ubuntu 17.04 and 17.10 distributions in the OVAL database, since these
+distributions have reached end of life, meaning that images with these
+distributions cannot be scanned with Vuls \tristan{why doesn't vuls use
+Ubuntu CVE tracker?}.
 \tristan{In Vuls, what happens when 2 databases are used?}
 
 Anchore also refers to National Vulnerability Database (NVD) to get
 metadata of vulnerabilities. Apart from this, like Anchore, Vuls also
-refers NVD database for getting vulnerability metadata \tristan{same
-question}. \tristan{why is it not in the table?}.
+refers NVD database for getting vulnerability metadata \tristan{why is NVD not in the table?}.
 
-For Centos images, Anchore and Clair gives scanning results using Red Hat
-Security Advisory (RHSA) identifiers for Centos images, whereas Vuls uses
-CVE identifiers. RHSA identifiers specifies security patches that are
-pending to apply and CVE identifiers specifies vulnerabilities that exist
-in the system. We mapped RHSA identifiers to corresponding CVE identifiers,
-to allow for a comparison between scanners.
+For CentOS images, Anchore and Clair give scanning results using Red Hat
+Security Advisory (RHSA) identifiers, whereas Vuls uses the Common
+Vulnerabilities and Exposures (CVE) identifiers used in OVAL. We mapped
+RHSA identifiers to corresponding CVE identifiers, to allow for a
+comparison between scanners.
 
-Different vulnerabilities may be
-reported by scanners if scanning experiments take place on different dates.
-To avoid such discrepancies, we froze the vulnerability
-databases used by these scanners as of 2019-09-25, when we initiated our
-experiments.\tristan{this contradicts the date used for Clair}
+Different vulnerabilities may be reported by scanners if scanning
+experiments take place on different dates. To avoid such discrepancies, we
+froze the vulnerability databases used by these scanners as of 2019-09-25
+\tristan{this contradicts the date mentioned in the paragraph on Clair}.
 
 \subsection{Image Update}
 
@@ -324,53 +324,33 @@ OS packages. \tristan{what was the date at which update was run?}
 
 \subsection{Image Minification}
 
-%We revert to image minimization to reduce the number of vulnerabilities without affecting results reproducibility.
-%An interesting choice to do so would be to use 
-%Neurodocker~\cite{neurodocker}.
-%This tool traces and deletes unnecessary files.
-%However, it does not affect the number of installed packages.
-%Since image scanners report vulnerabilities according to the installed
-%packages. Therefore, after
-%minimization the same number of vulnerabilities is still reported.
-%Consequently, we need to reduce the number of installed packages
-%in the images by deleting unnecessary packages. For that, it is required to figure
-%out which packages we need for the pipeline to function properly.
-
-\todo{mention neuro docker}
-
 A second approach to reduce the number of vulnerabilities in the images is
 to remove unnecessary packages, an operation potentially specific to each
 analysis. We used the open-source \reprozip tool~\cite{rampin2016reprozip}
-to capture the list of packages used by an analysis. For this purpose,
-\reprozip first captures the list of files involved in the analysis,
-through system call interception, then retrieves the list of associated
-software packages, by querying the package manager. We extend this list
-with a passlist of packages required for the system to function
-\tristan{can you give an example?}, and with all the dependencies of the
-required packages, retrieved using Debtree~\cite{debtree} (Repoquery
-(\url{https://linux.die.net/man/1/repoquery}) could be used in RPM-based
-distributions instead). Our minification script, available
-\href{https://github.com/big-data-lab-team/container-vulnerabilities-paper/tree/master/Scripts/minification}{here},
-installs \reprozip in the image to minify, runs an analysis to collect a
-\reprozip trace, and finally deletes all unnecessary packages. 
+to capture the list of packages used by an analysis. \reprozip first
+captures the list of files involved in the analysis, through system call
+interception, then retrieves the list of associated software packages, by
+querying the package manager. We extend this list with a passlist of
+packages required for the system to function \tristan{can you give an
+example?}, and with all the dependencies of the required packages,
+retrieved using
+\href{http://manpages.ubuntu.com/manpages/xenial/man1/debtree.1.html}{Debtree}.
+\href{https://linux.die.net/man/1/repoquery}{Repoquery} could be used in
+RPM-based distributions instead. Our minification script, available
+\href{https://github.com/big-data-lab-team/container-vulnerabilities-paper/tree/master/Scripts/minification}{here}
+\tristan{Add info in README, clean up code wherever needed}, installs
+\reprozip in the image to minify, runs an analysis to collect a \reprozip
+trace, and finally deletes all unnecessary packages. We had used the
+\href{https://github.com/ReproNim/neurodocker}{Neurodocker} tool initially, but it did not have any impact on the detected
+vulnerabilities because it was removing unused files from the file system
+directly instead of using the package manager \tristan{Please check this last sentence}.
 
 Using this approach, we minified five Debian- or Ubuntu-based BIDS app images,
 using basic analysis examples found in the applications documentation.
 
-% \subsection{Hybrid Approach}
-
-% Following the two previous approaches, we employ a hybrid approach, where
-% we combine both update and size reduction processes in an attempt to
-% lessen number of vulnerabilities or to test the effect of
-% combining two approaches. To allow for that, we first update all packages in
-% the image, then delete all unnecessary packages. Applying these processes in reverse
-% may reduce the needed work; however this is not possible in all cases. For instance,
-% some packages, such as \texttt{apt-transport-https}, are required to fetch updates, deleting these packages
-% ahead of time will disallow the update process to take place.
-
 \section{Results}
 
-Figure~\ref{fig:vulnerabilities} summarizes our results. All the collected
+Figure~\ref{fig:vulnerabilities} presents our results. All the collected
 data are available in our GitHub repository at
 \url{https://github.com/big-data-lab-team/container-vulnerabilities-paper}
 with a Jupyter notebook to generate the figures. 
@@ -380,16 +360,21 @@ with a Jupyter notebook to generate the figures.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{Figures/results.pdf}
-\caption{\label{fig:vulnerabilities} Number of vulnerabilities detected
-by Anchore in container images. \textbf{(A)} Number of vulnerabilities
-by container image and severity. \textbf{(B)} Combined
-effect of image minification and package update on 5 container images. \textbf{(C, D)}
-Number of vulnerabilities by number of packages, before and after
-package update.}
+\caption{\label{fig:vulnerabilities} Number of vulnerabilities detected by
+Anchore in container images. \textbf{(A)} Number of vulnerabilities by
+container image and severity, showing hundreds of detected vulnerabilities
+per image (mean: 468). \textbf{(B)} Effect of image minification and
+package update on 5 container images, showing that both techniques are
+complementary \tristan{image f has 0 vulnerabilities after update and minification, is it really the case?
+it is also weird that minification before update has almost no effect, but it removes all the remaining vulnerabilities after update}.
+ \textbf{(C)} Number of vulnerabilities by number of
+packages, showing a strong linear relationship. \textbf{(D)} Number of
+vulnerabilities by number of packages \emph{after package update}, showing that software updates 
+importantly reduce the number of detected vulnerabilities.}
 \end{figure*}
 
-A substantial number of vulnerabilities were found in the tested container
- images (Fig~\ref{fig:vulnerabilities}-\textbf{A}), with an average of 466 vulnerabilities
+An important amount of vulnerabilities were found in the tested container
+ images (Fig~\ref{fig:vulnerabilities}-\textbf{A}), with an average of 468 vulnerabilities
   per image and a median of 372. In comparison, no vulnerabilities were found in base
  Docker images \texttt{ubuntu:20.04} and \texttt{centos:7} after package
  update. Moreover, a significant fraction of detected vulnerabilities are
@@ -400,11 +385,11 @@ A substantial number of vulnerabilities were found in the tested container
  arbitrary code in the container, by crafting responses to specific network
  requests. The OS distribution is reported only for illustration purposes,
  as no obvious association between the OS distribution and numbers of
- vulnerabilities could be found.
+ vulnerabilities was observed \tristan{note to self: this isn't true for Alpine}.
 
 Unsuprisingly, a strong linear relationship is found between the number of
 detected vulnerabilities and the number of packages present in the
-container image (Fig~\ref{fig:vulnerabilities}-\textbf{C}, r=0.83,
+image (Fig~\ref{fig:vulnerabilities}-\textbf{C}, r=0.83,
 $p\textless10^{-10}$). On average, 1.8 vulnerabilities are introduced for
 each new package installation. This observation motivates a systematic
 review of software dependencies by application developers, to avoid
@@ -416,13 +401,13 @@ average, although data is too scarce to conclude.
 \subsection{Effect of image udpate}
 
 Updating container images reduces the number of vulnerabilities by package
-by a factor of 3 on average, leading to an extra 0.6 vulnerabilities by
+by a factor of 3 on average, resulting in only 0.6 extra vulnerabilities by
 package (Fig~\ref{fig:vulnerabilities}-\textbf{D}, r=0.81,
 $p\textless10^{-7}$). Six container images are missing on this figure; they
 could not be updated since their OS distributions reached end of life
 \tristan{give more details, one of these images is centos 7 which didnt
 reach EOL}. In spite of the associated reproducibility challenges, updating
-packages therefore appears as a very good way to avoid vulnerabilities. It
+packages therefore appears as a very efficient way to avoid vulnerabilities. It
 is not an ultimate solution though, as substantial numbers of
 vulnerabilities remain.
 
@@ -444,7 +429,7 @@ For some container images, such as image \textbf{S}, minification removes more
 than 70\% of the detected vulnerabilities. For other images, such as
 image \textbf{f}, it only reduces the number of vulnerabilities by less than 1\%.
 The effect of minification stems from the number of packages
-than can be removed, which varies greatly across images. For
+that can be removed, which varies greatly across images. For
 instance, images \textbf{f} and \textbf{a} have a large number of packages,
 but the last majority of them is required by the analysis, which makes
 minification less useful. In other cases, a limited number of unnecessary packages contain 
@@ -456,7 +441,7 @@ and kernel headers reduced the number of vulnerabilities by an important fractio
 
 Package update and image minification remove different types of
 vulnerabilities. The former is efficient against vulnerabilities that have
-been fixed by the package maintainers, while the latter targets unused
+been fixed by package maintainers, while the latter targets unused
 software. In four of the five tested images, we find that combining update
 and minification further reduces the number of vulnerabilities compared to
 using only one of these processes
@@ -466,21 +451,21 @@ minification seems to be dependent mostly on the effect of minification: if
 minification is useful, then it is beneficial to run it in combination with
 package update.
 
-\subsection{Discrepancies between scanners}
+\subsection{Differences between scanners}
 
-The results presented so far were obtained with Anchore, a popular
-container image scanning tool. We scanned the images with two other tools,
+The results presented so far were obtained with Anchore. We scanned the images with two other tools,
 Clair and Vuls, to evaluate the stability of our results. Important
 discrepancies were found between scanners (Fig~\ref{fig:venn}), in particular between Anchore
-and the other two, for which Jaccard coefficients are as low as 0.6, meaning
-that only 60\% of all the detected vulnerabilities are detected by both
-Anchore and the other scanner. Vuls and Clair appear to be in better
+and the other two scanners, for which Jaccard coefficients as low as 0.6 were found, meaning
+that scanning results only overlapped by 60\%. Vuls and Clair appear to be in better
 agreement, with a Jaccard coefficient of 0.8.
 
 % where do the discrepancies come from?
-The vulnerabilities detected only by Anchore (region
-\textbf{(1)} in Fig~\ref{fig:venn}) are all in the development package
-(headers) of the C library (\texttt{linux-libc-dev} in Ubuntu). 
+The vulnerabilities detected by Anchore only (region \textbf{(1)} in
+Fig~\ref{fig:venn}) are all in the development package (headers) of the C
+library (\texttt{linux-libc-dev} in Ubuntu). \tristan{not all in fact... I
+wasn't sure how to interpret all these differences (see last section in the
+notebook), let's discuss it during a meeting.}
 
 
 % \begin{table*}
@@ -498,11 +483,13 @@ The vulnerabilities detected only by Anchore (region
 % 	\end{table*}
 	\begin{figure}
         \includegraphics[width=\columnwidth]{Figures/venn.pdf}
-	\caption{\label{fig:venn} Discrepancies in the vulnerabilities detected
+	\caption{\label{fig:venn} Differences between the vulnerabilities detected
 	by the different scanners. The Jaccard coefficients between the sets of
 	detected vulnerabilities are quite low, showing important discrepancies
-	between the scanners: Jaccard(Anchor, Clair) = 0.59, Jaccard(Anchore, Vuls) =
-	0.59, Jaccard(Vuls, Clair) = 0.82. Two Ubuntu 17.04 images weren't included in this comparison as they cannot be scanned by Vuls. \todo{add Centos images}}
+	between the scanners: Jaccard(Anchore, Clair) = 0.59, Jaccard(Anchore, Vuls) =
+	0.59, Jaccard(Vuls, Clair) = 0.82. Two Ubuntu 17.04 images weren't
+	included in this comparison as they cannot be scanned by Vuls.
+	\tristan{add Centos images to the analysis using the notebook}}
 \end{figure}
 
 % In most cases,
@@ -832,10 +819,9 @@ choosing a base container image. OS distributions have very different life
 cycle durations, as long and short life cycles serve different purposes.
 For instance, among RedHat-based distributions Fedora release a new version
 every 6 months and provide maintenance for about a year, while CentOS
-releases every 3-5 years and provide maintenance for 10 years. Similarly,
+release every 3-5 years and provide maintenance for 10 years. Similarly,
 Ubuntu LTS (long-term support) distributions provide free security updates
-for 5 years, and Debian stable releases are maintained for 3 years (the
-Debian LTS project intends to extend this duration to 5 years). Commercial
+for 5 years, and Debian stable releases are maintained for 3 years. Commercial
 offers for extended maintenance periods are common. 
 \item \emph{Install packages, not files}. Vulnerability scanners such as
 Anchore, Clair or Vuls detect vulnerabilities from the list of packages
@@ -853,8 +839,8 @@ more practical for software developers to identify and remove unnecessary
 dependencies when they build containers, based on their knowledge of the
 application.
 \item \emph{Run image scanners during continuous integration.} Scanning
-container images cann be a cumbersome process (for instance, scanning the
-\todo{x} images involved in this study takes about \todo{y} hours) that
+container images can be a cumbersome process (for instance, scanning the
+38 images involved in this study takes about \todo{y} hours) that
 could be asynchronously executed during continuous integration (CI),
 through tools such as Travis CI or Circle CI. Including security scans in
 CI also allows developers to identify vulnerabilities quickly,
@@ -877,7 +863,7 @@ Several types of escalation attacks could be envisaged once remote
 attackers gain access to the container, in particular related to (1) using
 the resources allocated to the container for malicious use, such as storing
 data in the file system or using CPU cycles, resulting in denial of service
-for the user running the container, and possibly for other HPC users, and
+for the user running the container and possibly for other HPC users, and
 (2) attacking a host network service, for instance a scheduler or a file
 system daemon. Exploits in the host kernel to break out of the container
 are always possible but unlikely assuming that the host system is
@@ -885,21 +871,21 @@ maintained by professional system administrators.
 
 \section{Conclusion}
 
-Container images deployed on HPC clusters for scientific data analyses are
-likely to contain hundreds of security vulnerabilities, many of which are
-critical. In the short term, application software developers can address
-this issue by: (1) minifying container images, by using lightweight OS
-distributions and reducing software dependencies, and (2) applying regular
-security updates, which requires using OS distributions with long-term
-support. Longer term, data analysis pipelines would benefit from in-depth
-stability analysis, to ensure that analytical results are not affected by
-security updates.
+Most container images deployed on HPC clusters for scientific data analyses
+contain hundreds of security vulnerabilities, many of which are critical.
+In the short term, application software developers can address this issue
+by: (1) minifying container images, by using lightweight OS distributions
+and reducing software dependencies, and (2) applying regular security
+updates, which requires using OS distributions with long-term support.
+Longer term, data analysis pipelines would benefit from in-depth stability
+analysis, to ensure that analytical results are not affected by security
+updates.
 
 This conclusion is not an alarming message urging HPC administrators  
 to ban containers from their systems. User-controlled container images are
-just one of many end-user artifacts that could serve as attack vectors,
-and to our knowledge no attack has been described to exploit them. Other,
-more traditional types of attacks targeting user credentials or network
+just one of many end-user artifacts that could serve as attack vectors, and
+to our knowledge no attack has been described to exploit them. More
+traditional types of attacks targeting user credentials or network
 connections are likely to remain more common.
 
 \bibliography{bibliography}
