@@ -33,7 +33,7 @@
 \newcommand{\change}[2]{\color{cyan}Changes: #1\color{black}}
 \newcommand{\reprozip}[0]{ReproZip\xspace}
 \newcommand{\rom}[1]{\lowercase\expandafter{\romannumeral #1\relax}}
-\newcommand{\tristan}[1]{\color{blue}From Tristan: #1\color{black}}
+\newcommand{\tristan}[1]{\color{red}From Tristan: #1\color{black}}
 
 \renewcommand{\labelitemi}{$\textendash$}
 \title{An Analysis of Security Vulnerabilities in Container Images for Scientific Data Analysis}
@@ -207,7 +207,7 @@ and 6 Singularity images. \tristan{Check the numbers: that makes 24 Boutiques im
 
 We used four popular image scanners, namely Anchore,
 Vuls and Clair, supporting Docker, and
-Singularity Container Tools --- Stools~\cite{stools}, supporting Singularity. 
+Singularity Container Tools --- Stools, supporting Singularity. 
 
 \href{https://github.com/anchore/anchore-engine}{Anchore} is an end-to-end, open-source container security platform. It
 analyzes container images and lists vulnerable OS
@@ -299,7 +299,7 @@ Ubuntu CVE tracker?}.
 
 Anchore also refers to National Vulnerability Database (NVD) to get
 metadata of vulnerabilities. Apart from this, like Anchore, Vuls also
-refers NVD database for getting vulnerability metadata \tristan{why is NVD not in the table?}.
+refers to the NVD database for getting vulnerability metadata \tristan{why is NVD not in the table?}.
 
 For CentOS images, Anchore and Clair give scanning results using Red Hat
 Security Advisory (RHSA) identifiers, whereas Vuls uses the Common
@@ -387,7 +387,7 @@ An important amount of vulnerabilities were found in the tested container
  as no obvious association between the OS distribution and numbers of
  vulnerabilities was observed \tristan{note to self: this isn't true for Alpine}.
 
-Unsuprisingly, a strong linear relationship is found between the number of
+Unsurprisingly, a strong linear relationship is found between the number of
 detected vulnerabilities and the number of packages present in the
 image (Fig~\ref{fig:vulnerabilities}-\textbf{C}, r=0.83,
 $p\textless10^{-10}$). On average, 1.8 vulnerabilities are introduced for
@@ -398,7 +398,7 @@ distributions such as Alpine. Compared to Ubuntu and Debian distributions,
 CentOS images seem to have a lower number of vulnerabilities by package on
 average, although data is too scarce to conclude.
 
-\subsection{Effect of image udpate}
+\subsection{Effect of image update}
 
 Updating container images reduces the number of vulnerabilities by package
 by a factor of 3 on average, resulting in only 0.6 extra vulnerabilities by
@@ -803,7 +803,7 @@ relatively minor operation in a data analysis pipeline, such as a data
 format conversion, while the same functionality might be available in the
 existing dependencies of the pipeline, albeit in a less convenient way.
 \item \emph{Use lightweight base images such as Alpine Linux}. Base
-images often come with packages that are useful in personnal computers or
+images often come with packages that are useful in personal computers or
 servers, but not in containers dedicated to a specific data analysis. In
 addition, lightweight distributions define packages with a fine
 granularity, allowing developers to avoid installing unnecessary
