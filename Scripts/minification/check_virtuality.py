@@ -15,9 +15,9 @@ with open("virtual.csv", "r") as fin:
 # Write the installed packages to file.
 with open(sys.argv[2], "w") as fout:
     for package in installed:
-        fout.write(package +'\n')
+        fout.write(package + "\n")
 
 # TODO add comment about what is written to the file here.
 with open(sys.argv[3], "w") as fout:
     for package in virtual:
-        fout.write(package +'\n')
+        fout.write(package + "\n")
