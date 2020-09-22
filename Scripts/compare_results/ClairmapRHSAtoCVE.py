@@ -1,43 +1,44 @@
+#!/usr/bin/env python
 import sys
-import csv
-
-targets = []
-cves = []
+from typing import List
 
 
-def domapping(file1, file2, file3):
-    with open(file1, "r") as f1, open(file2, "r") as f2:
-        words = f2.readlines()
-        lines = f1.readlines()
+def domapping(rhsa2cve_file: str, rhsa_file: str, output_file: str) -> None:
+    """Map Clair RHSA to CVE.
+
+    Parameters
+    ----------
+    rhsa2cve_file : str
+        Path to downloaded RHSA to CVE mapping file (rhsamapcpe.txt file in our case).
+    rhsa_file : str
+        Path to csv file containing RHSA to convert.
+    output_file : str
+        Path to csv file to write mapped CVEs.
+    """
+    targets: List[str] = list()
+
+    with open(rhsa2cve_file, "r") as fin:
+        words = fin.readlines()
+
+    with open(rhsa_file, "r") as fin:
+        lines = fin.readlines()
+
         for word in words:
             word = word.strip()
             print(word)
-            # targets.append([line for line in lines if word in line])
+
             for line in lines:
                 if word in line:
-                    data = line.split()
-                    targets.append(data[1])
-        for target in targets:
-            # print(target)
-            target = target.split(",")
-            for t in target:
-                cves.append(t)
+                    targets.append(line.split()[1])
+
+        cves = [cve for target in targets for cve in target.split(",")]
+
     req_cves = list(set(cves))
-    with open(file3, "w") as f:
+    with open(output_file, "w") as fout:
         for cve in req_cves:
-            f.write(cve)
-            f.write("\n")
+            fout.write(cve + "\n")
             print(cve)
 
 
-def main():
-    file1 = sys.argv[
-        1
-    ]  ## downloaded RHSA to CVE mapping file (rhsamapcpe.txt file in our case)
-    file2 = sys.argv[2]  ## csv file containing RHSA to convert
-    file3 = sys.argv[3]  ## csv file to write mapped CVE's
-    domapping(file1, file2, file3)
-
-
 if __name__ == "__main__":
-    main()
+    domapping(sys.argv[1], sys.argv[2], sys.argv[3])

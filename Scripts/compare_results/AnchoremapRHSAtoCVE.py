@@ -1,50 +1,45 @@
-# Import BeautifulSoup
-from bs4 import BeautifulSoup as bs
-import csv
+#!/usr/bin/env python
 import sys
+from typing import List
 
-content = []
-result = []
-cves = []
+from bs4 import BeautifulSoup as bs
 
 
-def domapping(file1, file2):
-    with open(file1, "r") as fp:
-        rows = fp.readlines()
-    for row in rows:
-        row = row.strip()
+def domapping(input_file: str, output_file: str) -> None:
+    """Convert the Anchore RHSA to CVE.
 
-    # Read the XML file
-    with open("redhat.xml", "r") as file:
-        # Read each line in the file, readlines() returns a list of lines
-        content = file.readlines()
-        # Combine the lines in the list into a string
-        content = "".join(content)
+    Parameters
+    ----------
+    input_file : str
+        Path to csv file containing RHSA and needed to be mapped.
+    output_file : str
+        Path to csv file where mapped CVE needs to be written.
+    """
+    cves: List[str] = []
+
+    with open(input_file, "r") as fin:
+        rows = map(str.strip, fin.readlines())
+
+    with open("redhat.xml", "r") as fin:
+        content = "".join(fin.readlines())
+
         bs_content = bs(content, "lxml")
+
         for row in rows:
-            row = row.strip()
-            req_id = bs_content.find("reference", {"ref_id": row})
-            result = list(req_id.next_siblings)
-            for each in result:
-                try:
-                    cves.append(each["ref_id"])
-                    print(each["ref_id"])
-                except:
-                    continue
+            req_id = bs_content.find("reference", {"ref_id": row.strip()})
+            results = list(req_id.next_siblings)
+
+            for result in results:
+                if "ref_id" in result:
+                    cves.append(result["ref_id"])
+                    print(result["ref_id"])
+
     cves_req = list(set(cves))
-    # print(cves_req)
-    # print(len(cves_req))
-    with open(file2, "w") as out:
+
+    with open(output_file, "w") as fout:
         for entry in cves_req:
-            out.write(entry)
-            out.write("\n")
-
-
-def main():
-    file1 = sys.argv[1]  ## csv file containing RHSA and needed to be mapped
-    file2 = sys.argv[2]  ## csv file where mapped CVE needs to be written
-    domapping(file1, file2)
+            fout.write(entry + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    domapping(sys.argv[1], sys.argv[2])
