@@ -14,8 +14,12 @@ def domapping(rhsa2cve_file: str, rhsa_file: str, output_file: str) -> None:
         Path to csv file containing RHSA to convert.
     output_file : str
         Path to csv file to write mapped CVEs.
+
+    Returns
+    -------
+        None
     """
-    targets: List[str] = list()
+    targets: List[str] = []
 
     with open(rhsa2cve_file, "r") as fin:
         words = fin.readlines()

@@ -14,6 +14,10 @@ def domapping(input_file: str, output_file: str) -> None:
         Path to csv file containing RHSA and needed to be mapped.
     output_file : str
         Path to csv file where mapped CVE needs to be written.
+
+    Returns
+    -------
+        None
     """
     cves: List[str] = []
 
