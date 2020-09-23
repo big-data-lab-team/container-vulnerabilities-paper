@@ -8,7 +8,10 @@ export cmd3='python3 /run.py /data /data/outputs group2 --participant_label 0003
 name1="$(cut -d'/' -f1 <<<"$2")"
 name2="$(cut -d'/' -f2 <<<"$2")"
 name="$(cut -d':' -f1 <<<"$name2")"
-###run image and mount the required dataset
+###run image and mount the required dataset to /data folder inside image
+###if the image needs dataset and output mounted to a specific folder that should be done in following command while running container
+###for example bids/mindboggle:0.0.4-1 required dataset to be mounted to /home/jovyan/work/data so instead of /data required path
+###should be passed and accordingly changes should be made to the rest of the script
 docker run -itd --entrypoint="bash" --name $name --security-opt seccomp=unconfined -v $1/:/data $2
 ###removing outputs folder and required file if already there
 docker exec -i $name bash -c "rm -rf /data/outputs/*"
