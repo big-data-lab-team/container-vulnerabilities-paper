@@ -17,7 +17,7 @@ def domapping(input_file: str, output_file: str) -> None:
 
     Returns
     -------
-        None
+    None
     """
     cves: List[str] = []
 

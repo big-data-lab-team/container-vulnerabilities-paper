@@ -17,7 +17,7 @@ def domapping(rhsa2cve_file: str, rhsa_file: str, output_file: str) -> None:
 
     Returns
     -------
-        None
+    None
     """
     targets: List[str] = []
 
