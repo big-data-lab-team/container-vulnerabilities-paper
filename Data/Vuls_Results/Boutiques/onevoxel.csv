@@ -1,0 +1,3 @@
+CveID Packages PackageVer "CVSS (AC)" Summary
+CVE-2018-20843 expat 2.2.5-r0- LOW "In libexpat in Expat before 2.2.7, XML input including XML names that contain a large number of colons could make the XML parser consume a high amount of RAM and CPU resources while processing (enough to be usable for denial-of-service attacks)."
+CVE-2019-14697 musl 1.1.18-r3- LOW "musl libc through 1.1.23 has an x87 floating-point stack adjustment imbalance, related to the math/i386/ directory. In some cases, use of this library could introduce out-of-bounds writes that are not present in an application's source code."
