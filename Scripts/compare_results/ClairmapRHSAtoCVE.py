@@ -16,15 +16,11 @@ def domapping(file1,file2,file3):
   for key in rhsa.keys():
         severity = rhsa[key][0]
         package = rhsa[key][1]
-        print("severity  ",severity)
-        print("package ",package) 
         for line in lines:
             if key in line:
                 data = line.split() 
                 for cve in data[1].split(','):
                     cves[cve]=[severity,package]
-  print(cves)
-  print(len(cves))
   with open(file3,'w') as out:
         out.write("Vulnerability_ID     Package    Severity\n")
         for key in cves.keys():
