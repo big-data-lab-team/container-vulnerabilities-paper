@@ -1,137 +1,258 @@
-Vulnerability_ID        Package                                        Severity        Fix                          CVE Refs        Vulnerability URL                                      
-RHSA-2017:0372          kernel-headers-3.10.0-693.21.1.el7             High            0:4.5.0-15.2.1.el7                           https://access.redhat.com/errata/RHSA-2017:0372        
-RHSA-2018:1062          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-862.el7                             https://access.redhat.com/errata/RHSA-2018:1062        
-RHSA-2018:1318          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-862.2.3.el7                         https://access.redhat.com/errata/RHSA-2018:1318        
-RHSA-2018:1629          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-862.3.2.el7                         https://access.redhat.com/errata/RHSA-2018:1629        
-RHSA-2018:1700          procps-ng-3.3.10-16.el7                        High            0:3.3.10-17.el7_5.2                          https://access.redhat.com/errata/RHSA-2018:1700        
-RHSA-2018:1957          git-1.8.3.1-12.el7_4                           High            0:1.8.3.1-14.el7_5                           https://access.redhat.com/errata/RHSA-2018:1957        
-RHSA-2018:1957          perl-Git-1.8.3.1-12.el7_4                      High            0:1.8.3.1-14.el7_5                           https://access.redhat.com/errata/RHSA-2018:1957        
-RHSA-2018:1965          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-862.6.3.el7                         https://access.redhat.com/errata/RHSA-2018:1965        
-RHSA-2018:2181          gnupg2-2.0.22-4.el7                            High            0:2.0.22-5.el7_5                             https://access.redhat.com/errata/RHSA-2018:2181        
-RHSA-2018:2285          yum-plugin-fastestmirror-1.1.31-42.el7         High            0:1.1.31-46.el7_5                            https://access.redhat.com/errata/RHSA-2018:2285        
-RHSA-2018:2384          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-862.11.6.el7                        https://access.redhat.com/errata/RHSA-2018:2384        
-RHSA-2018:2570          bind-license-9.9.4-51.el7_4.2                  High            32:9.9.4-61.el7_5.1                          https://access.redhat.com/errata/RHSA-2018:2570        
-RHSA-2018:2748          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-862.14.4.el7                        https://access.redhat.com/errata/RHSA-2018:2748        
-RHSA-2018:3083          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-957.el7                             https://access.redhat.com/errata/RHSA-2018:3083        
-RHSA-2018:3408          git-1.8.3.1-12.el7_4                           High            0:1.8.3.1-20.el7                             https://access.redhat.com/errata/RHSA-2018:3408        
-RHSA-2018:3408          perl-Git-1.8.3.1-12.el7_4                      High            0:1.8.3.1-20.el7                             https://access.redhat.com/errata/RHSA-2018:3408        
-RHSA-2019:0049          systemd-219-42.el7_4.10                        High            0:219-62.el7_6.2                             https://access.redhat.com/errata/RHSA-2019:0049        
-RHSA-2019:0049          systemd-libs-219-42.el7_4.10                   High            0:219-62.el7_6.2                             https://access.redhat.com/errata/RHSA-2019:0049        
-RHSA-2019:0109          perl-5.16.3-292.el7                            High            4:5.16.3-294.el7_6                           https://access.redhat.com/errata/RHSA-2019:0109        
-RHSA-2019:0109          perl-ExtUtils-Install-1.58-292.el7             High            0:1.58-294.el7_6                             https://access.redhat.com/errata/RHSA-2019:0109        
-RHSA-2019:0109          perl-Pod-Escapes-1.04-292.el7                  High            1:1.04-294.el7_6                             https://access.redhat.com/errata/RHSA-2019:0109        
-RHSA-2019:0109          perl-devel-5.16.3-292.el7                      High            4:5.16.3-294.el7_6                           https://access.redhat.com/errata/RHSA-2019:0109        
-RHSA-2019:0109          perl-libs-5.16.3-292.el7                       High            4:5.16.3-294.el7_6                           https://access.redhat.com/errata/RHSA-2019:0109        
-RHSA-2019:0109          perl-macros-5.16.3-292.el7                     High            4:5.16.3-294.el7_6                           https://access.redhat.com/errata/RHSA-2019:0109        
-RHSA-2019:0163          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-957.5.1.el7                         https://access.redhat.com/errata/RHSA-2019:0163        
-RHSA-2019:0368          systemd-219-42.el7_4.10                        High            0:219-62.el7_6.5                             https://access.redhat.com/errata/RHSA-2019:0368        
-RHSA-2019:0368          systemd-libs-219-42.el7_4.10                   High            0:219-62.el7_6.5                             https://access.redhat.com/errata/RHSA-2019:0368        
-RHSA-2019:0512          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-957.10.1.el7                        https://access.redhat.com/errata/RHSA-2019:0512        
-RHSA-2019:0679          libssh2-1.4.3-10.el7_2.1                       High            0:1.4.3-12.el7_6.2                           https://access.redhat.com/errata/RHSA-2019:0679        
-RHSA-2019:0710          python-2.7.5-58.el7                            High            0:2.7.5-77.el7_6                             https://access.redhat.com/errata/RHSA-2019:0710        
-RHSA-2019:0710          python-libs-2.7.5-58.el7                       High            0:2.7.5-77.el7_6                             https://access.redhat.com/errata/RHSA-2019:0710        
-RHSA-2019:0818          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-957.12.1.el7                        https://access.redhat.com/errata/RHSA-2019:0818        
-RHSA-2019:1168          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-957.12.2.el7                        https://access.redhat.com/errata/RHSA-2019:1168        
-RHSA-2019:1228          wget-1.14-15.el7_4.1                           High            0:1.14-18.el7_6.1                            https://access.redhat.com/errata/RHSA-2019:1228        
-RHSA-2019:1294          bind-license-9.9.4-51.el7_4.2                  High            32:9.9.4-74.el7_6.1                          https://access.redhat.com/errata/RHSA-2019:1294        
-RHSA-2019:1481          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-957.21.3.el7                        https://access.redhat.com/errata/RHSA-2019:1481        
-RHSA-2019:1587          python-2.7.5-58.el7                            High            0:2.7.5-80.el7_6                             https://access.redhat.com/errata/RHSA-2019:1587        
-RHSA-2019:1587          python-libs-2.7.5-58.el7                       High            0:2.7.5-80.el7_6                             https://access.redhat.com/errata/RHSA-2019:1587        
-RHSA-2019:1619          vim-minimal-7.4.160-2.el7                      High            2:7.4.160-6.el7_6                            https://access.redhat.com/errata/RHSA-2019:1619        
-RHSA-2019:1873          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-957.27.2.el7                        https://access.redhat.com/errata/RHSA-2019:1873        
-RHSA-2019:2029          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-1062.el7                            https://access.redhat.com/errata/RHSA-2019:2029        
-RHSA-2019:2600          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-1062.1.1.el7                        https://access.redhat.com/errata/RHSA-2019:2600        
-RHSA-2019:2829          kernel-headers-3.10.0-693.21.1.el7             High            0:3.10.0-1062.1.2.el7                        https://access.redhat.com/errata/RHSA-2019:2829        
-RHSA-2018:0849          libgcc-4.8.5-16.el7_4.2                        Low             0:4.8.5-28.el7                               https://access.redhat.com/errata/RHSA-2018:0849        
-RHSA-2018:0849          libgfortran-4.8.5-16.el7_4.2                   Low             0:4.8.5-28.el7                               https://access.redhat.com/errata/RHSA-2018:0849        
-RHSA-2018:0849          libgomp-4.8.5-16.el7_4.2                       Low             0:4.8.5-28.el7                               https://access.redhat.com/errata/RHSA-2018:0849        
-RHSA-2018:0849          libquadmath-4.8.5-16.el7_4.2                   Low             0:4.8.5-28.el7                               https://access.redhat.com/errata/RHSA-2018:0849        
-RHSA-2018:0849          libstdc++-4.8.5-16.el7_4.2                     Low             0:4.8.5-28.el7                               https://access.redhat.com/errata/RHSA-2018:0849        
-RHSA-2018:0980          openssh-7.4p1-13.el7_4                         Low             0:7.4p1-16.el7                               https://access.redhat.com/errata/RHSA-2018:0980        
-RHSA-2018:0980          openssh-clients-7.4p1-13.el7_4                 Low             0:7.4p1-16.el7                               https://access.redhat.com/errata/RHSA-2018:0980        
-RHSA-2018:3032          binutils-2.25.1-32.base.el7_4.2                Low             0:2.27-34.base.el7                           https://access.redhat.com/errata/RHSA-2018:3032        
-RHSA-2018:3059          libX11-1.6.5-1.el7                             Low             0:1.6.5-2.el7                                https://access.redhat.com/errata/RHSA-2018:3059        
-RHSA-2018:3059          libX11-common-1.6.5-1.el7                      Low             0:1.6.5-2.el7                                https://access.redhat.com/errata/RHSA-2018:3059        
-RHSA-2018:3059          libdrm-2.4.74-1.el7                            Low             0:2.4.91-3.el7                               https://access.redhat.com/errata/RHSA-2018:3059        
-RHSA-2018:3059          libxcb-1.12-1.el7                              Low             0:1.13-1.el7                                 https://access.redhat.com/errata/RHSA-2018:3059        
-RHSA-2018:3059          mesa-libGL-17.0.1-6.20170307.el7               Low             0:18.0.5-3.el7                               https://access.redhat.com/errata/RHSA-2018:3059        
-RHSA-2018:3059          mesa-libglapi-17.0.1-6.20170307.el7            Low             0:18.0.5-3.el7                               https://access.redhat.com/errata/RHSA-2018:3059        
-RHSA-2018:3071          krb5-devel-1.15.1-8.el7                        Low             0:1.15.1-34.el7                              https://access.redhat.com/errata/RHSA-2018:3071        
-RHSA-2018:3071          krb5-libs-1.15.1-8.el7                         Low             0:1.15.1-34.el7                              https://access.redhat.com/errata/RHSA-2018:3071        
-RHSA-2018:3071          libkadm5-1.15.1-8.el7                          Low             0:1.15.1-34.el7                              https://access.redhat.com/errata/RHSA-2018:3071        
-RHSA-2018:3249          setup-2.8.71-7.el7                             Low             0:2.8.71-10.el7                              https://access.redhat.com/errata/RHSA-2018:3249        
-RHSA-2019:0201          systemd-219-42.el7_4.10                        Low             0:219-62.el7_6.3                             https://access.redhat.com/errata/RHSA-2019:0201        
-RHSA-2019:0201          systemd-libs-219-42.el7_4.10                   Low             0:219-62.el7_6.3                             https://access.redhat.com/errata/RHSA-2019:0201        
-RHSA-2019:1880          curl-7.29.0-42.el7_4.1                         Low             0:7.29.0-51.el7_6.3                          https://access.redhat.com/errata/RHSA-2019:1880        
-RHSA-2019:1880          libcurl-7.29.0-42.el7_4.1                      Low             0:7.29.0-51.el7_6.3                          https://access.redhat.com/errata/RHSA-2019:1880        
-RHSA-2019:1880          libcurl-devel-7.29.0-42.el7_4.1                Low             0:7.29.0-51.el7_6.3                          https://access.redhat.com/errata/RHSA-2019:1880        
-RHSA-2019:2143          openssh-7.4p1-13.el7_4                         Low             0:7.4p1-21.el7                               https://access.redhat.com/errata/RHSA-2019:2143        
-RHSA-2019:2143          openssh-clients-7.4p1-13.el7_4                 Low             0:7.4p1-21.el7                               https://access.redhat.com/errata/RHSA-2019:2143        
-RHSA-2019:2159          unzip-6.0-16.el7                               Low             0:6.0-20.el7                                 https://access.redhat.com/errata/RHSA-2019:2159        
-RHSA-2019:2181          curl-7.29.0-42.el7_4.1                         Low             0:7.29.0-54.el7                              https://access.redhat.com/errata/RHSA-2019:2181        
-RHSA-2019:2181          libcurl-7.29.0-42.el7_4.1                      Low             0:7.29.0-54.el7                              https://access.redhat.com/errata/RHSA-2019:2181        
-RHSA-2019:2181          libcurl-devel-7.29.0-42.el7_4.1                Low             0:7.29.0-54.el7                              https://access.redhat.com/errata/RHSA-2019:2181        
-RHSA-2019:2197          elfutils-default-yama-scope-0.168-8.el7        Low             0:0.176-2.el7                                https://access.redhat.com/errata/RHSA-2019:2197        
-RHSA-2019:2197          elfutils-libelf-0.168-8.el7                    Low             0:0.176-2.el7                                https://access.redhat.com/errata/RHSA-2019:2197        
-RHSA-2019:2197          elfutils-libs-0.168-8.el7                      Low             0:0.176-2.el7                                https://access.redhat.com/errata/RHSA-2019:2197        
-RHSA-2018:0666          krb5-devel-1.15.1-8.el7                        Medium          0:1.15.1-18.el7                              https://access.redhat.com/errata/RHSA-2018:0666        
-RHSA-2018:0666          krb5-libs-1.15.1-8.el7                         Medium          0:1.15.1-18.el7                              https://access.redhat.com/errata/RHSA-2018:0666        
-RHSA-2018:0666          libkadm5-1.15.1-8.el7                          Medium          0:1.15.1-18.el7                              https://access.redhat.com/errata/RHSA-2018:0666        
-RHSA-2018:0805          glibc-2.17-196.el7_4.2                         Medium          0:2.17-222.el7                               https://access.redhat.com/errata/RHSA-2018:0805        
-RHSA-2018:0805          glibc-common-2.17-196.el7_4.2                  Medium          0:2.17-222.el7                               https://access.redhat.com/errata/RHSA-2018:0805        
-RHSA-2018:0805          glibc-devel-2.17-196.el7_4.2                   Medium          0:2.17-222.el7                               https://access.redhat.com/errata/RHSA-2018:0805        
-RHSA-2018:0805          glibc-headers-2.17-196.el7_4.2                 Medium          0:2.17-222.el7                               https://access.redhat.com/errata/RHSA-2018:0805        
-RHSA-2018:0998          openssl-devel-1.0.2k-8.el7                     Medium          1:1.0.2k-12.el7                              https://access.redhat.com/errata/RHSA-2018:0998        
-RHSA-2018:0998          openssl-libs-1.0.2k-8.el7                      Medium          1:1.0.2k-12.el7                              https://access.redhat.com/errata/RHSA-2018:0998        
-RHSA-2018:1852          kernel-headers-3.10.0-693.21.1.el7             Medium          0:3.10.0-862.3.3.el7                         https://access.redhat.com/errata/RHSA-2018:1852        
-RHSA-2018:2123          python-2.7.5-58.el7                            Medium          0:2.7.5-69.el7_5                             https://access.redhat.com/errata/RHSA-2018:2123        
-RHSA-2018:2123          python-libs-2.7.5-58.el7                       Medium          0:2.7.5-69.el7_5                             https://access.redhat.com/errata/RHSA-2018:2123        
-RHSA-2018:2768          nss-3.28.4-15.el7_4                            Medium          0:3.36.0-7.el7_5                             https://access.redhat.com/errata/RHSA-2018:2768        
-RHSA-2018:2768          nss-sysinit-3.28.4-15.el7_4                    Medium          0:3.36.0-7.el7_5                             https://access.redhat.com/errata/RHSA-2018:2768        
-RHSA-2018:2768          nss-tools-3.28.4-15.el7_4                      Medium          0:3.36.0-7.el7_5                             https://access.redhat.com/errata/RHSA-2018:2768        
-RHSA-2018:3041          python-2.7.5-58.el7                            Medium          0:2.7.5-76.el7                               https://access.redhat.com/errata/RHSA-2018:3041        
-RHSA-2018:3041          python-libs-2.7.5-58.el7                       Medium          0:2.7.5-76.el7                               https://access.redhat.com/errata/RHSA-2018:3041        
-RHSA-2018:3052          wget-1.14-15.el7_4.1                           Medium          0:1.14-18.el7                                https://access.redhat.com/errata/RHSA-2018:3052        
-RHSA-2018:3092          glibc-2.17-196.el7_4.2                         Medium          0:2.17-260.el7                               https://access.redhat.com/errata/RHSA-2018:3092        
-RHSA-2018:3092          glibc-common-2.17-196.el7_4.2                  Medium          0:2.17-260.el7                               https://access.redhat.com/errata/RHSA-2018:3092        
-RHSA-2018:3092          glibc-devel-2.17-196.el7_4.2                   Medium          0:2.17-260.el7                               https://access.redhat.com/errata/RHSA-2018:3092        
-RHSA-2018:3092          glibc-headers-2.17-196.el7_4.2                 Medium          0:2.17-260.el7                               https://access.redhat.com/errata/RHSA-2018:3092        
-RHSA-2018:3140          fontconfig-2.10.95-11.el7                      Medium          0:2.13.0-4.3.el7                             https://access.redhat.com/errata/RHSA-2018:3140        
-RHSA-2018:3140          freetype-2.4.11-15.el7                         Medium          0:2.8-12.el7                                 https://access.redhat.com/errata/RHSA-2018:3140        
-RHSA-2018:3140          glib2-2.50.3-3.el7                             Medium          0:2.56.1-2.el7                               https://access.redhat.com/errata/RHSA-2018:3140        
-RHSA-2018:3140          gobject-introspection-1.50.0-1.el7             Medium          0:1.56.1-1.el7                               https://access.redhat.com/errata/RHSA-2018:3140        
-RHSA-2018:3140          libcroco-0.6.11-1.el7                          Medium          0:0.6.12-4.el7                               https://access.redhat.com/errata/RHSA-2018:3140        
-RHSA-2018:3157          curl-7.29.0-42.el7_4.1                         Medium          0:7.29.0-51.el7                              https://access.redhat.com/errata/RHSA-2018:3157        
-RHSA-2018:3157          libcurl-7.29.0-42.el7_4.1                      Medium          0:7.29.0-51.el7                              https://access.redhat.com/errata/RHSA-2018:3157        
-RHSA-2018:3157          libcurl-devel-7.29.0-42.el7_4.1                Medium          0:7.29.0-51.el7                              https://access.redhat.com/errata/RHSA-2018:3157        
-RHSA-2018:3157          nss-pem-1.0.3-4.el7                            Medium          0:1.0.3-5.el7                                https://access.redhat.com/errata/RHSA-2018:3157        
-RHSA-2018:3221          openssl-devel-1.0.2k-8.el7                     Medium          1:1.0.2k-16.el7                              https://access.redhat.com/errata/RHSA-2018:3221        
-RHSA-2018:3221          openssl-libs-1.0.2k-8.el7                      Medium          1:1.0.2k-16.el7                              https://access.redhat.com/errata/RHSA-2018:3221        
-RHSA-2018:3651          kernel-headers-3.10.0-693.21.1.el7             Medium          0:3.10.0-957.1.3.el7                         https://access.redhat.com/errata/RHSA-2018:3651        
-RHSA-2019:0194          bind-license-9.9.4-51.el7_4.2                  Medium          32:9.9.4-73.el7_6                            https://access.redhat.com/errata/RHSA-2019:0194        
-RHSA-2019:0483          openssl-devel-1.0.2k-8.el7                     Medium          1:1.0.2k-16.el7_6.1                          https://access.redhat.com/errata/RHSA-2019:0483        
-RHSA-2019:0483          openssl-libs-1.0.2k-8.el7                      Medium          1:1.0.2k-16.el7_6.1                          https://access.redhat.com/errata/RHSA-2019:0483        
-RHSA-2019:1884          libssh2-1.4.3-10.el7_2.1                       Medium          0:1.4.3-12.el7_6.3                           https://access.redhat.com/errata/RHSA-2019:1884        
-RHSA-2019:2030          python-2.7.5-58.el7                            Medium          0:2.7.5-86.el7                               https://access.redhat.com/errata/RHSA-2019:2030        
-RHSA-2019:2030          python-libs-2.7.5-58.el7                       Medium          0:2.7.5-86.el7                               https://access.redhat.com/errata/RHSA-2019:2030        
-RHSA-2019:2057          bind-license-9.9.4-51.el7_4.2                  Medium          32:9.11.4-9.P2.el7                           https://access.redhat.com/errata/RHSA-2019:2057        
-RHSA-2019:2075          binutils-2.25.1-32.base.el7_4.2                Medium          0:2.27-41.base.el7                           https://access.redhat.com/errata/RHSA-2019:2075        
-RHSA-2019:2079          libX11-1.6.5-1.el7                             Medium          0:1.6.7-2.el7                                https://access.redhat.com/errata/RHSA-2019:2079        
-RHSA-2019:2079          libX11-common-1.6.5-1.el7                      Medium          0:1.6.7-2.el7                                https://access.redhat.com/errata/RHSA-2019:2079        
-RHSA-2019:2091          systemd-219-42.el7_4.10                        Medium          0:219-67.el7                                 https://access.redhat.com/errata/RHSA-2019:2091        
-RHSA-2019:2091          systemd-libs-219-42.el7_4.10                   Medium          0:219-67.el7                                 https://access.redhat.com/errata/RHSA-2019:2091        
-RHSA-2019:2118          glibc-2.17-196.el7_4.2                         Medium          0:2.17-292.el7                               https://access.redhat.com/errata/RHSA-2019:2118        
-RHSA-2019:2118          glibc-common-2.17-196.el7_4.2                  Medium          0:2.17-292.el7                               https://access.redhat.com/errata/RHSA-2019:2118        
-RHSA-2019:2118          glibc-devel-2.17-196.el7_4.2                   Medium          0:2.17-292.el7                               https://access.redhat.com/errata/RHSA-2019:2118        
-RHSA-2019:2118          glibc-headers-2.17-196.el7_4.2                 Medium          0:2.17-292.el7                               https://access.redhat.com/errata/RHSA-2019:2118        
-RHSA-2019:2136          libssh2-1.4.3-10.el7_2.1                       Medium          0:1.8.0-3.el7                                https://access.redhat.com/errata/RHSA-2019:2136        
-RHSA-2019:2189          procps-ng-3.3.10-16.el7                        Medium          0:3.3.10-26.el7                              https://access.redhat.com/errata/RHSA-2019:2189        
-RHSA-2019:2237          nspr-4.13.1-1.0.el7_3                          Medium          0:4.21.0-1.el7                               https://access.redhat.com/errata/RHSA-2019:2237        
-RHSA-2019:2237          nss-3.28.4-15.el7_4                            Medium          0:3.44.0-4.el7                               https://access.redhat.com/errata/RHSA-2019:2237        
-RHSA-2019:2237          nss-softokn-3.28.3-8.el7_4                     Medium          0:3.44.0-5.el7                               https://access.redhat.com/errata/RHSA-2019:2237        
-RHSA-2019:2237          nss-softokn-freebl-3.28.3-8.el7_4              Medium          0:3.44.0-5.el7                               https://access.redhat.com/errata/RHSA-2019:2237        
-RHSA-2019:2237          nss-sysinit-3.28.4-15.el7_4                    Medium          0:3.44.0-4.el7                               https://access.redhat.com/errata/RHSA-2019:2237        
-RHSA-2019:2237          nss-tools-3.28.4-15.el7_4                      Medium          0:3.44.0-4.el7                               https://access.redhat.com/errata/RHSA-2019:2237        
-RHSA-2019:2237          nss-util-3.28.4-3.el7                          Medium          0:3.44.0-3.el7                               https://access.redhat.com/errata/RHSA-2019:2237        
-RHSA-2019:2304          openssl-devel-1.0.2k-8.el7                     Medium          1:1.0.2k-19.el7                              https://access.redhat.com/errata/RHSA-2019:2304        
-RHSA-2019:2304          openssl-libs-1.0.2k-8.el7                      Medium          1:1.0.2k-19.el7                              https://access.redhat.com/errata/RHSA-2019:2304        
+Vulnerability_ID   Package   Severity
+CVE-2016-5195   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2016-7039   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2016-8666   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2016-3672   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2016-7913   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2016-8633   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-1000252   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-1000407   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-1000410   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-12154   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-12190   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-13166   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-13305   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-14140   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-15116   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-15121   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-15126   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-15127   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-15129   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-15265   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-15274   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-17448   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-17449   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-17558   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-18017   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-18203   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-18270   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-7294   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-8824   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-9725   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1000004   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-5750   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-6927   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-16939   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1000199   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1068   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1087   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1091   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-8897   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-3639   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1124   procps-ng-3.3.10-16.el7   High
+CVE-2018-1126   procps-ng-3.3.10-16.el7   High
+CVE-2018-11235   perl-Git-1.8.3.1-12.el7_4   High
+CVE-2017-11600   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-12020   gnupg2-2.0.22-4.el7   High
+CVE-2018-10897   yum-plugin-fastestmirror-1.1.31-42.el7   High
+CVE-2017-13215   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10675   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-3620   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-3646   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-3693   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-5390   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-7566   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-5740   bind-license-9.9.4-51.el7_4.2   High
+CVE-2018-14634   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2015-8830   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2016-4913   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-0861   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-10661   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-17805   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-18208   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-18232   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-18344   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-18360   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1000026   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10322   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10878   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10879   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10881   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10883   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10902   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1092   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1094   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10940   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1118   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1120   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-1130   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-13405   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-18690   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-5344   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-5391   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-5803   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-5848   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-7740   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-7757   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-8781   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-17456   perl-Git-1.8.3.1-12.el7_4   High
+CVE-2018-15688   systemd-libs-219-42.el7_4.10   High
+CVE-2018-16864   systemd-libs-219-42.el7_4.10   High
+CVE-2018-16865   systemd-libs-219-42.el7_4.10   High
+CVE-2018-18311   perl-macros-5.16.3-292.el7   High
+CVE-2018-18397   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-18559   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-6454   systemd-libs-219-42.el7_4.10   High
+CVE-2018-17972   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-18445   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-9568   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-3855   libssh2-1.4.3-10.el7_2.1   High
+CVE-2019-3856   libssh2-1.4.3-10.el7_2.1   High
+CVE-2019-3857   libssh2-1.4.3-10.el7_2.1   High
+CVE-2019-3863   libssh2-1.4.3-10.el7_2.1   High
+CVE-2019-9636   python-libs-2.7.5-58.el7   High
+CVE-2019-6974   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-7221   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-12126   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-12127   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-12130   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-11091   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-5953   wget-1.14-15.el7_4.1   High
+CVE-2018-5743   bind-license-9.9.4-51.el7_4.2   High
+CVE-2019-11477   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-11478   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-11479   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-10160   python-libs-2.7.5-58.el7   High
+CVE-2019-12735   vim-minimal-7.4.160-2.el7   High
+CVE-2018-16871   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-16884   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-11085   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-11811   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-10853   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-13053   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-13093   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-13094   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-13095   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-14625   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-14734   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-15594   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-16658   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-16885   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-18281   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-7755   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-8087   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-9363   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-9516   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2018-9517   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-10140   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-11599   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-11810   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-11833   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-3459   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-3460   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-3882   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-3900   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-5489   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-7222   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-9456   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-1125   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-9500   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2019-14835   kernel-headers-3.10.0-693.21.1.el7   High
+CVE-2017-11671   libstdc++-4.8.5-16.el7_4.2   Low
+CVE-2017-15906   openssh-clients-7.4p1-13.el7_4   Low
+CVE-2018-10372   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-10373   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-10534   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-10535   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-13033   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-7208   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-7568   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-7569   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-7642   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-7643   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2018-8945   binutils-2.25.1-32.base.el7_4.2   Low
+CVE-2015-9262   mesa-libglapi-17.0.1-6.20170307.el7   Low
+CVE-2018-5729   libkadm5-1.15.1-8.el7   Low
+CVE-2018-5730   libkadm5-1.15.1-8.el7   Low
+CVE-2018-1113   setup-2.8.71-7.el7   Low
+CVE-2019-3815   systemd-libs-219-42.el7_4.10   Low
+CVE-2018-14618   libcurl-devel-7.29.0-42.el7_4.1   Low
+CVE-2018-15473   openssh-clients-7.4p1-13.el7_4   Low
+CVE-2018-18384   unzip-6.0-16.el7   Low
+CVE-2018-16842   libcurl-devel-7.29.0-42.el7_4.1   Low
+CVE-2018-16062   elfutils-libs-0.168-8.el7   Low
+CVE-2018-16402   elfutils-libs-0.168-8.el7   Low
+CVE-2018-16403   elfutils-libs-0.168-8.el7   Low
+CVE-2018-18310   elfutils-libs-0.168-8.el7   Low
+CVE-2018-18520   elfutils-libs-0.168-8.el7   Low
+CVE-2018-18521   elfutils-libs-0.168-8.el7   Low
+CVE-2019-7149   elfutils-libs-0.168-8.el7   Low
+CVE-2019-7150   elfutils-libs-0.168-8.el7   Low
+CVE-2019-7664   elfutils-libs-0.168-8.el7   Low
+CVE-2019-7665   elfutils-libs-0.168-8.el7   Low
+CVE-2017-11368   libkadm5-1.15.1-8.el7   Medium
+CVE-2017-7562   libkadm5-1.15.1-8.el7   Medium
+CVE-2014-9402   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2015-5180   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2017-12132   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2017-15670   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2017-15804   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2018-1000001   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2017-3736   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2017-3737   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2017-3738   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2018-3665   kernel-headers-3.10.0-693.21.1.el7   Medium
+CVE-2016-2183   python-libs-2.7.5-58.el7   Medium
+CVE-2018-12384   nss-tools-3.28.4-15.el7_4   Medium
+CVE-2018-1060   python-libs-2.7.5-58.el7   Medium
+CVE-2018-1061   python-libs-2.7.5-58.el7   Medium
+CVE-2018-0494   wget-1.14-15.el7_4.1   Medium
+CVE-2017-16997   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2018-11236   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2018-11237   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2018-6485   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2015-9381   libcroco-0.6.11-1.el7   Medium
+CVE-2015-9382   libcroco-0.6.11-1.el7   Medium
+CVE-2017-18267   libcroco-0.6.11-1.el7   Medium
+CVE-2018-10733   libcroco-0.6.11-1.el7   Medium
+CVE-2018-10767   libcroco-0.6.11-1.el7   Medium
+CVE-2018-10768   libcroco-0.6.11-1.el7   Medium
+CVE-2018-12910   libcroco-0.6.11-1.el7   Medium
+CVE-2018-13988   libcroco-0.6.11-1.el7   Medium
+CVE-2018-1000007   nss-pem-1.0.3-4.el7   Medium
+CVE-2018-1000120   nss-pem-1.0.3-4.el7   Medium
+CVE-2018-1000121   nss-pem-1.0.3-4.el7   Medium
+CVE-2018-1000122   nss-pem-1.0.3-4.el7   Medium
+CVE-2018-1000301   nss-pem-1.0.3-4.el7   Medium
+CVE-2017-3735   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2018-0495   nss-util-3.28.4-3.el7   Medium
+CVE-2018-0732   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2018-0737   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2018-0739   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2018-14633   kernel-headers-3.10.0-693.21.1.el7   Medium
+CVE-2018-14646   kernel-headers-3.10.0-693.21.1.el7   Medium
+CVE-2018-5742   bind-license-9.9.4-51.el7_4.2   Medium
+CVE-2018-5407   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2019-3862   libssh2-1.4.3-10.el7_2.1   Medium
+CVE-2018-14647   python-libs-2.7.5-58.el7   Medium
+CVE-2019-5010   python-libs-2.7.5-58.el7   Medium
+CVE-2019-9740   python-libs-2.7.5-58.el7   Medium
+CVE-2019-9947   python-libs-2.7.5-58.el7   Medium
+CVE-2019-9948   python-libs-2.7.5-58.el7   Medium
+CVE-2018-5741   bind-license-9.9.4-51.el7_4.2   Medium
+CVE-2018-1000876   binutils-2.25.1-32.base.el7_4.2   Medium
+CVE-2018-12641   binutils-2.25.1-32.base.el7_4.2   Medium
+CVE-2018-12697   binutils-2.25.1-32.base.el7_4.2   Medium
+CVE-2018-14598   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-14599   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-14600   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15853   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15854   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15855   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15856   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15857   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15859   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15861   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15862   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15863   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15864   libX11-common-1.6.5-1.el7   Medium
+CVE-2018-15686   systemd-libs-219-42.el7_4.10   Medium
+CVE-2018-16866   systemd-libs-219-42.el7_4.10   Medium
+CVE-2018-16888   systemd-libs-219-42.el7_4.10   Medium
+CVE-2016-10739   glibc-headers-2.17-196.el7_4.2   Medium
+CVE-2019-3858   libssh2-1.4.3-10.el7_2.1   Medium
+CVE-2019-3861   libssh2-1.4.3-10.el7_2.1   Medium
+CVE-2018-1122   procps-ng-3.3.10-16.el7   Medium
+CVE-2018-12404   nss-util-3.28.4-3.el7   Medium
+CVE-2018-0734   openssl-libs-1.0.2k-8.el7   Medium
+CVE-2019-1559   openssl-libs-1.0.2k-8.el7   Medium
