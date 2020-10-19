@@ -200,8 +200,9 @@ out of which one wasn't available on DockerHub. Boutiques had 49 images,
 %listed using Boutiques \texttt{bosh search} command,
 however, only 23 unique images were listed, out of which 3 couldn't be retrieved and 2
 were already included in BIDS apps. All the final 26 images
-from BIDS apps were Docker images, whereas Boutiques contained 18 Docker images
+from BIDS apps were Docker images, whereas 18 Boutiques contained 12 Docker images
 and 6 Singularity images. \tristan{Check the numbers: that makes 24 Boutiques images, not 18.}
+\change{Boutiques images are total 18 which is 12(docker)+6(Singularity)}.
 
 \subsection{Image Scanners}
 
@@ -290,16 +291,26 @@ security fixes in different versions of the distribution. Vuls uses OVAL
 databases for all distributions except Alpine, since Alpine is not
 available in OVAL. On the contrary, Clair exclusively refers to
 distribution-specific databases. Anchore uses OVAL only for CentOS
-\tristan{any idea why?}. It is also worth noting that there is no vulnerability data
+\tristan{any idea why?}.\change{Through our scanning experiments I learned that
+Oval Centos database was not listing all vulnerabilities and Anchore team already
+realized that. In their recent releeases Centos OVAL is deprecated and they started 
+referring to Red Hat Enterprise Linux (RHEL) data} It is also worth noting that there is no vulnerability data
 for Ubuntu 17.04 and 17.10 distributions in the OVAL database, since these
 distributions have reached end of life, meaning that images with these
 distributions cannot be scanned with Vuls \tristan{why doesn't vuls use
-Ubuntu CVE tracker?}.
-\tristan{In Vuls, what happens when 2 databases are used?}
+Ubuntu CVE tracker?}.\change{They have it
+in their TODO list}.
+\tristan{In Vuls, what happens when 2 databases are used?}.
+\change{Using OVAL database alone is not sufficient because
+OVAL does not contain all vulnerabilities as the main intention
+of the OVAL database is to provide a detailed description of the most recent vulnerabilities}.
 
 Anchore also refers to National Vulnerability Database (NVD) to get
 metadata of vulnerabilities. Apart from this, like Anchore, Vuls also
 refers to the NVD database for getting vulnerability metadata \tristan{why is NVD not in the table?}.
+\change{NVD is used by all scanners for all Operating systems for getting
+generic vulnerability metadata so if we write in table it will be
+repetitive info}.
 
 For CentOS images, Anchore and Clair give scanning results using Red Hat
 Security Advisory (RHSA) identifiers, whereas Vuls uses the Common
@@ -311,7 +322,11 @@ Different vulnerabilities may be reported by scanners if scanning
 experiments take place on different dates. To avoid such discrepancies, we
 froze the vulnerability databases used by these scanners as of 2019-09-25
 \tristan{this contradicts the date mentioned in the paragraph on Clair}.
-
+\change{No, its not. Because the date mentioned in Clair is the date
+when Clair's database was last updated (because its database is present as
+a Docker container so we fetched that was latest updated). However, here the date represents
+the date when we
+froze the vulnerability databases for all the scanners}.
 \subsection{Image Update}
 
 A first approach to reduce the number of vulnerabilities in container
@@ -321,6 +336,7 @@ distribution. To study the effect of such updates, we developed a script
 \href{https://github.com/big-data-lab-team/container-vulnerabilities-paper/blob/master/Scripts/update}{here})
 to identify the package manager in the image, and invoke it to update all
 OS packages. \tristan{what was the date at which update was run?}
+\change{We updated images on 2019-11-05}.
 
 \subsection{Image Minification}
 
@@ -331,8 +347,8 @@ to capture the list of packages used by an analysis. \reprozip first
 captures the list of files involved in the analysis, through system call
 interception, then retrieves the list of associated software packages, by
 querying the package manager. We extend this list with a passlist of
-packages required for the system to function \tristan{can you give an
-example?}, and with all the dependencies of the required packages,
+packages required for the system to function, \tristan{can you give an
+example?}\change{such as \texttt{coreutils} and \texttt{bash}}, and with all the dependencies of the required packages,
 retrieved using
 \href{http://manpages.ubuntu.com/manpages/xenial/man1/debtree.1.html}{Debtree}.
 \href{https://linux.die.net/man/1/repoquery}{Repoquery} could be used in
@@ -344,6 +360,7 @@ trace, and finally deletes all unnecessary packages. We had used the
 \href{https://github.com/ReproNim/neurodocker}{Neurodocker} tool initially, but it did not have any impact on the detected
 vulnerabilities because it was removing unused files from the file system
 directly instead of using the package manager \tristan{Please check this last sentence}.
+\change{correct}.
 
 Using this approach, we minified five Debian- or Ubuntu-based BIDS app images,
 using basic analysis examples found in the applications documentation.
@@ -367,7 +384,9 @@ per image (mean: 468). \textbf{(B)} Effect of image minification and
 package update on 5 container images, showing that both techniques are
 complementary \tristan{image f has 0 vulnerabilities after update and minification, is it really the case?
 it is also weird that minification before update has almost no effect, but it removes all the remaining vulnerabilities after update}.
- \textbf{(C)} Number of vulnerabilities by number of
+	\change{image f is bids/ndmg:latest and it have 329 vulnerabilities after update
+	and minification together. However, minification alone does not have much effect and it have 930
+	vulnerabilities after minification} \textbf{(C)} Number of vulnerabilities by number of
 packages, showing a strong linear relationship. \textbf{(D)} Number of
 vulnerabilities by number of packages \emph{after package update}, showing that software updates 
 importantly reduce the number of detected vulnerabilities.}
@@ -406,7 +425,10 @@ package (Fig~\ref{fig:vulnerabilities}-\textbf{D}, r=0.81,
 $p\textless10^{-7}$). Six container images are missing on this figure; they
 could not be updated since their OS distributions reached end of life
 \tristan{give more details, one of these images is centos 7 which didnt
-reach EOL}. In spite of the associated reproducibility challenges, updating
+reach EOL}. \change{3 out of these missing 6 images retured an error while updating which
+indicates a problem with the package installer, 2 were unable to update because they
+reached EOL and last one with Centos 7.1.1503 returned libselinux conflicts with systemd}. 
+In spite of the associated reproducibility challenges, updating
 packages therefore appears as a very efficient way to avoid vulnerabilities. It
 is not an ultimate solution though, as substantial numbers of
 vulnerabilities remain.
@@ -840,7 +862,9 @@ dependencies when they build containers, based on their knowledge of the
 application.
 \item \emph{Run image scanners during continuous integration.} Scanning
 container images can be a cumbersome process (for instance, scanning the
-38 images involved in this study takes about \todo{y} hours) that
+		38 images involved in this study takes about \todo{y} hours) \change{scanning time
+		is different with different images. It took time between 3 minutes to one hour sometimes
+		per image} that
 could be asynchronously executed during continuous integration (CI),
 through tools such as Travis CI or Circle CI. Including security scans in
 CI also allows developers to identify vulnerabilities quickly,

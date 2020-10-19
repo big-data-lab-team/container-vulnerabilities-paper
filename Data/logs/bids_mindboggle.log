@@ -1,646 +1,0 @@
-> yum not found
-> Found apt
-
-WARNING: apt does not have a stable CLI interface yet. Use with caution in scripts.
-
-Ign http://cdn-fastly.deb.debian.org jessie InRelease
-Get:1 http://cdn-fastly.deb.debian.org jessie/updates InRelease [44.9 kB]
-Get:2 http://cdn-fastly.deb.debian.org jessie Release.gpg [1,652 B]
-Get:3 http://cdn-fastly.deb.debian.org jessie Release [77.3 kB]
-Get:4 http://cdn-fastly.deb.debian.org jessie/updates/main amd64 Packages [977 kB]
-Get:5 http://cdn-fastly.deb.debian.org jessie/main amd64 Packages [9,098 kB]
-Fetched 10.2 MB in 10s (969 kB/s)
-Reading package lists...
-Building dependency tree...
-Reading state information...
-123 packages can be upgraded. Run 'apt list --upgradable' to see them.
-W: There is no public key available for the following key IDs:
-AA8E81B4331F7F50
-
-WARNING: apt does not have a stable CLI interface yet. Use with caution in scripts.
-
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following NEW packages will be installed:
-  libbsd0
-The following packages will be upgraded:
-  apt base-files bash bzip2 ca-certificates cpp-4.9 curl debconf debconf-i18n
-  debian-archive-keyring e2fslibs e2fsprogs emacs24-bin-common emacs24-common
-  emacs24-nox g++-4.9 gcc-4.9 gcc-4.9-base git git-man gnupg gpgv
-  inetutils-ping libapt-pkg4.12 libasan1 libatomic1 libbz2-1.0 libc-bin
-  libc-dev-bin libc6 libc6-dev libcilkrts5 libcomerr2 libcurl3 libcurl3-gnutls
-  libdb5.3 libdbus-1-3 libexpat1 libffi6 libfreetype6 libgcc-4.9-dev libgcc1
-  libgcrypt20 libgd3 libgl1-mesa-glx libglapi-mesa libglib2.0-0
-  libgnutls-deb0-28 libgomp1 libgraphite2-3 libgssapi-krb5-2 libharfbuzz0b
-  libice-dev libice6 libicu52 libidn11 libitm1 libjpeg62-turbo libk5crypto3
-  libkrb5-3 libkrb5support0 libldap-2.4-2 liblsan0 libncurses5 libncursesw5
-  libpam-modules libpam-modules-bin libpam0g libpixman-1-0 libprocps3
-  libquadmath0 libsasl2-2 libsasl2-modules-db libss2 libssh2-1 libssl1.0.0
-  libstdc++-4.9-dev libstdc++6 libsystemd0 libtasn1-6 libtiff5 libtinfo5
-  libtsan0 libubsan0 libudev1 libvpx1 libx11-6 libx11-data libx11-dev
-  libx11-xcb1 libxdmcp-dev libxdmcp6 libxfixes3 libxfont1 libxml2
-  linux-libc-dev locales login multiarch-support ncurses-base ncurses-bin
-  openssl passwd patch perl perl-base perl-modules procps sensible-utils sudo
-  systemd systemd-sysv tar tzdata udev unzip vim vim-common vim-runtime wget
-  xserver-common xvfb zlib1g
-123 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
-Need to get 121 MB of archives.
-After this operation, 3,050 kB of additional disk space will be used.
-Get:1 http://cdn-fastly.deb.debian.org/debian/ jessie/main base-files amd64 8+deb8u11 [78.2 kB]
-Get:2 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main bash amd64 4.3-11+deb8u2 [1,173 kB]
-Get:3 http://cdn-fastly.deb.debian.org/debian/ jessie/main libc6-dev amd64 2.19-18+deb8u10 [2,003 kB]
-Get:4 http://cdn-fastly.deb.debian.org/debian/ jessie/main libc-dev-bin amd64 2.19-18+deb8u10 [238 kB]
-Get:5 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main linux-libc-dev amd64 3.16.81-1 [1,155 kB]
-Get:6 http://cdn-fastly.deb.debian.org/debian/ jessie/main libc-bin amd64 2.19-18+deb8u10 [1,281 kB]
-Get:7 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libgomp1 amd64 4.9.2-10+deb8u2 [37.8 kB]
-Get:8 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libitm1 amd64 4.9.2-10+deb8u2 [29.3 kB]
-Get:9 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libatomic1 amd64 4.9.2-10+deb8u2 [9,000 B]
-Get:10 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main gcc-4.9-base amd64 4.9.2-10+deb8u2 [160 kB]
-Get:11 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libgcc1 amd64 1:4.9.2-10+deb8u2 [39.4 kB]
-Get:12 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libasan1 amd64 4.9.2-10+deb8u2 [195 kB]
-Get:13 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main liblsan0 amd64 4.9.2-10+deb8u2 [92.7 kB]
-Get:14 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libtsan0 amd64 4.9.2-10+deb8u2 [213 kB]
-Get:15 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libubsan0 amd64 4.9.2-10+deb8u2 [82.4 kB]
-Get:16 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libcilkrts5 amd64 4.9.2-10+deb8u2 [40.1 kB]
-Get:17 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libquadmath0 amd64 4.9.2-10+deb8u2 [129 kB]
-Get:18 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main cpp-4.9 amd64 4.9.2-10+deb8u2 [5,169 kB]
-Get:19 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main g++-4.9 amd64 4.9.2-10+deb8u2 [17.6 MB]
-Get:20 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main gcc-4.9 amd64 4.9.2-10+deb8u2 [5,373 kB]
-Get:21 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libgcc-4.9-dev amd64 4.9.2-10+deb8u2 [2,064 kB]
-Get:22 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libstdc++-4.9-dev amd64 4.9.2-10+deb8u2 [1,118 kB]
-Get:23 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libstdc++6 amd64 4.9.2-10+deb8u2 [273 kB]
-Get:24 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main zlib1g amd64 1:1.2.8.dfsg-2+deb8u1 [88.3 kB]
-Get:25 http://cdn-fastly.deb.debian.org/debian/ jessie/main libc6 amd64 2.19-18+deb8u10 [4,665 kB]
-Get:26 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main e2fslibs amd64 1.42.12-2+deb8u2 [186 kB]
-Get:27 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main e2fsprogs amd64 1.42.12-2+deb8u2 [751 kB]
-Get:28 http://cdn-fastly.deb.debian.org/debian/ jessie/main login amd64 1:4.2-3+deb8u4 [722 kB]
-Get:29 http://cdn-fastly.deb.debian.org/debian/ jessie/main ncurses-bin amd64 5.9+20140913-1+deb8u3 [347 kB]
-Get:30 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main perl amd64 5.20.2-3+deb8u12 [2,658 kB]
-Get:31 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main perl-base amd64 5.20.2-3+deb8u12 [1,231 kB]
-Get:32 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main perl-modules all 5.20.2-3+deb8u12 [2,553 kB]
-Get:33 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main bzip2 amd64 1.0.6-7+deb8u2 [46.8 kB]
-Get:34 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libbz2-1.0 amd64 1.0.6-7+deb8u2 [43.3 kB]
-Get:35 http://cdn-fastly.deb.debian.org/debian/ jessie/main libdb5.3 amd64 5.3.28-9+deb8u1 [680 kB]
-Get:36 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main tar amd64 1.27.1-2+deb8u2 [676 kB]
-Get:37 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libapt-pkg4.12 amd64 1.0.9.8.5 [792 kB]
-Get:38 http://cdn-fastly.deb.debian.org/debian/ jessie/main gpgv amd64 1.4.18-7+deb8u5 [209 kB]
-Get:39 http://cdn-fastly.deb.debian.org/debian/ jessie/main debian-archive-keyring all 2017.5~deb8u1 [56.7 kB]
-Get:40 http://cdn-fastly.deb.debian.org/debian/ jessie/main gnupg amd64 1.4.18-7+deb8u5 [1,150 kB]
-Get:41 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main apt amd64 1.0.9.8.5 [1,109 kB]
-Get:42 http://cdn-fastly.deb.debian.org/debian/ jessie/main ncurses-base all 5.9+20140913-1+deb8u3 [222 kB]
-Get:43 http://cdn-fastly.deb.debian.org/debian/ jessie/main libtinfo5 amd64 5.9+20140913-1+deb8u3 [282 kB]
-Get:44 http://cdn-fastly.deb.debian.org/debian/ jessie/main libncursesw5 amd64 5.9+20140913-1+deb8u3 [123 kB]
-Get:45 http://cdn-fastly.deb.debian.org/debian/ jessie/main libncurses5 amd64 5.9+20140913-1+deb8u3 [96.6 kB]
-Get:46 http://cdn-fastly.deb.debian.org/debian/ jessie/main libprocps3 amd64 2:3.3.9-9+deb8u1 [56.7 kB]
-Get:47 http://cdn-fastly.deb.debian.org/debian/ jessie/main procps amd64 2:3.3.9-9+deb8u1 [236 kB]
-Get:48 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libudev1 amd64 215-17+deb8u13 [58.8 kB]
-Get:49 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main udev amd64 215-17+deb8u13 [878 kB]
-Get:50 http://cdn-fastly.deb.debian.org/debian/ jessie/main debconf-i18n all 1.5.56+deb8u1 [206 kB]
-Get:51 http://cdn-fastly.deb.debian.org/debian/ jessie/main debconf all 1.5.56+deb8u1 [167 kB]
-Get:52 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libcomerr2 amd64 1.42.12-2+deb8u2 [60.6 kB]
-Get:53 http://cdn-fastly.deb.debian.org/debian/ jessie/main libpam0g amd64 1.1.8-3.1+deb8u2+b1 [126 kB]
-Get:54 http://cdn-fastly.deb.debian.org/debian/ jessie/main libpam-modules-bin amd64 1.1.8-3.1+deb8u2+b1 [104 kB]
-Get:55 http://cdn-fastly.deb.debian.org/debian/ jessie/main libpam-modules amd64 1.1.8-3.1+deb8u2+b1 [307 kB]
-Get:56 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libss2 amd64 1.42.12-2+deb8u2 [64.9 kB]
-Get:57 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libgcrypt20 amd64 1.6.3-2+deb8u8 [394 kB]
-Get:58 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libsystemd0 amd64 215-17+deb8u13 [90.5 kB]
-Get:59 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main systemd amd64 215-17+deb8u13 [2,555 kB]
-Get:60 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main systemd-sysv amd64 215-17+deb8u13 [37.5 kB]
-Get:61 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libssl1.0.0 amd64 1.0.1t-1+deb8u12 [1,049 kB]
-Get:62 http://cdn-fastly.deb.debian.org/debian/ jessie/main libtasn1-6 amd64 4.2-3+deb8u3 [49.2 kB]
-Get:63 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libgnutls-deb0-28 amd64 3.3.30-0+deb8u1 [749 kB]
-Get:64 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libgssapi-krb5-2 amd64 1.12.1+dfsg-19+deb8u5 [152 kB]
-Get:65 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libkrb5-3 amd64 1.12.1+dfsg-19+deb8u5 [303 kB]
-Get:66 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libkrb5support0 amd64 1.12.1+dfsg-19+deb8u5 [59.5 kB]
-Get:67 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libk5crypto3 amd64 1.12.1+dfsg-19+deb8u5 [115 kB]
-Get:68 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libidn11 amd64 1.29-1+deb8u3 [137 kB]
-Get:69 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libsasl2-modules-db amd64 2.1.26.dfsg1-13+deb8u2 [67.3 kB]
-Get:70 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libsasl2-2 amd64 2.1.26.dfsg1-13+deb8u2 [105 kB]
-Get:71 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libldap-2.4-2 amd64 2.4.40+dfsg-1+deb8u6 [218 kB]
-Get:72 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libxml2 amd64 2.9.1+dfsg1-5+deb8u8 [803 kB]
-Get:73 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libbsd0 amd64 0.7.0-2+deb8u1 [68.2 kB]
-Get:74 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main curl amd64 7.38.0-4+deb8u16 [202 kB]
-Get:75 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libssh2-1 amd64 1.4.3-4.1+deb8u6 [128 kB]
-Get:76 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libcurl3 amd64 7.38.0-4+deb8u16 [261 kB]
-Get:77 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libcurl3-gnutls amd64 7.38.0-4+deb8u16 [253 kB]
-Get:78 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libdbus-1-3 amd64 1.8.22-0+deb8u2 [171 kB]
-Get:79 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libexpat1 amd64 2.1.0-6+deb8u6 [80.3 kB]
-Get:80 http://cdn-fastly.deb.debian.org/debian/ jessie/main libffi6 amd64 3.1-2+deb8u1 [20.2 kB]
-Get:81 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libfreetype6 amd64 2.5.2-3+deb8u4 [467 kB]
-Get:82 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libjpeg62-turbo amd64 1:1.3.1-12+deb8u2 [117 kB]
-Get:83 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libtiff5 amd64 4.0.3-12.3+deb8u10 [223 kB]
-Get:84 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libvpx1 amd64 1.3.0-3+deb8u3 [600 kB]
-Get:85 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libx11-data all 2:1.6.2-3+deb8u2 [126 kB]
-Get:86 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libxdmcp-dev amd64 1:1.1.1-1+deb8u1 [40.0 kB]
-Get:87 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libxdmcp6 amd64 1:1.1.1-1+deb8u1 [24.7 kB]
-Get:88 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libx11-dev amd64 2:1.6.2-3+deb8u2 [800 kB]
-Get:89 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libx11-6 amd64 2:1.6.2-3+deb8u2 [729 kB]
-Get:90 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libgd3 amd64 2.1.0-5+deb8u14 [148 kB]
-Get:91 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libgl1-mesa-glx amd64 10.3.2-1+deb8u2 [181 kB]
-Get:92 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libglapi-mesa amd64 10.3.2-1+deb8u2 [53.9 kB]
-Get:93 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libx11-xcb1 amd64 2:1.6.2-3+deb8u2 [163 kB]
-Get:94 http://cdn-fastly.deb.debian.org/debian/ jessie/main libxfixes3 amd64 1:5.0.1-2+deb8u1 [21.1 kB]
-Get:95 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libglib2.0-0 amd64 2.42.1-1+deb8u3 [2,400 kB]
-Get:96 http://cdn-fastly.deb.debian.org/debian/ jessie/main libgraphite2-3 amd64 1.3.10-1~deb8u1 [85.4 kB]
-Get:97 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libharfbuzz0b amd64 0.9.35-2+deb8u1 [486 kB]
-Get:98 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libice-dev amd64 2:1.0.9-1+deb8u1 [66.2 kB]
-Get:99 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libice6 amd64 2:1.0.9-1+deb8u1 [58.8 kB]
-Get:100 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libicu52 amd64 52.1-8+deb8u8 [6,791 kB]
-Get:101 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main libpixman-1-0 amd64 0.32.6-3+deb8u1 [506 kB]
-Get:102 http://cdn-fastly.deb.debian.org/debian/ jessie/main libxfont1 amd64 1:1.5.1-1+deb8u1 [133 kB]
-Get:103 http://cdn-fastly.deb.debian.org/debian/ jessie/main multiarch-support amd64 2.19-18+deb8u10 [181 kB]
-Get:104 http://cdn-fastly.deb.debian.org/debian/ jessie/main passwd amd64 1:4.2-3+deb8u4 [971 kB]
-Get:105 http://cdn-fastly.deb.debian.org/debian/ jessie/main sensible-utils all 0.0.9+deb8u1 [10.9 kB]
-Get:106 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main tzdata all 2019c-0+deb8u1 [234 kB]
-Get:107 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main vim amd64 2:7.4.488-7+deb8u4 [953 kB]
-Get:108 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main vim-runtime all 2:7.4.488-7+deb8u4 [5,052 kB]
-Get:109 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main vim-common amd64 2:7.4.488-7+deb8u4 [185 kB]
-Get:110 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main wget amd64 1.16-1+deb8u7 [496 kB]
-Get:111 http://cdn-fastly.deb.debian.org/debian/ jessie/main locales all 2.19-18+deb8u10 [3,930 kB]
-Get:112 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main patch amd64 2.7.5-1+deb8u3 [109 kB]
-Get:113 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main openssl amd64 1.0.1t-1+deb8u12 [666 kB]
-Get:114 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main ca-certificates all 20141019+deb8u4 [185 kB]
-Get:115 http://cdn-fastly.deb.debian.org/debian/ jessie/main emacs24-nox amd64 24.4+1-5+deb8u1 [3,141 kB]
-Get:116 http://cdn-fastly.deb.debian.org/debian/ jessie/main emacs24-bin-common amd64 24.4+1-5+deb8u1 [251 kB]
-Get:117 http://cdn-fastly.deb.debian.org/debian/ jessie/main emacs24-common all 24.4+1-5+deb8u1 [12.8 MB]
-Get:118 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main git-man all 1:2.1.4-2.1+deb8u10 [1,271 kB]
-Get:119 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main git amd64 1:2.1.4-2.1+deb8u10 [3,227 kB]
-Get:120 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main sudo amd64 1.8.10p3-1+deb8u7 [856 kB]
-Get:121 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main unzip amd64 6.0-16+deb8u6 [164 kB]
-Get:122 http://cdn-fastly.deb.debian.org/debian/ jessie/main xserver-common all 2:1.16.4-1+deb8u2 [1,759 kB]
-Get:123 http://cdn-fastly.deb.debian.org/debian/ jessie/main xvfb amd64 2:1.16.4-1+deb8u2 [2,499 kB]
-Get:124 http://cdn-fastly.deb.debian.org/debian-security/ jessie/updates/main inetutils-ping amd64 2:1.9.2.39.3a460-3+deb8u1 [216 kB]
-debconf: delaying package configuration, since apt-utils is not installed
-Fetched 121 MB in 2min 18s (872 kB/s)
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20610 files and directories currently installed.)
-Preparing to unpack .../base-files_8+deb8u11_amd64.deb ...
-Unpacking base-files (8+deb8u11) over (8+deb8u7) ...
-Setting up base-files (8+deb8u11) ...
-Installing new version of config file /etc/debian_version ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20610 files and directories currently installed.)
-Preparing to unpack .../bash_4.3-11+deb8u2_amd64.deb ...
-Unpacking bash (4.3-11+deb8u2) over (4.3-11+deb8u1) ...
-Setting up bash (4.3-11+deb8u2) ...
-update-alternatives: using /usr/share/man/man7/bash-builtins.7.gz to provide /usr/share/man/man7/builtins.7.gz (builtins.7.gz) in auto mode
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20610 files and directories currently installed.)
-Preparing to unpack .../libc6-dev_2.19-18+deb8u10_amd64.deb ...
-Unpacking libc6-dev:amd64 (2.19-18+deb8u10) over (2.19-18+deb8u9) ...
-Preparing to unpack .../libc-dev-bin_2.19-18+deb8u10_amd64.deb ...
-Unpacking libc-dev-bin (2.19-18+deb8u10) over (2.19-18+deb8u9) ...
-Preparing to unpack .../linux-libc-dev_3.16.81-1_amd64.deb ...
-Unpacking linux-libc-dev:amd64 (3.16.81-1) over (3.16.43-2) ...
-Preparing to unpack .../libc-bin_2.19-18+deb8u10_amd64.deb ...
-Unpacking libc-bin (2.19-18+deb8u10) over (2.19-18+deb8u7) ...
-Setting up libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20610 files and directories currently installed.)
-Preparing to unpack .../libgomp1_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libgomp1:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libitm1_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libitm1:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libatomic1_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libatomic1:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../gcc-4.9-base_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking gcc-4.9-base:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Setting up gcc-4.9-base:amd64 (4.9.2-10+deb8u2) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20610 files and directories currently installed.)
-Preparing to unpack .../libgcc1_1%3a4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libgcc1:amd64 (1:4.9.2-10+deb8u2) over (1:4.9.2-10) ...
-Setting up libgcc1:amd64 (1:4.9.2-10+deb8u2) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20610 files and directories currently installed.)
-Preparing to unpack .../libasan1_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libasan1:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../liblsan0_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking liblsan0:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libtsan0_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libtsan0:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libubsan0_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libubsan0:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libcilkrts5_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libcilkrts5:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libquadmath0_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libquadmath0:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../cpp-4.9_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking cpp-4.9 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../g++-4.9_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking g++-4.9 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../gcc-4.9_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking gcc-4.9 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libgcc-4.9-dev_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libgcc-4.9-dev:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libstdc++-4.9-dev_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libstdc++-4.9-dev:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Preparing to unpack .../libstdc++6_4.9.2-10+deb8u2_amd64.deb ...
-Unpacking libstdc++6:amd64 (4.9.2-10+deb8u2) over (4.9.2-10) ...
-Setting up libstdc++6:amd64 (4.9.2-10+deb8u2) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20610 files and directories currently installed.)
-Preparing to unpack .../zlib1g_1%3a1.2.8.dfsg-2+deb8u1_amd64.deb ...
-Unpacking zlib1g:amd64 (1:1.2.8.dfsg-2+deb8u1) over (1:1.2.8.dfsg-2+b1) ...
-Setting up zlib1g:amd64 (1:1.2.8.dfsg-2+deb8u1) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20609 files and directories currently installed.)
-Preparing to unpack .../libc6_2.19-18+deb8u10_amd64.deb ...
-Unpacking libc6:amd64 (2.19-18+deb8u10) over (2.19-18+deb8u9) ...
-Setting up libc6:amd64 (2.19-18+deb8u10) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20609 files and directories currently installed.)
-Preparing to unpack .../e2fslibs_1.42.12-2+deb8u2_amd64.deb ...
-Unpacking e2fslibs:amd64 (1.42.12-2+deb8u2) over (1.42.12-2+b1) ...
-Setting up e2fslibs:amd64 (1.42.12-2+deb8u2) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20608 files and directories currently installed.)
-Preparing to unpack .../e2fsprogs_1.42.12-2+deb8u2_amd64.deb ...
-Unpacking e2fsprogs (1.42.12-2+deb8u2) over (1.42.12-2+b1) ...
-Setting up e2fsprogs (1.42.12-2+deb8u2) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20607 files and directories currently installed.)
-Preparing to unpack .../login_1%3a4.2-3+deb8u4_amd64.deb ...
-Unpacking login (1:4.2-3+deb8u4) over (1:4.2-3+deb8u3) ...
-Setting up login (1:4.2-3+deb8u4) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20607 files and directories currently installed.)
-Preparing to unpack .../ncurses-bin_5.9+20140913-1+deb8u3_amd64.deb ...
-Unpacking ncurses-bin (5.9+20140913-1+deb8u3) over (5.9+20140913-1+b1) ...
-Setting up ncurses-bin (5.9+20140913-1+deb8u3) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20606 files and directories currently installed.)
-Preparing to unpack .../perl_5.20.2-3+deb8u12_amd64.deb ...
-Unpacking perl (5.20.2-3+deb8u12) over (5.20.2-3+deb8u6) ...
-Preparing to unpack .../perl-base_5.20.2-3+deb8u12_amd64.deb ...
-Unpacking perl-base (5.20.2-3+deb8u12) over (5.20.2-3+deb8u6) ...
-Setting up perl-base (5.20.2-3+deb8u12) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20606 files and directories currently installed.)
-Preparing to unpack .../perl-modules_5.20.2-3+deb8u12_all.deb ...
-Unpacking perl-modules (5.20.2-3+deb8u12) over (5.20.2-3+deb8u6) ...
-Preparing to unpack .../bzip2_1.0.6-7+deb8u2_amd64.deb ...
-Unpacking bzip2 (1.0.6-7+deb8u2) over (1.0.6-7+b3) ...
-Preparing to unpack .../libbz2-1.0_1.0.6-7+deb8u2_amd64.deb ...
-Unpacking libbz2-1.0:amd64 (1.0.6-7+deb8u2) over (1.0.6-7+b3) ...
-Setting up libbz2-1.0:amd64 (1.0.6-7+deb8u2) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../libdb5.3_5.3.28-9+deb8u1_amd64.deb ...
-Unpacking libdb5.3:amd64 (5.3.28-9+deb8u1) over (5.3.28-9) ...
-Setting up libdb5.3:amd64 (5.3.28-9+deb8u1) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../tar_1.27.1-2+deb8u2_amd64.deb ...
-Unpacking tar (1.27.1-2+deb8u2) over (1.27.1-2+deb8u1) ...
-Setting up tar (1.27.1-2+deb8u2) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../libapt-pkg4.12_1.0.9.8.5_amd64.deb ...
-Unpacking libapt-pkg4.12:amd64 (1.0.9.8.5) over (1.0.9.8.4) ...
-Setting up libapt-pkg4.12:amd64 (1.0.9.8.5) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../gpgv_1.4.18-7+deb8u5_amd64.deb ...
-Unpacking gpgv (1.4.18-7+deb8u5) over (1.4.18-7+deb8u3) ...
-Setting up gpgv (1.4.18-7+deb8u5) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../debian-archive-keyring_2017.5~deb8u1_all.deb ...
-Unpacking debian-archive-keyring (2017.5~deb8u1) over (2014.3) ...
-Setting up debian-archive-keyring (2017.5~deb8u1) ...
-Removing obsolete conffile /etc/apt/trusted.gpg.d/debian-archive-squeeze-automatic.gpg ...
-Removing obsolete conffile /etc/apt/trusted.gpg.d/debian-archive-squeeze-stable.gpg ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../gnupg_1.4.18-7+deb8u5_amd64.deb ...
-Unpacking gnupg (1.4.18-7+deb8u5) over (1.4.18-7+deb8u3) ...
-Setting up gnupg (1.4.18-7+deb8u5) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../apt_1.0.9.8.5_amd64.deb ...
-Unpacking apt (1.0.9.8.5) over (1.0.9.8.4) ...
-Setting up apt (1.0.9.8.5) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../ncurses-base_5.9+20140913-1+deb8u3_all.deb ...
-Unpacking ncurses-base (5.9+20140913-1+deb8u3) over (5.9+20140913-1) ...
-Setting up ncurses-base (5.9+20140913-1+deb8u3) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../libtinfo5_5.9+20140913-1+deb8u3_amd64.deb ...
-Unpacking libtinfo5:amd64 (5.9+20140913-1+deb8u3) over (5.9+20140913-1+b1) ...
-Setting up libtinfo5:amd64 (5.9+20140913-1+deb8u3) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../libncursesw5_5.9+20140913-1+deb8u3_amd64.deb ...
-Unpacking libncursesw5:amd64 (5.9+20140913-1+deb8u3) over (5.9+20140913-1+b1) ...
-Setting up libncursesw5:amd64 (5.9+20140913-1+deb8u3) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../libncurses5_5.9+20140913-1+deb8u3_amd64.deb ...
-Unpacking libncurses5:amd64 (5.9+20140913-1+deb8u3) over (5.9+20140913-1+b1) ...
-Setting up libncurses5:amd64 (5.9+20140913-1+deb8u3) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../libprocps3_2%3a3.3.9-9+deb8u1_amd64.deb ...
-Unpacking libprocps3:amd64 (2:3.3.9-9+deb8u1) over (2:3.3.9-9) ...
-Setting up libprocps3:amd64 (2:3.3.9-9+deb8u1) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../procps_2%3a3.3.9-9+deb8u1_amd64.deb ...
-invoke-rc.d: policy-rc.d denied execution of stop.
-Unpacking procps (2:3.3.9-9+deb8u1) over (2:3.3.9-9) ...
-Processing triggers for systemd (215-17+deb8u6) ...
-Setting up procps (2:3.3.9-9+deb8u1) ...
-invoke-rc.d: policy-rc.d denied execution of start.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../libudev1_215-17+deb8u13_amd64.deb ...
-Unpacking libudev1:amd64 (215-17+deb8u13) over (215-17+deb8u6) ...
-Setting up libudev1:amd64 (215-17+deb8u13) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../udev_215-17+deb8u13_amd64.deb ...
-Unpacking udev (215-17+deb8u13) over (215-17+deb8u6) ...
-Processing triggers for systemd (215-17+deb8u6) ...
-Setting up udev (215-17+deb8u13) ...
-addgroup: The group `input' already exists as a system group. Exiting.
-udev does not support containers, not started.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../debconf-i18n_1.5.56+deb8u1_all.deb ...
-Unpacking debconf-i18n (1.5.56+deb8u1) over (1.5.56) ...
-Preparing to unpack .../debconf_1.5.56+deb8u1_all.deb ...
-Unpacking debconf (1.5.56+deb8u1) over (1.5.56) ...
-Setting up debconf (1.5.56+deb8u1) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../libcomerr2_1.42.12-2+deb8u2_amd64.deb ...
-Unpacking libcomerr2:amd64 (1.42.12-2+deb8u2) over (1.42.12-2+b1) ...
-Setting up libcomerr2:amd64 (1.42.12-2+deb8u2) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20603 files and directories currently installed.)
-Preparing to unpack .../libpam0g_1.1.8-3.1+deb8u2+b1_amd64.deb ...
-Unpacking libpam0g:amd64 (1.1.8-3.1+deb8u2+b1) over (1.1.8-3.1+deb8u2) ...
-Setting up libpam0g:amd64 (1.1.8-3.1+deb8u2+b1) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../libpam-modules-bin_1.1.8-3.1+deb8u2+b1_amd64.deb ...
-Unpacking libpam-modules-bin (1.1.8-3.1+deb8u2+b1) over (1.1.8-3.1+deb8u2) ...
-Setting up libpam-modules-bin (1.1.8-3.1+deb8u2+b1) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../libpam-modules_1.1.8-3.1+deb8u2+b1_amd64.deb ...
-Unpacking libpam-modules:amd64 (1.1.8-3.1+deb8u2+b1) over (1.1.8-3.1+deb8u2) ...
-Setting up libpam-modules:amd64 (1.1.8-3.1+deb8u2+b1) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20606 files and directories currently installed.)
-Preparing to unpack .../libss2_1.42.12-2+deb8u2_amd64.deb ...
-Unpacking libss2:amd64 (1.42.12-2+deb8u2) over (1.42.12-2+b1) ...
-Setting up libss2:amd64 (1.42.12-2+deb8u2) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../libgcrypt20_1.6.3-2+deb8u8_amd64.deb ...
-Unpacking libgcrypt20:amd64 (1.6.3-2+deb8u8) over (1.6.3-2+deb8u2) ...
-Setting up libgcrypt20:amd64 (1.6.3-2+deb8u8) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../libsystemd0_215-17+deb8u13_amd64.deb ...
-Unpacking libsystemd0:amd64 (215-17+deb8u13) over (215-17+deb8u6) ...
-Setting up libsystemd0:amd64 (215-17+deb8u13) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../systemd_215-17+deb8u13_amd64.deb ...
-Unpacking systemd (215-17+deb8u13) over (215-17+deb8u6) ...
-Setting up systemd (215-17+deb8u13) ...
-addgroup: The group `systemd-journal' already exists as a system group. Exiting.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../systemd-sysv_215-17+deb8u13_amd64.deb ...
-Unpacking systemd-sysv (215-17+deb8u13) over (215-17+deb8u6) ...
-Setting up systemd-sysv (215-17+deb8u13) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20605 files and directories currently installed.)
-Preparing to unpack .../libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb ...
-Unpacking libssl1.0.0:amd64 (1.0.1t-1+deb8u12) over (1.0.1t-1+deb8u6) ...
-Preparing to unpack .../libtasn1-6_4.2-3+deb8u3_amd64.deb ...
-Unpacking libtasn1-6:amd64 (4.2-3+deb8u3) over (4.2-3+deb8u2) ...
-Preparing to unpack .../libgnutls-deb0-28_3.3.30-0+deb8u1_amd64.deb ...
-Unpacking libgnutls-deb0-28:amd64 (3.3.30-0+deb8u1) over (3.3.8-6+deb8u4) ...
-Preparing to unpack .../libgssapi-krb5-2_1.12.1+dfsg-19+deb8u5_amd64.deb ...
-Unpacking libgssapi-krb5-2:amd64 (1.12.1+dfsg-19+deb8u5) over (1.12.1+dfsg-19+deb8u2) ...
-Preparing to unpack .../libkrb5-3_1.12.1+dfsg-19+deb8u5_amd64.deb ...
-Unpacking libkrb5-3:amd64 (1.12.1+dfsg-19+deb8u5) over (1.12.1+dfsg-19+deb8u2) ...
-Preparing to unpack .../libkrb5support0_1.12.1+dfsg-19+deb8u5_amd64.deb ...
-Unpacking libkrb5support0:amd64 (1.12.1+dfsg-19+deb8u5) over (1.12.1+dfsg-19+deb8u2) ...
-Preparing to unpack .../libk5crypto3_1.12.1+dfsg-19+deb8u5_amd64.deb ...
-Unpacking libk5crypto3:amd64 (1.12.1+dfsg-19+deb8u5) over (1.12.1+dfsg-19+deb8u2) ...
-Preparing to unpack .../libidn11_1.29-1+deb8u3_amd64.deb ...
-Unpacking libidn11:amd64 (1.29-1+deb8u3) over (1.29-1+deb8u2) ...
-Preparing to unpack .../libsasl2-modules-db_2.1.26.dfsg1-13+deb8u2_amd64.deb ...
-Unpacking libsasl2-modules-db:amd64 (2.1.26.dfsg1-13+deb8u2) over (2.1.26.dfsg1-13+deb8u1) ...
-Preparing to unpack .../libsasl2-2_2.1.26.dfsg1-13+deb8u2_amd64.deb ...
-Unpacking libsasl2-2:amd64 (2.1.26.dfsg1-13+deb8u2) over (2.1.26.dfsg1-13+deb8u1) ...
-Preparing to unpack .../libldap-2.4-2_2.4.40+dfsg-1+deb8u6_amd64.deb ...
-Unpacking libldap-2.4-2:amd64 (2.4.40+dfsg-1+deb8u6) over (2.4.40+dfsg-1+deb8u2) ...
-Preparing to unpack .../libxml2_2.9.1+dfsg1-5+deb8u8_amd64.deb ...
-Unpacking libxml2:amd64 (2.9.1+dfsg1-5+deb8u8) over (2.9.1+dfsg1-5+deb8u4) ...
-Selecting previously unselected package libbsd0:amd64.
-Preparing to unpack .../libbsd0_0.7.0-2+deb8u1_amd64.deb ...
-Unpacking libbsd0:amd64 (0.7.0-2+deb8u1) ...
-Preparing to unpack .../curl_7.38.0-4+deb8u16_amd64.deb ...
-Unpacking curl (7.38.0-4+deb8u16) over (7.38.0-4+deb8u5) ...
-Preparing to unpack .../libssh2-1_1.4.3-4.1+deb8u6_amd64.deb ...
-Unpacking libssh2-1:amd64 (1.4.3-4.1+deb8u6) over (1.4.3-4.1+deb8u1) ...
-Preparing to unpack .../libcurl3_7.38.0-4+deb8u16_amd64.deb ...
-Unpacking libcurl3:amd64 (7.38.0-4+deb8u16) over (7.38.0-4+deb8u5) ...
-Preparing to unpack .../libcurl3-gnutls_7.38.0-4+deb8u16_amd64.deb ...
-Unpacking libcurl3-gnutls:amd64 (7.38.0-4+deb8u16) over (7.38.0-4+deb8u5) ...
-Preparing to unpack .../libdbus-1-3_1.8.22-0+deb8u2_amd64.deb ...
-Unpacking libdbus-1-3:amd64 (1.8.22-0+deb8u2) over (1.8.22-0+deb8u1) ...
-Preparing to unpack .../libexpat1_2.1.0-6+deb8u6_amd64.deb ...
-Unpacking libexpat1:amd64 (2.1.0-6+deb8u6) over (2.1.0-6+deb8u3) ...
-Preparing to unpack .../libffi6_3.1-2+deb8u1_amd64.deb ...
-Unpacking libffi6:amd64 (3.1-2+deb8u1) over (3.1-2+b2) ...
-Preparing to unpack .../libfreetype6_2.5.2-3+deb8u4_amd64.deb ...
-Unpacking libfreetype6:amd64 (2.5.2-3+deb8u4) over (2.5.2-3+deb8u2) ...
-Preparing to unpack .../libjpeg62-turbo_1%3a1.3.1-12+deb8u2_amd64.deb ...
-Unpacking libjpeg62-turbo:amd64 (1:1.3.1-12+deb8u2) over (1:1.3.1-12) ...
-Preparing to unpack .../libtiff5_4.0.3-12.3+deb8u10_amd64.deb ...
-Unpacking libtiff5:amd64 (4.0.3-12.3+deb8u10) over (4.0.3-12.3+deb8u3) ...
-Preparing to unpack .../libvpx1_1.3.0-3+deb8u3_amd64.deb ...
-Unpacking libvpx1:amd64 (1.3.0-3+deb8u3) over (1.3.0-3) ...
-Preparing to unpack .../libx11-data_2%3a1.6.2-3+deb8u2_all.deb ...
-Unpacking libx11-data (2:1.6.2-3+deb8u2) over (2:1.6.2-3) ...
-Preparing to unpack .../libxdmcp-dev_1%3a1.1.1-1+deb8u1_amd64.deb ...
-Unpacking libxdmcp-dev:amd64 (1:1.1.1-1+deb8u1) over (1:1.1.1-1+b1) ...
-Preparing to unpack .../libxdmcp6_1%3a1.1.1-1+deb8u1_amd64.deb ...
-Unpacking libxdmcp6:amd64 (1:1.1.1-1+deb8u1) over (1:1.1.1-1+b1) ...
-Preparing to unpack .../libx11-dev_2%3a1.6.2-3+deb8u2_amd64.deb ...
-Unpacking libx11-dev:amd64 (2:1.6.2-3+deb8u2) over (2:1.6.2-3) ...
-Preparing to unpack .../libx11-6_2%3a1.6.2-3+deb8u2_amd64.deb ...
-Unpacking libx11-6:amd64 (2:1.6.2-3+deb8u2) over (2:1.6.2-3) ...
-Preparing to unpack .../libgd3_2.1.0-5+deb8u14_amd64.deb ...
-Unpacking libgd3:amd64 (2.1.0-5+deb8u14) over (2.1.0-5+deb8u9) ...
-Preparing to unpack .../libgl1-mesa-glx_10.3.2-1+deb8u2_amd64.deb ...
-Unpacking libgl1-mesa-glx:amd64 (10.3.2-1+deb8u2) over (10.3.2-1+deb8u1) ...
-Preparing to unpack .../libglapi-mesa_10.3.2-1+deb8u2_amd64.deb ...
-Unpacking libglapi-mesa:amd64 (10.3.2-1+deb8u2) over (10.3.2-1+deb8u1) ...
-Preparing to unpack .../libx11-xcb1_2%3a1.6.2-3+deb8u2_amd64.deb ...
-Unpacking libx11-xcb1:amd64 (2:1.6.2-3+deb8u2) over (2:1.6.2-3) ...
-Preparing to unpack .../libxfixes3_1%3a5.0.1-2+deb8u1_amd64.deb ...
-Unpacking libxfixes3:amd64 (1:5.0.1-2+deb8u1) over (1:5.0.1-2+b2) ...
-Preparing to unpack .../libglib2.0-0_2.42.1-1+deb8u3_amd64.deb ...
-Unpacking libglib2.0-0:amd64 (2.42.1-1+deb8u3) over (2.42.1-1+b1) ...
-Preparing to unpack .../libgraphite2-3_1.3.10-1~deb8u1_amd64.deb ...
-Unpacking libgraphite2-3:amd64 (1.3.10-1~deb8u1) over (1.3.6-1~deb8u1) ...
-Preparing to unpack .../libharfbuzz0b_0.9.35-2+deb8u1_amd64.deb ...
-Unpacking libharfbuzz0b:amd64 (0.9.35-2+deb8u1) over (0.9.35-2) ...
-Preparing to unpack .../libice-dev_2%3a1.0.9-1+deb8u1_amd64.deb ...
-Unpacking libice-dev:amd64 (2:1.0.9-1+deb8u1) over (2:1.0.9-1+b1) ...
-Preparing to unpack .../libice6_2%3a1.0.9-1+deb8u1_amd64.deb ...
-Unpacking libice6:amd64 (2:1.0.9-1+deb8u1) over (2:1.0.9-1+b1) ...
-Preparing to unpack .../libicu52_52.1-8+deb8u8_amd64.deb ...
-Unpacking libicu52:amd64 (52.1-8+deb8u8) over (52.1-8+deb8u4) ...
-Preparing to unpack .../libpixman-1-0_0.32.6-3+deb8u1_amd64.deb ...
-Unpacking libpixman-1-0:amd64 (0.32.6-3+deb8u1) over (0.32.6-3) ...
-Preparing to unpack .../libxfont1_1%3a1.5.1-1+deb8u1_amd64.deb ...
-Unpacking libxfont1:amd64 (1:1.5.1-1+deb8u1) over (1:1.5.1-1) ...
-Preparing to unpack .../multiarch-support_2.19-18+deb8u10_amd64.deb ...
-Unpacking multiarch-support (2.19-18+deb8u10) over (2.19-18+deb8u7) ...
-Setting up multiarch-support (2.19-18+deb8u10) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../passwd_1%3a4.2-3+deb8u4_amd64.deb ...
-Unpacking passwd (1:4.2-3+deb8u4) over (1:4.2-3+deb8u3) ...
-Setting up passwd (1:4.2-3+deb8u4) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../sensible-utils_0.0.9+deb8u1_all.deb ...
-Unpacking sensible-utils (0.0.9+deb8u1) over (0.0.9) ...
-Setting up sensible-utils (0.0.9+deb8u1) ...
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20604 files and directories currently installed.)
-Preparing to unpack .../tzdata_2019c-0+deb8u1_all.deb ...
-Unpacking tzdata (2019c-0+deb8u1) over (2016j-0+deb8u1) ...
-Setting up tzdata (2019c-0+deb8u1) ...
-
-Current default time zone: 'Etc/UTC'
-Local time is now:      Sat May  9 16:39:50 UTC 2020.
-Universal Time is now:  Sat May  9 16:39:50 UTC 2020.
-Run 'dpkg-reconfigure tzdata' if you wish to change it.
-
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 20607 files and directories currently installed.)
-Preparing to unpack .../vim_2%3a7.4.488-7+deb8u4_amd64.deb ...
-Unpacking vim (2:7.4.488-7+deb8u4) over (2:7.4.488-7+deb8u3) ...
-Preparing to unpack .../vim-runtime_2%3a7.4.488-7+deb8u4_all.deb ...
-Unpacking vim-runtime (2:7.4.488-7+deb8u4) over (2:7.4.488-7+deb8u3) ...
-Preparing to unpack .../vim-common_2%3a7.4.488-7+deb8u4_amd64.deb ...
-Unpacking vim-common (2:7.4.488-7+deb8u4) over (2:7.4.488-7+deb8u3) ...
-Preparing to unpack .../wget_1.16-1+deb8u7_amd64.deb ...
-Unpacking wget (1.16-1+deb8u7) over (1.16-1+deb8u2) ...
-Preparing to unpack .../locales_2.19-18+deb8u10_all.deb ...
-Unpacking locales (2.19-18+deb8u10) over (2.19-18+deb8u7) ...
-Preparing to unpack .../patch_2.7.5-1+deb8u3_amd64.deb ...
-Unpacking patch (2.7.5-1+deb8u3) over (2.7.5-1) ...
-Preparing to unpack .../openssl_1.0.1t-1+deb8u12_amd64.deb ...
-Unpacking openssl (1.0.1t-1+deb8u12) over (1.0.1t-1+deb8u6) ...
-Preparing to unpack .../ca-certificates_20141019+deb8u4_all.deb ...
-Unpacking ca-certificates (20141019+deb8u4) over (20141019+deb8u3) ...
-Preparing to unpack .../emacs24-nox_24.4+1-5+deb8u1_amd64.deb ...
-Remove emacsen-common for emacs24
-emacsen-common: Handling removal of emacsen flavor emacs24
-Unpacking emacs24-nox (24.4+1-5+deb8u1) over (24.4+1-5) ...
-Preparing to unpack .../emacs24-bin-common_24.4+1-5+deb8u1_amd64.deb ...
-Unpacking emacs24-bin-common (24.4+1-5+deb8u1) over (24.4+1-5) ...
-Preparing to unpack .../emacs24-common_24.4+1-5+deb8u1_all.deb ...
-Unpacking emacs24-common (24.4+1-5+deb8u1) over (24.4+1-5) ...
-Preparing to unpack .../git-man_1%3a2.1.4-2.1+deb8u10_all.deb ...
-Unpacking git-man (1:2.1.4-2.1+deb8u10) over (1:2.1.4-2.1+deb8u3) ...
-Preparing to unpack .../git_1%3a2.1.4-2.1+deb8u10_amd64.deb ...
-Unpacking git (1:2.1.4-2.1+deb8u10) over (1:2.1.4-2.1+deb8u3) ...
-Preparing to unpack .../sudo_1.8.10p3-1+deb8u7_amd64.deb ...
-invoke-rc.d: policy-rc.d denied execution of stop.
-Unpacking sudo (1.8.10p3-1+deb8u7) over (1.8.10p3-1+deb8u3) ...
-Preparing to unpack .../unzip_6.0-16+deb8u6_amd64.deb ...
-Unpacking unzip (6.0-16+deb8u6) over (6.0-16+deb8u3) ...
-Preparing to unpack .../xserver-common_2%3a1.16.4-1+deb8u2_all.deb ...
-Unpacking xserver-common (2:1.16.4-1+deb8u2) over (2:1.16.4-1) ...
-Preparing to unpack .../xvfb_2%3a1.16.4-1+deb8u2_amd64.deb ...
-Unpacking xvfb (2:1.16.4-1+deb8u2) over (2:1.16.4-1) ...
-Preparing to unpack .../inetutils-ping_2%3a1.9.2.39.3a460-3+deb8u1_amd64.deb ...
-Unpacking inetutils-ping (2:1.9.2.39.3a460-3+deb8u1) over (2:1.9.2.39.3a460-3) ...
-Processing triggers for systemd (215-17+deb8u13) ...
-Setting up libc-dev-bin (2.19-18+deb8u10) ...
-Setting up linux-libc-dev:amd64 (3.16.81-1) ...
-Setting up libc6-dev:amd64 (2.19-18+deb8u10) ...
-Setting up libgomp1:amd64 (4.9.2-10+deb8u2) ...
-Setting up libitm1:amd64 (4.9.2-10+deb8u2) ...
-Setting up libatomic1:amd64 (4.9.2-10+deb8u2) ...
-Setting up libasan1:amd64 (4.9.2-10+deb8u2) ...
-Setting up liblsan0:amd64 (4.9.2-10+deb8u2) ...
-Setting up libtsan0:amd64 (4.9.2-10+deb8u2) ...
-Setting up libubsan0:amd64 (4.9.2-10+deb8u2) ...
-Setting up libcilkrts5:amd64 (4.9.2-10+deb8u2) ...
-Setting up libquadmath0:amd64 (4.9.2-10+deb8u2) ...
-Setting up cpp-4.9 (4.9.2-10+deb8u2) ...
-Setting up libgcc-4.9-dev:amd64 (4.9.2-10+deb8u2) ...
-Setting up gcc-4.9 (4.9.2-10+deb8u2) ...
-Setting up libstdc++-4.9-dev:amd64 (4.9.2-10+deb8u2) ...
-Setting up g++-4.9 (4.9.2-10+deb8u2) ...
-Setting up perl-modules (5.20.2-3+deb8u12) ...
-Setting up perl (5.20.2-3+deb8u12) ...
-Setting up bzip2 (1.0.6-7+deb8u2) ...
-Setting up debconf-i18n (1.5.56+deb8u1) ...
-Setting up libssl1.0.0:amd64 (1.0.1t-1+deb8u12) ...
-Setting up libtasn1-6:amd64 (4.2-3+deb8u3) ...
-Setting up libgnutls-deb0-28:amd64 (3.3.30-0+deb8u1) ...
-Setting up libkrb5support0:amd64 (1.12.1+dfsg-19+deb8u5) ...
-Setting up libk5crypto3:amd64 (1.12.1+dfsg-19+deb8u5) ...
-Setting up libkrb5-3:amd64 (1.12.1+dfsg-19+deb8u5) ...
-Setting up libgssapi-krb5-2:amd64 (1.12.1+dfsg-19+deb8u5) ...
-Setting up libidn11:amd64 (1.29-1+deb8u3) ...
-Setting up libsasl2-modules-db:amd64 (2.1.26.dfsg1-13+deb8u2) ...
-Setting up libsasl2-2:amd64 (2.1.26.dfsg1-13+deb8u2) ...
-Setting up libldap-2.4-2:amd64 (2.4.40+dfsg-1+deb8u6) ...
-Setting up libxml2:amd64 (2.9.1+dfsg1-5+deb8u8) ...
-Setting up libbsd0:amd64 (0.7.0-2+deb8u1) ...
-Setting up libssh2-1:amd64 (1.4.3-4.1+deb8u6) ...
-Setting up libcurl3:amd64 (7.38.0-4+deb8u16) ...
-Setting up curl (7.38.0-4+deb8u16) ...
-Setting up libcurl3-gnutls:amd64 (7.38.0-4+deb8u16) ...
-Setting up libdbus-1-3:amd64 (1.8.22-0+deb8u2) ...
-Setting up libexpat1:amd64 (2.1.0-6+deb8u6) ...
-Setting up libffi6:amd64 (3.1-2+deb8u1) ...
-Setting up libfreetype6:amd64 (2.5.2-3+deb8u4) ...
-Setting up libjpeg62-turbo:amd64 (1:1.3.1-12+deb8u2) ...
-Setting up libtiff5:amd64 (4.0.3-12.3+deb8u10) ...
-Setting up libvpx1:amd64 (1.3.0-3+deb8u3) ...
-Setting up libx11-data (2:1.6.2-3+deb8u2) ...
-Setting up libxdmcp6:amd64 (1:1.1.1-1+deb8u1) ...
-Setting up libxdmcp-dev:amd64 (1:1.1.1-1+deb8u1) ...
-Setting up libx11-6:amd64 (2:1.6.2-3+deb8u2) ...
-Setting up libx11-dev:amd64 (2:1.6.2-3+deb8u2) ...
-Setting up libgd3:amd64 (2.1.0-5+deb8u14) ...
-Setting up libglapi-mesa:amd64 (10.3.2-1+deb8u2) ...
-Setting up libx11-xcb1:amd64 (2:1.6.2-3+deb8u2) ...
-Setting up libxfixes3:amd64 (1:5.0.1-2+deb8u1) ...
-Setting up libgl1-mesa-glx:amd64 (10.3.2-1+deb8u2) ...
-Setting up libglib2.0-0:amd64 (2.42.1-1+deb8u3) ...
-No schema files found: doing nothing.
-Setting up libgraphite2-3:amd64 (1.3.10-1~deb8u1) ...
-Setting up libharfbuzz0b:amd64 (0.9.35-2+deb8u1) ...
-Setting up libice6:amd64 (2:1.0.9-1+deb8u1) ...
-Setting up libice-dev:amd64 (2:1.0.9-1+deb8u1) ...
-Setting up libicu52:amd64 (52.1-8+deb8u8) ...
-Setting up libpixman-1-0:amd64 (0.32.6-3+deb8u1) ...
-Setting up libxfont1:amd64 (1:1.5.1-1+deb8u1) ...
-Setting up vim-common (2:7.4.488-7+deb8u4) ...
-Setting up vim-runtime (2:7.4.488-7+deb8u4) ...
-Processing /usr/share/vim/addons/doc
-Setting up vim (2:7.4.488-7+deb8u4) ...
-Setting up wget (1.16-1+deb8u7) ...
-Setting up locales (2.19-18+deb8u10) ...
-Generating locales (this might take a while)...
-  en_US.UTF-8... done
-Generation complete.
-Setting up patch (2.7.5-1+deb8u3) ...
-Setting up openssl (1.0.1t-1+deb8u12) ...
-Setting up ca-certificates (20141019+deb8u4) ...
-Updating certificates in /etc/ssl/certs... 20 added, 42 removed; done.
-Setting up emacs24-common (24.4+1-5+deb8u1) ...
-Setting up emacs24-bin-common (24.4+1-5+deb8u1) ...
-Setting up emacs24-nox (24.4+1-5+deb8u1) ...
-Install emacsen-common for emacs24
-emacsen-common: Handling install of emacsen flavor emacs24
-Wrote /etc/emacs24/site-start.d/00debian-vars.elc
-Wrote /usr/share/emacs24/site-lisp/debian-startup.elc
-Setting up git-man (1:2.1.4-2.1+deb8u10) ...
-Setting up git (1:2.1.4-2.1+deb8u10) ...
-Setting up sudo (1.8.10p3-1+deb8u7) ...
-Setting up unzip (6.0-16+deb8u6) ...
-Setting up xserver-common (2:1.16.4-1+deb8u2) ...
-Setting up xvfb (2:1.16.4-1+deb8u2) ...
-Setting up inetutils-ping (2:1.9.2.39.3a460-3+deb8u1) ...
-Processing triggers for libc-bin (2.19-18+deb8u10) ...
-Processing triggers for ca-certificates (20141019+deb8u4) ...
-Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done.
-Running hooks in /etc/ca-certificates/update.d....done.

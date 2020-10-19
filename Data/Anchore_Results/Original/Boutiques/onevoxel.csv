@@ -1,0 +1,9 @@
+Vulnerability_ID        Package                       Severity        Fix              CVE Refs        Vulnerability URL                                                   
+CVE-2018-20843          expat-2.2.5-r0                High            2.2.7-r0                         http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-20843        
+CVE-2019-12900          libbz2-1.0.6-r6               High            1.0.6-r7                         http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-12900        
+CVE-2019-14697          musl-1.1.18-r3                High            1.1.18-r4                        http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14697        
+CVE-2019-14697          musl-dev-1.1.18-r3            High            1.1.18-r4                        http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14697        
+CVE-2019-14697          musl-utils-1.1.18-r3          High            1.1.18-r4                        http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14697        
+CVE-2019-8457           sqlite-libs-3.25.3-r0         High            3.25.3-r1                        http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-8457         
+CVE-2019-1559           libcrypto1.0-1.0.2q-r0        Medium          1.0.2r-r0                        http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-1559         
+CVE-2019-1559           libssl1.0-1.0.2q-r0           Medium          1.0.2r-r0                        http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-1559         
