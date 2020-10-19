@@ -31,7 +31,7 @@ bids/dparsf:v4.3.12,ubuntu:14.04,506
 bids/example,ubuntu:14.04,528
 bids/tracula:v6.0.0-4,ubuntu:14.04,530
 bids/ndmg:v0.1.0,ubuntu:14.04,537
-bids/ndmg,ubuntu:14.04,538
+bids/ndmg,ubuntu:14.04,537
 bids/fibredensityandcrosssection,ubuntu:14.04,566
 bids/cpac:v1.0.1a_22,ubuntu:16.04,600
 bids/oppni:v0.7.0-1,ubuntu:14.04,762
