@@ -1,21 +1,15 @@
 #!/usr/bin/env python
+with open("all-packages.csv", "r") as fin:
+    packages = fin.readlines()
 
+with open("uniq_keep_installed.csv", "r") as fin:
+    keep = fin.readlines()
 
-all = None
-keep = None
+remove = [package.strip() for package in packages if package not in keep]
+removed_packages = " ".join(str(e) for e in remove)
 
-with open('all-packages.csv', 'r') as f:
-  all = f.readlines()
+with open("to_remove.txt", "w") as f:
+    f.write(removed_packages)
 
-with open('uniq_keep_installed.csv', 'r') as f:
-  keep = f.readlines()
-
-remove = [ p.strip() for p in all if not p in keep ]
-str3 = ' '.join(str(e) for e in remove)
-
-with open('to_remove.txt', 'w') as f:
-      f.write(str3)
-print(str3)
+print(removed_packages)
 print(len(remove))
-#for p in remove:
-#    print(p)
