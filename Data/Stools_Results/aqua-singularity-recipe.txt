@@ -1,0 +1,56 @@
+Found 33 Clair namespaces
+Clair URL: http://0.0.0.0:6060/v1
+
+1. Starting server...
+======== Running on http://0.0.0.0:8080 ========
+(Press CTRL+C to quit)
+
+1. Checking server...
+2. Processing images!
+Exporting bioinformatics-group-aqua-singularity-recipe-master-latest.simg to targz...
+[34mINFO:   [0m Starting build...
+[34mINFO:   [0m Creating sandbox directory...
+[34mINFO:   [0m Build complete: /tmp/tmph79ln38a/singularity-clair.yojtrqfs
+[34mINFO:   [0m Starting build...
+[34mINFO:   [0m Creating sandbox directory...
+[34mINFO:   [0m Build complete: /tmp/tmph79ln38a/singularity-clair.yojtrqfs
+...exported bioinformatics-group-aqua-singularity-recipe-master-latest.simg to /tmp/tmph79ln38a/singularity-clair.yojtrqfs.gz
+...serving http://0.0.0.0:8080/images/singularity-clair.yojtrqfs.gz to Clair
+3. Generating report!
+patch - 2.7.5-1+deb9u1
+----------------------
+CVE-2016-10713 (Negligible)
+https://security-tracker.debian.org/tracker/CVE-2016-10713
+An issue was discovered in GNU patch before 2.7.6. Out-of-bounds access within pch_write_line() in pch.c can possibly lead to DoS via a crafted input file.
+
+
+CVE-2018-6951 (Negligible)
+https://security-tracker.debian.org/tracker/CVE-2018-6951
+An issue was discovered in GNU patch through 2.7.6. There is a segmentation fault, associated with a NULL pointer dereference, leading to a denial of service in the intuit_diff_type function in pch.c, aka a "mangled rename" issue.
+
+
+CVE-2018-6952 (Negligible)
+https://security-tracker.debian.org/tracker/CVE-2018-6952
+A double free exists in the another_hunk function in pch.c in GNU patch through 2.7.6.
+
+
+CVE-2010-4651 (Negligible)
+https://security-tracker.debian.org/tracker/CVE-2010-4651
+Directory traversal vulnerability in util.c in GNU patch 2.6.1 and earlier allows user-assisted remote attackers to create or overwrite arbitrary files via a filename that is specified with a .. (dot dot) or full pathname, a related issue to CVE-2010-1679.
+
+
+CVE-2019-13636 (Medium)
+https://security-tracker.debian.org/tracker/CVE-2019-13636
+In GNU patch through 2.7.6, the following of symlinks is mishandled in certain cases other than input files. This affects inp.c and util.c.
+
+
+CVE-2019-13638 (High)
+https://security-tracker.debian.org/tracker/CVE-2019-13638
+GNU patch through 2.7.6 is vulnerable to OS shell command injection that can be exploited by opening a crafted patch file that contains an ed style diff payload with shell metacharacters. The ed editor does not need to be present on the vulnerable system. This is different from CVE-2018-1000156.
+
+
+apt - 1.4.9
+-----------
+CVE-2011-3374 (Negligible)
+https://security-tracker.debian.org/tracker/CVE-2011-3374
+It was found that apt-key in apt, all versions, do not correctly validate gpg keys with the master keyring, leading to a potential man-in-the-middle attack.

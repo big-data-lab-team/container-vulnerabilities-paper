@@ -1,0 +1,625 @@
+Found 33 Clair namespaces
+Clair URL: http://0.0.0.0:6060/v1
+
+1. Starting server...
+======== Running on http://0.0.0.0:8080 ========
+(Press CTRL+C to quit)
+
+1. Checking server...
+2. Processing images!
+Exporting MontrealSergiy-BEst-master-latest.simg to targz...
+[34mINFO:   [0m Starting build...
+[34mINFO:   [0m Creating sandbox directory...
+[34mINFO:   [0m Build complete: /tmp/tmpqm4dbjwa/singularity-clair.xz_5y621
+[34mINFO:   [0m Starting build...
+[34mINFO:   [0m Creating sandbox directory...
+[34mINFO:   [0m Build complete: /tmp/tmpqm4dbjwa/singularity-clair.xz_5y621
+...exported MontrealSergiy-BEst-master-latest.simg to /tmp/tmpqm4dbjwa/singularity-clair.xz_5y621.gz
+...serving http://0.0.0.0:8080/images/singularity-clair.xz_5y621.gz to Clair
+3. Generating report!
+db5.3 - 5.3.28-11ubuntu0.1
+--------------------------
+CVE-2019-8457 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-8457
+SQLite3 from 3.6.0 to and including 3.27.2 is vulnerable to heap out-of-bound read in the rtreenode() function when handling invalid rtree tables.
+
+
+dpkg - 1.18.4ubuntu1.5
+----------------------
+CVE-2017-8283 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-8283
+dpkg-source in dpkg 1.3.0 through 1.18.23 is able to use a non-GNU patch program and does not offer a protection mechanism for blank-indented diff hunks, which allows remote attackers to conduct directory traversal attacks via a crafted Debian source package, as demonstrated by use of dpkg-source on NetBSD.
+
+
+groff - 1.22.3-7
+----------------
+CVE-2009-5080 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2009-5080
+The (1) contrib/eqn2graph/eqn2graph.sh, (2) contrib/grap2graph/grap2graph.sh, and (3) contrib/pic2graph/pic2graph.sh scripts in GNU troff (aka groff) 1.21 and earlier do not properly handle certain failed attempts to create temporary directories, which might allow local users to overwrite arbitrary files via a symlink attack on a file in a temporary directory, a different vulnerability than CVE-2004-1296.
+
+
+pcre3 - 2:8.38-3.1
+------------------
+CVE-2017-7245 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-7245
+Stack-based buffer overflow in the pcre32_copy_substring function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to cause a denial of service (WRITE of size 4) or possibly have unspecified other impact via a crafted file.
+
+
+CVE-2017-7244 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-7244
+The _pcre32_xclass function in pcre_xclass.c in libpcre1 in PCRE 8.40 allows remote attackers to cause a denial of service (invalid memory read) via a crafted file.
+
+
+CVE-2017-6004 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-6004
+The compile_bracket_matchingpath function in pcre_jit_compile.c in PCRE through 8.x before revision 1680 (e.g., the PHP 7.1.1 bundled version) allows remote attackers to cause a denial of service (out-of-bounds read and application crash) via a crafted regular expression.
+
+
+CVE-2017-7246 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-7246
+Stack-based buffer overflow in the pcre32_copy_substring function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to cause a denial of service (WRITE of size 268) or possibly have unspecified other impact via a crafted file.
+
+
+CVE-2017-7186 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-7186
+libpcre1 in PCRE 8.40 and libpcre2 in PCRE2 10.23 allow remote attackers to cause a denial of service (segmentation violation for read access, and application crash) by triggering an invalid Unicode property lookup.
+
+
+CVE-2017-11164 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-11164
+In PCRE 8.41, the OP_KETRMAX feature in the match function in pcre_exec.c allows stack exhaustion (uncontrolled recursion) when processing a crafted regular expression.
+
+
+zlib - 1:1.2.8.dfsg-2ubuntu4.1
+------------------------------
+CVE-2016-9842 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-9842
+The inflateMark function in inflate.c in zlib 1.2.8 might allow context-dependent attackers to have unspecified impact via vectors involving left shifts of negative integers.
+
+
+CVE-2016-9841 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-9841
+inffast.c in zlib 1.2.8 might allow context-dependent attackers to have unspecified impact by leveraging improper pointer arithmetic.
+
+
+CVE-2016-9840 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-9840
+inftrees.c in zlib 1.2.8 might allow context-dependent attackers to have unspecified impact by leveraging improper pointer arithmetic.
+
+
+CVE-2016-9843 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-9843
+The crc32_big function in crc32.c in zlib 1.2.8 might allow context-dependent attackers to have unspecified impact via vectors involving big-endian CRC calculation.
+
+
+shadow - 1:4.2-3.1ubuntu5.4
+---------------------------
+CVE-2017-12424 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-12424
+In shadow before 4.5, the newusers tool could be made to manipulate internal data structures in ways unintended by the authors. Malformed input may lead to crashes (with a buffer overflow or other memory corruption) or other unspecified behaviors. This crosses a privilege boundary in, for example, certain web-hosting environments in which a Control Panel allows an unprivileged user account to create subaccounts.
+
+
+CVE-2013-4235 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2013-4235
+TOCTOU race conditions by copying and removing directory trees
+
+
+CVE-2018-7169 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-7169
+An issue was discovered in shadow 4.5. newgidmap (in shadow-utils) is setuid and allows an unprivileged user to be placed in a user namespace where setgroups(2) is permitted. This allows an attacker to remove themselves from a supplementary group, which may allow access to certain filesystem paths if the administrator has used "group blacklisting" (e.g., chmod g-rwx) to restrict access to paths. This flaw effectively reverts a security feature in the kernel (in particular, the /proc/self/setgroups knob) to prevent this sort of privilege escalation.
+
+
+libxv - 2:1.0.10-1
+------------------
+CVE-2016-5407 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-5407
+The (1) XvQueryAdaptors and (2) XvQueryEncodings functions in X.org libXv before 1.0.11 allow remote X servers to trigger out-of-bounds memory access operations via vectors involving length specifications in received data.
+
+
+python2.7 - 2.7.12-1ubuntu0~16.04.4
+-----------------------------------
+CVE-2019-9740 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9740
+An issue was discovered in urllib2 in Python 2.x through 2.7.16 and urllib in Python 3.x through 3.7.3. CRLF injection is possible if the attacker controls a url parameter, as demonstrated by the first argument to urllib.request.urlopen with \r\n (specifically in the query string after a ? character) followed by an HTTP header or a Redis command.
+
+
+CVE-2019-5010 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-5010
+NULL pointer dereference using a specially crafted X509 certificate
+
+
+CVE-2019-9947 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9947
+An issue was discovered in urllib2 in Python 2.x through 2.7.16 and urllib in Python 3.x through 3.7.3. CRLF injection is possible if the attacker controls a url parameter, as demonstrated by the first argument to urllib.request.urlopen with \r\n (specifically in the path component of a URL that lacks a ? character) followed by an HTTP header or a Redis command. This is similar to the CVE-2019-9740 query string issue.
+
+
+CVE-2019-9636 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9636
+Python 2.7.x through 2.7.16 and 3.x through 3.7.2 is affected by: Improper Handling of Unicode Encoding (with an incorrect netloc) during NFKC normalization. The impact is: Information disclosure (credentials, cookies, etc. that are cached against a given hostname). The components are: urllib.parse.urlsplit, urllib.parse.urlparse. The attack vector is: A specially crafted URL could be incorrectly parsed to locate cookies or authentication data and send that information to a different host than when parsed correctly.
+
+
+CVE-2019-10160 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-10160
+A security regression of CVE-2019-9636 was discovered in python since commit d537ab0ff9767ef024f26246899728f0116b1ec3 affecting versions 2.7, 3.5, 3.6, 3.7 and from v3.8.0a4 through v3.8.0b1, which still allows an attacker to exploit CVE-2019-9636 by abusing the user and password parts of a URL. When an application parses user-supplied URLs to store cookies, authentication credentials, or other kind of information, it is possible for an attacker to provide specially crafted URLs to make the application locate host-related information (e.g. cookies, authentication data) and send them to a different host than where it should, unlike if the URLs had been correctly parsed. The result of an attack may vary based on the application.
+
+
+CVE-2019-9948 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9948
+urllib in Python 2.x through 2.7.16 supports the local_file: scheme, which makes it easier for remote attackers to bypass protection mechanisms that blacklist file: URIs, as demonstrated by triggering a urllib.urlopen('local_file:///etc/passwd') call.
+
+
+libxi - 2:1.7.6-1
+-----------------
+CVE-2016-7945 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7945
+Multiple integer overflows in X.org libXi before 1.7.7 allow remote X servers to cause a denial of service (out-of-bounds memory access or infinite loop) via vectors involving length fields.
+
+
+CVE-2016-7946 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7946
+X.org libXi before 1.7.7 allows remote X servers to cause a denial of service (infinite loop) via vectors involving length fields.
+
+
+apparmor - 2.10.95-0ubuntu2.10
+------------------------------
+CVE-2016-1585 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-1585
+In all versions of AppArmor mount rules are accidentally widened when compiled.
+
+
+util-linux - 2.27.1-6ubuntu3.6
+------------------------------
+CVE-2016-2779 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-2779
+runuser in util-linux allows local users to escape to the parent session via a crafted TIOCSTI ioctl call, which pushes characters to the terminal's input buffer.
+
+
+CVE-2016-5011 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-5011
+The parse_dos_extended function in partitions/dos.c in the libblkid library in util-linux allows physically proximate attackers to cause a denial of service (memory consumption) via a crafted MSDOS partition table with an extended partition boot record at zero offset.
+
+
+sqlite3 - 3.11.0-1ubuntu1.1
+---------------------------
+CVE-2017-13685 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13685
+The dump_callback function in SQLite 3.20.0 allows remote attackers to cause a denial of service (EXC_BAD_ACCESS and application crash) via a crafted file.
+
+
+CVE-2018-20346 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-20346
+SQLite before 3.25.3, when the FTS3 extension is enabled, encounters an integer overflow (and resultant buffer overflow) for FTS3 queries that occur after crafted changes to FTS3 shadow tables, allowing remote attackers to execute arbitrary code by leveraging the ability to run arbitrary SQL statements (such as in certain WebSQL use cases), aka Magellan.
+
+
+CVE-2017-10989 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-10989
+The getNodeSize function in ext/rtree/rtree.c in SQLite through 3.19.3, as used in GDAL and other products, mishandles undersized RTree blobs in a crafted database, leading to a heap-based buffer over-read or possibly unspecified other impact.
+
+
+CVE-2019-8457 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-8457
+SQLite3 from 3.6.0 to and including 3.27.2 is vulnerable to heap out-of-bound read in the rtreenode() function when handling invalid rtree tables.
+
+
+CVE-2019-9936 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9936
+In SQLite 3.27.2, running fts5 prefix queries inside a transaction could trigger a heap-based buffer over-read in fts5HashEntrySort in sqlite3.c, which may lead to an information leak. This is related to ext/fts5/fts5_hash.c.
+
+
+CVE-2017-2520 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-2520
+An issue was discovered in certain Apple products. iOS before 10.3.2 is affected. macOS before 10.12.5 is affected. tvOS before 10.2.1 is affected. watchOS before 3.2.2 is affected. The issue involves the "SQLite" component. It allows remote attackers to execute arbitrary code or cause a denial of service (buffer overflow and application crash) via a crafted SQL statement.
+
+
+CVE-2016-6153 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-6153
+os_unix.c in SQLite before 3.13.0 improperly implements the temporary directory search algorithm, which might allow local users to obtain sensitive information, cause a denial of service (application crash), or have unspecified other impact by leveraging use of the current working directory for temporary files.
+
+
+CVE-2019-9937 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9937
+In SQLite 3.27.2, interleaving reads and writes in a single transaction with an fts5 virtual table will lead to a NULL Pointer Dereference in fts5ChunkIterate in sqlite3.c. This is related to ext/fts5/fts5_hash.c and ext/fts5/fts5_index.c.
+
+
+CVE-2017-2518 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-2518
+An issue was discovered in certain Apple products. iOS before 10.3.2 is affected. macOS before 10.12.5 is affected. tvOS before 10.2.1 is affected. watchOS before 3.2.2 is affected. The issue involves the "SQLite" component. It allows remote attackers to execute arbitrary code or cause a denial of service (buffer overflow and application crash) via a crafted SQL statement.
+
+
+CVE-2017-2519 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-2519
+An issue was discovered in certain Apple products. iOS before 10.3.2 is affected. macOS before 10.12.5 is affected. tvOS before 10.2.1 is affected. watchOS before 3.2.2 is affected. The issue involves the "SQLite" component. It allows remote attackers to execute arbitrary code or cause a denial of service (memory corruption and application crash) via a crafted SQL statement.
+
+
+CVE-2018-20506 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-20506
+SQLite before 3.25.3, when the FTS3 extension is enabled, encounters an integer overflow (and resultant buffer overflow) for FTS3 queries in a "merge" operation that occurs after crafted changes to FTS3 shadow tables, allowing remote attackers to execute arbitrary code by leveraging the ability to run arbitrary SQL statements (such as in certain WebSQL use cases). This is a different vulnerability than CVE-2018-20346.
+
+
+CVE-2019-5827 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-5827
+Integer overflow in SQLite via WebSQL in Google Chrome prior to 74.0.3729.131 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page.
+
+
+libice - 2:1.0.9-1
+------------------
+CVE-2017-2626 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-2626
+It was discovered that libICE before 1.0.9-8 used a weak entropy to generate keys. A local attacker could potentially use this flaw for session hijacking using the information available from the process list.
+
+
+libxvmc - 2:1.0.9-1ubuntu1
+--------------------------
+CVE-2016-7953 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7953
+Buffer underflow in X.org libXvMC before 1.0.10 allows remote X servers to have unspecified impact via an empty string.
+
+
+systemd - 229-4ubuntu21.21
+--------------------------
+CVE-2018-20839 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-20839
+systemd 242 changes the VT1 mode upon a logout, which allows attackers to read cleartext passwords in certain circumstances, such as watching a shutdown, or using Ctrl-Alt-F1 and Ctrl-Alt-F2. This occurs because the KDGKBMODE (aka current keyboard mode) check is mishandled.
+
+
+CVE-2018-16888 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-16888
+It was discovered systemd does not correctly check the content of PIDFile files before using it to kill processes. When a service is run from an unprivileged user (e.g. User field set in the service file), a local attacker who is able to write to the PIDFile of the mentioned service may use this flaw to trick systemd into killing other services and/or privileged processes. Versions before v237 are vulnerable.
+
+
+bzip2 - 1.0.6-8
+---------------
+CVE-2016-3189 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-3189
+Use-after-free vulnerability in bzip2recover in bzip2 1.0.6 allows remote attackers to cause a denial of service (crash) via a crafted bzip2 file, related to block ends set to before the start of the block.
+
+
+CVE-2019-12900 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-12900
+BZ2_decompress in decompress.c in bzip2 through 1.0.6 has an out-of-bounds write when there are many selectors.
+
+
+glibc - 2.23-0ubuntu11
+----------------------
+CVE-2018-20796 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-20796
+In the GNU C Library (aka glibc or libc6) through 2.29, check_dst_limits_calc_pos_1 in posix/regexec.c has Uncontrolled Recursion, as demonstrated by '(\227|)(\\1\\1|t1|\\\2537)+' in grep.
+
+
+CVE-2017-12132 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-12132
+The DNS stub resolver in the GNU C Library (aka glibc or libc6) before version 2.26, when EDNS support is enabled, will solicit large UDP responses from name servers, potentially simplifying off-path DNS spoofing attacks due to IP fragmentation.
+
+
+CVE-2017-12133 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-12133
+Use-after-free vulnerability in the clntudp_call function in sunrpc/clnt_udp.c in the GNU C Library (aka glibc or libc6) before 2.26 allows remote attackers to have unspecified impact via vectors related to error path.
+
+
+CVE-2019-9192 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9192
+** DISPUTED ** In the GNU C Library (aka glibc or libc6) through 2.29, check_dst_limits_calc_pos_1 in posix/regexec.c has Uncontrolled Recursion, as demonstrated by '(|)(\\1\\1)*' in grep, a different issue than CVE-2018-20796. NOTE: the software maintainer disputes that this is a vulnerability because the behavior occurs only with a crafted pattern.
+
+
+CVE-2018-6485 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-6485
+An integer overflow in the implementation of the posix_memalign in memalign functions in the GNU C Library (aka glibc or libc6) 2.26 and earlier could cause these functions to return a pointer to a heap area that is too small, potentially leading to heap corruption.
+
+
+CVE-2015-5180 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2015-5180
+res_query in libresolv in glibc before 2.25 allows remote attackers to cause a denial of service (NULL pointer dereference and process crash).
+
+
+CVE-2015-8985 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2015-8985
+The pop_fail_stack function in the GNU C Library (aka glibc or libc6) allows context-dependent attackers to cause a denial of service (assertion failure and application crash) via vectors related to extended regular expression processing.
+
+
+CVE-2016-10228 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-10228
+The iconv program in the GNU C Library (aka glibc or libc6) 2.25 and earlier, when invoked with the -c option, enters an infinite loop when processing invalid multi-byte input sequences, leading to a denial of service.
+
+
+CVE-2019-7309 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-7309
+In the GNU C Library (aka glibc or libc6) through 2.29, the memcmp function for the x32 architecture can incorrectly return zero (indicating that the inputs are equal) because the RDX most significant bit is mishandled.
+
+
+CVE-2009-5155 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2009-5155
+In the GNU C Library (aka glibc or libc6) before 2.28, parse_reg_exp in posix/regcomp.c misparses alternatives, which allows attackers to cause a denial of service (assertion failure and application exit) or trigger an incorrect result by attempting a regular-expression match.
+
+
+CVE-2017-18269 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-18269
+An SSE2-optimized memmove implementation for i386 in sysdeps/i386/i686/multiarch/memcpy-sse2-unaligned.S in the GNU C Library (aka glibc or libc6) 2.21 through 2.27 does not correctly perform the overlapping memory check if the source memory range spans the middle of the address space, resulting in corrupt data being produced by the copy operation. This may disclose information to context-dependent attackers, or result in a denial of service, or, possibly, code execution.
+
+
+CVE-2018-11236 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-11236
+stdlib/canonicalize.c in the GNU C Library (aka glibc or libc6) 2.27 and earlier, when processing very long pathname arguments to the realpath function, could encounter an integer overflow on 32-bit architectures, leading to a stack-based buffer overflow and, potentially, arbitrary code execution.
+
+
+CVE-2018-11237 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-11237
+An AVX-512-optimized implementation of the mempcpy function in the GNU C Library (aka glibc or libc6) 2.27 and earlier may write data beyond the target buffer, leading to a buffer overflow in __mempcpy_avx512_no_vzeroupper.
+
+
+CVE-2016-10739 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-10739
+In the GNU C Library (aka glibc or libc6) through 2.28, the getaddrinfo function would successfully parse a string that contained an IPv4 address followed by whitespace and arbitrary characters, which could lead applications to incorrectly assume that it had parsed a valid string, without the possibility of embedded HTTP headers or other potentially dangerous substrings.
+
+
+CVE-2019-9169 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9169
+In the GNU C Library (aka glibc or libc6) through 2.29, proceed_next_node in posix/regexec.c has a heap-based buffer over-read via an attempted case-insensitive regular-expression match.
+
+
+gnupg - 1.4.20-1ubuntu3.3
+-------------------------
+CVE-2019-13050 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-13050
+Interaction between the sks-keyserver code through 1.2.0 of the SKS keyserver network, and GnuPG through 2.2.16, makes it risky to have a GnuPG keyserver configuration line referring to a host on the SKS keyserver network. Retrieving data from this network may cause a persistent denial of service, because of a Certificate Spamming Attack.
+
+
+libxtst - 2:1.2.2-1
+-------------------
+CVE-2016-7952 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7952
+X.org libXtst before 1.2.3 allows remote X servers to cause a denial of service (infinite loop) via a reply in the (1) XRecordStartOfData, (2) XRecordEndOfData, or (3) XRecordClientDied category without a client sequence and with attached data.
+
+
+CVE-2016-7951 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7951
+Multiple integer overflows in X.org libXtst before 1.2.3 allow remote X servers to trigger out-of-bounds memory access operations by leveraging the lack of range checks.
+
+
+cryptsetup - 2:1.6.6-5ubuntu2.1
+-------------------------------
+CVE-2016-4484 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-4484
+The Debian initrd script for the cryptsetup package 2:1.7.3-2 and earlier allows physically proximate attackers to gain shell access via many log in attempts with an invalid password.
+
+
+dbus - 1.10.6-1ubuntu3.3
+------------------------
+CVE-2019-12749 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-12749
+dbus before 1.10.28, 1.12.x before 1.12.16, and 1.13.x before 1.13.12, as used in DBusServer in Canonical Upstart in Ubuntu 14.04 (and in some, less common, uses of dbus-daemon), allows cookie spoofing because of symlink mishandling in the reference implementation of DBUS_COOKIE_SHA1 in the libdbus library. (This only affects the DBUS_COOKIE_SHA1 authentication mechanism.) A malicious client with write access to its own home directory could manipulate a ~/.dbus-keyrings symlink to cause a DBusServer with a different uid to read and write in unintended locations. In the worst case, this could result in the DBusServer reusing a cookie that is known to the malicious client, and treating that cookie as evidence that a subsequent client connection came from an attacker-chosen uid, allowing authentication bypass.
+
+
+libpng - 1.2.54-1ubuntu1.1
+--------------------------
+CVE-2018-14048 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-14048
+An issue has been found in libpng 1.6.34. It is a SEGV in the function png_free_data in png.c, related to the recommended error handling for png_read_image.
+
+
+xorg - 1:7.7+13ubuntu3.1
+------------------------
+CVE-2012-1093 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2012-1093
+ML-Date: 2012-02-28 17:01:19, ML-Subject: Re: [oss-security] CVE request: init script x11-common creates directories in insecure manners
+
+
+elfutils - 0.165-3ubuntu1.1
+---------------------------
+CVE-2018-16403 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-16403
+libdw in elfutils 0.173 checks the end of the attributes list incorrectly in dwarf_getabbrev in dwarf_getabbrev.c and dwarf_hasattr in dwarf_hasattr.c, leading to a heap-based buffer over-read and an application crash.
+
+
+CVE-2018-18520 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-18520
+An Invalid Memory Address Dereference exists in the function elf_end in libelf in elfutils through v0.174. Although eu-size is intended to support ar files inside ar files, handle_ar in size.c closes the outer ar file before handling all inner entries. The vulnerability allows attackers to cause a denial of service (application crash) with a crafted ELF file.
+
+
+CVE-2018-18310 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-18310
+An invalid memory address dereference was discovered in dwfl_segment_report_module.c in libdwfl in elfutils through v0.174. The vulnerability allows attackers to cause a denial of service (application crash) with a crafted ELF file, as demonstrated by consider_notes.
+
+
+CVE-2019-7150 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-7150
+An issue was discovered in elfutils 0.175. A segmentation fault can occur in the function elf64_xlatetom in libelf/elf32_xlatetom.c, due to dwfl_segment_report_module not checking whether the dyn data read from a core file is truncated. A crafted input can cause a program crash, leading to denial-of-service, as demonstrated by eu-stack.
+
+
+CVE-2019-7149 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-7149
+A heap-based buffer over-read was discovered in the function read_srclines in dwarf_getsrclines.c in libdw in elfutils 0.175. A crafted input can cause segmentation faults, leading to denial-of-service, as demonstrated by eu-nm.
+
+
+CVE-2018-16062 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-16062
+dwarf_getaranges in dwarf_getaranges.c in libdw in elfutils before 2018-08-18 allows remote attackers to cause a denial of service (heap-based buffer over-read) via a crafted file.
+
+
+CVE-2019-7665 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-7665
+In elfutils 0.175, a heap-based buffer over-read was discovered in the function elf32_xlatetom in elf32_xlatetom.c in libelf. A crafted ELF input can cause a segmentation fault leading to denial of service (program crash) because ebl_core_note does not reject malformed core file notes.
+
+
+CVE-2018-16402 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-16402
+libelf/elf_end.c in elfutils 0.173 allows remote attackers to cause a denial of service (double free and application crash) or possibly have unspecified other impact because it tries to decompress twice.
+
+
+CVE-2018-18521 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-18521
+Divide-by-zero vulnerabilities in the function arlib_add_symbols() in arlib.c in elfutils 0.174 allow remote attackers to cause a denial of service (application crash) with a crafted ELF file, as demonstrated by eu-ranlib, because a zero sh_entsize is mishandled.
+
+
+libxrandr - 2:1.5.0-1
+---------------------
+CVE-2016-7948 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7948
+X.org libXrandr before 1.5.1 allows remote X servers to trigger out-of-bounds write operations by leveraging mishandling of reply data.
+
+
+CVE-2016-7947 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7947
+Multiple integer overflows in X.org libXrandr before 1.5.1 allow remote X servers to trigger out-of-bounds write operations via a crafted response.
+
+
+libxrender - 1:0.9.9-0ubuntu1
+-----------------------------
+CVE-2016-7950 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7950
+The XRenderQueryFilters function in X.org libXrender before 0.9.10 allows remote X servers to trigger out-of-bounds write operations via vectors involving filter name lengths.
+
+
+CVE-2016-7949 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7949
+Multiple buffer overflows in the (1) XvQueryAdaptors and (2) XvQueryEncodings functions in X.org libXrender before 0.9.10 allow remote X servers to trigger out-of-bounds write operations via vectors involving length fields.
+
+
+libxdmcp - 1:1.1.2-1.1
+----------------------
+CVE-2017-2625 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-2625
+It was discovered that libXdmcp before 1.1.2 including used weak entropy to generate session keys. On a multi-user system using xdmcp, a local attacker could potentially use information available from the process list to brute force the key, allowing them to hijack other users' sessions.
+
+
+bash - 4.3-14ubuntu1.2
+----------------------
+CVE-2019-9924 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9924
+rbash in Bash before 4.4-beta2 did not prevent the shell user from modifying BASH_CMDS, thus allowing the user to execute any command with the permissions of the shell.
+
+
+libxfixes - 1:5.0.1-2
+---------------------
+CVE-2016-7944 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-7944
+Integer overflow in X.org libXfixes before 5.0.3 on 32-bit platforms might allow remote X servers to gain privileges via a length value of INT_MAX, which triggers the client to stop reading data and get out of sync.
+
+
+libseccomp - 2.3.1-2.1ubuntu2~16.04.1
+-------------------------------------
+CVE-2019-9893 (Medium)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2019-9893
+libseccomp before 2.4.0 did not correctly generate 64-bit syscall argument comparisons using the arithmetic operators (LT, GT, LE, GE), which might able to lead to bypassing seccomp filters and potential privilege escalations.
+
+
+coreutils - 8.25-2ubuntu3~16.04
+-------------------------------
+CVE-2016-2781 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-2781
+chroot in GNU coreutils, when used with --userspec, allows local users to escape to the parent session via a crafted TIOCSTI ioctl call, which pushes characters to the terminal's input buffer.
+
+
+expat - 2.1.0-7ubuntu0.16.04.3
+------------------------------
+CVE-2018-20843 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-20843
+In libexpat in Expat before 2.2.7, XML input including XML names that contain a large number of colons could make the XML parser consume a high amount of RAM and CPU resources while processing (enough to be usable for denial-of-service attacks).
+
+
+man-db - 2.7.5-1
+----------------
+CVE-2015-1336 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2015-1336
+The daily mandb cleanup job in Man-db before 2.7.6.1-1 as packaged in Ubuntu and Debian allows local users with access to the man account to gain privileges via vectors involving insecure chown use.
+
+
+xserver-xorg-video-nouveau - 1:1.0.12-1build2
+---------------------------------------------
+CVE-2018-3979 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-3979
+A remote denial-of-service vulnerability exists in the way the Nouveau Display Driver (the default Ubuntu Nvidia display driver) handles GPU shader execution. A specially crafted pixel shader can cause remote denial-of-service issues. An attacker can provide a specially crafted website to trigger this vulnerability. This vulnerability can be triggered remotely after the user visits a malformed website. No further user interaction is required. Vulnerable versions include Ubuntu 18.04 LTS (linux 4.15.0-29-generic x86_64), Nouveau Display Driver NV117 (vermagic: 4.15.0-29-generic SMP mod_unload).
+
+
+tar - 1.28-2.1ubuntu0.1
+-----------------------
+CVE-2018-20482 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-20482
+GNU Tar through 1.30, when --sparse is used, mishandles file shrinkage during read access, which allows local users to cause a denial of service (infinite read loop in sparse_dump_region in sparse.c) by modifying a file that is supposed to be archived by a different user's process (e.g., a system backup running as root).
+
+
+protobuf - 2.6.1-1.3
+--------------------
+CVE-2015-5237 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2015-5237
+protobuf allows remote authenticated attackers to cause a heap-based buffer overflow.
+
+
+ncurses - 6.0+20160213-1ubuntu1
+-------------------------------
+CVE-2017-13734 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13734
+There is an illegal address access in the _nc_safe_strcat function in strings.c in ncurses 6.0 that will lead to a remote denial of service attack.
+
+
+CVE-2017-10684 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-10684
+In ncurses 6.0, there is a stack-based buffer overflow in the fmt_entry function. A crafted input will lead to a remote arbitrary code execution attack.
+
+
+CVE-2017-10685 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-10685
+In ncurses 6.0, there is a format string vulnerability in the fmt_entry function. A crafted input will lead to a remote arbitrary code execution attack.
+
+
+CVE-2017-11112 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-11112
+In ncurses 6.0, there is an attempted 0xffffffffffffffff access in the append_acs function of tinfo/parse_entry.c. It could lead to a remote denial of service attack if the terminfo library code is used to process untrusted terminfo data.
+
+
+CVE-2017-16879 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-16879
+Stack-based buffer overflow in the _nc_write_entry function in tinfo/write_entry.c in ncurses 6.0 allows attackers to cause a denial of service (application crash) or possibly execute arbitrary code via a crafted terminfo file, as demonstrated by tic.
+
+
+CVE-2017-13728 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13728
+There is an infinite loop in the next_char function in comp_scan.c in ncurses 6.0, related to libtic. A crafted input will lead to a remote denial of service attack.
+
+
+CVE-2017-11113 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-11113
+In ncurses 6.0, there is a NULL Pointer Dereference in the _nc_parse_entry function of tinfo/parse_entry.c. It could lead to a remote denial of service attack if the terminfo library code is used to process untrusted terminfo data.
+
+
+CVE-2017-13733 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13733
+There is an illegal address access in the fmt_entry function in progs/dump_entry.c in ncurses 6.0 that might lead to a remote denial of service attack.
+
+
+CVE-2017-13730 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13730
+There is an illegal address access in the function _nc_read_entry_source() in progs/tic.c in ncurses 6.0 that might lead to a remote denial of service attack.
+
+
+CVE-2017-13732 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13732
+There is an illegal address access in the function dump_uses() in progs/dump_entry.c in ncurses 6.0 that might lead to a remote denial of service attack.
+
+
+CVE-2017-13731 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13731
+There is an illegal address access in the function postprocess_termcap() in parse_entry.c in ncurses 6.0 that will lead to a remote denial of service attack.
+
+
+CVE-2017-13729 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2017-13729
+There is an illegal address access in the _nc_save_str function in alloc_entry.c in ncurses 6.0. It will lead to a remote denial of service attack.
+
+
+unzip - 6.0-20ubuntu1
+---------------------
+CVE-2014-9913 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2014-9913
+Buffer overflow in the list_files function in list.c in Info-Zip UnZip 6.0 allows remote attackers to cause a denial of service (crash) via vectors related to the compression method.
+
+
+CVE-2016-9844 (Negligible)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2016-9844
+Buffer overflow in the zi_short function in zipinfo.c in Info-Zip UnZip 6.0 allows remote attackers to cause a denial of service (crash) via a large compression method value in the central directory file header.
+
+
+CVE-2018-1000035 (Low)
+http://people.ubuntu.com/~ubuntu-security/cve/CVE-2018-1000035
+A heap-based buffer overflow exists in Info-Zip UnZip version <= 6.00 in the processing of password-protected archives that allows an attacker to perform a denial of service or to possibly achieve code execution.
+
+

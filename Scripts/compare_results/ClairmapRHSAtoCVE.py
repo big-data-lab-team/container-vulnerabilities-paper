@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import sys
-from typing import List
+from typing import Dict
+from typing import Tuple
 
 
 def domapping(rhsa2cve_file: str, rhsa_file: str, output_file: str) -> None:
     """Map Clair RHSA to CVE.
-
     Parameters
     ----------
     rhsa2cve_file : str
@@ -14,34 +14,34 @@ def domapping(rhsa2cve_file: str, rhsa_file: str, output_file: str) -> None:
         Path to csv file containing RHSA to convert.
     output_file : str
         Path to csv file to write mapped CVEs.
-
     Returns
     -------
     None
     """
-    targets: List[str] = []
+    cves: Dict[str, Tuple[str, str]] = {}
 
     with open(rhsa2cve_file, "r") as fin:
-        words = fin.readlines()
+        words = map(str.split, fin.readlines())
+        rhsa: Dict[str, Tuple[str, str]] = {
+            word[4]: (word[3], word[6])
+            for word in words
+            if (len(word) > 1 and "|" not in [word[3], word[4]])
+        }
 
     with open(rhsa_file, "r") as fin:
         lines = fin.readlines()
 
-        for word in words:
-            word = word.strip()
-            print(word)
+    for k, v in rhsa.items():
+        for line in lines:
+            if k in line:
+                data = line.split()
+                for cve in data[1].split(","):
+                    cves[cve] = (v[0], v[1])
 
-            for line in lines:
-                if word in line:
-                    targets.append(line.split()[1])
-
-        cves = [cve for target in targets for cve in target.split(",")]
-
-    req_cves = list(set(cves))
     with open(output_file, "w") as fout:
-        for cve in req_cves:
-            fout.write(cve + "\n")
-            print(cve)
+        fout.write("Vulnerability_ID     Package    Severity\n")
+        for k, v in cves.items():
+            fout.write(f"{k} {v[0]} {v[1]}\n")
 
 
 if __name__ == "__main__":
