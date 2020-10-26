@@ -221,8 +221,8 @@ image
 \texttt{vanessa/stools-clair:v3.2.1}.
 % , which is using another Docker
 % image \texttt{arminc/clair-db:latest} for referring to vulnerability feed.
-Since Stools uses Clair internally for scanning, vulnerability databases used
-by Stools are same as mentioned for Clair.
+Since Stools uses Clair internally for scanning, the vulnerability databases used
+by Stools are the same as mentioned for Clair.
 To scan Singularity images, we followed the steps mentioned in the
 \href{https://github.com/singularityhub/stools}{Stools documentation}.
 
@@ -440,7 +440,7 @@ patches beyond the 5 years covered by LTS. Although all the scanned images
 are LTS, Clair refers to the ESM database entry while Anchore and Vuls refer to the
 LTS database entry. The vulnerabilities present in region \textbf{3} due to
 this discrepancy are incorrectly missed by Anchore and Vuls: they have been
-detected in ESM but were already present in LTS. The vulneratibilities in
+detected in ESM but were already present in LTS. The vulnerabilities in
 region \textbf{4} are incorrectly missed by Clair: they have been fixed in
 ESM but are still present in LTS. 
 
