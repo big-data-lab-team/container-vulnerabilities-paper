@@ -56,10 +56,10 @@ of scientific data analyses on high-performance computing clusters
 software packages, which increases the number of security vulnerabilities
 in the images and widens the attack surface of the infrastructure. This
 paper presents a vulnerability analysis of container images for scientific
-data analysis. We analyze container images with four vulnerability
+data analysis. We compare results obtained with four vulnerability
 scanners, focusing on the use case of neuroscience data analysis, and
 quantifying the effect of images updates and minification on the number of
-vulnerabilities. We find that container images used for data analysis
+vulnerabilities. We find that container images used for neuroscience data analysis
 contain hundreds of vulnerabilities, that software updates remove about two
 thirds of these vulnerabilities, and that removing unused packages is also
 effective. We conclude with recommendations on how to build container
@@ -103,7 +103,7 @@ vulnerabilities~\cite{gummaraju2015over}, images on average contain over
 outdated packages~\cite{zerouali2019relation}.
 
 In this study, we focus on the vulnerabilities present in container images
-deployed on HPC clusters for scientific data analysis, and we answer the
+deployed on HPC clusters for scientific data analysis. We address the
 following questions:
 
 \textit{What is the current amount of vulnerabilities in
@@ -123,7 +123,7 @@ Container images often include more software packages than necessary for
 typical analysis. We report on the impact of unused software packages on
 the presence of vulnerabilities.
 
-We answer these questions through the example of neuroimaging analyses. The remainder of this paper 
+The remainder of this paper 
 describes the materials and tools used in the
 experiments, including container images, image scanners, and our methodology for updating and minifying images.
 Results present the vulnerabilities detected in container
@@ -144,9 +144,9 @@ four of the major image scanners.
 
 We scanned all container images available at the time of this study on two containerization frameworks
 used in neuroscience: BIDS
-apps~\cite{gorgolewski2017bids} and Boutiques~\cite{glatard2018boutiques},
+apps~\cite{gorgolewski2017bids} (26 images) and Boutiques~\cite{glatard2018boutiques} (18 images),
 totalling
-44 container images: 26 from BIDS apps, and 18 from Boutiques. At the time of the study, BIDS apps had 27 images,
+44 container images. At the time of the study, BIDS apps had 27 images,
 out of which one wasn't available on DockerHub. Boutiques had 49 images,
 %listed using Boutiques \texttt{bosh search} command,
 however, only 23 unique images were listed, out of which 3 couldn't be retrieved and 2
@@ -156,14 +156,14 @@ and 6 Singularity images.
 
 \subsection{Image Scanners}
 
-We used four popular image scanners: Anchore,
-Vuls and Clair to scan Docker images, and
-Singularity Container Tools (Stools) to scan Singularity images. 
+We compared the results obtained with four container image scanners: Anchore, Vuls, and
+Clair to scan Docker images, and Singularity Container Tools
+(Stools) to scan Singularity images. 
 
 \href{https://github.com/anchore/anchore-engine}{Anchore} is an end-to-end, open-source container security platform. It
 analyzes container images and lists vulnerable OS
 packages, non-OS packages (Python, Java, Gem, and npm), and files.
-In our experiments, we use Anchore Engine version 0.5.0 through Docker image \texttt{anchore/anchore-engine:v0.5.0}, and
+In our experiments, we used Anchore Engine version 0.5.0 through Docker image \texttt{anchore/anchore-engine:v0.5.0}, and
 Anchore vulnerability database version 0.0.11.
 
 \begin{table*}
@@ -181,21 +181,23 @@ Anchore vulnerability database version 0.0.11.
  \hline
 \end{tabular}
 \caption{Vulnerability databases used by scanners for different OS distributions. All scanners also refer to 
-the National Vulnerability Database (NVD) for metadata about vulnerabilities.}
+the National Vulnerability Database (NVD) for vulnerability metadata.}
 \label{table:databases}
 \end{table*}
 
 \href{https://github.com/future-architect/vuls}{Vuls} is an open-source vulnerability scanner for Linux and FreeBSD. It
 offers both static and dynamic scanning, and both local and remote
-scanning. In our experiments,we used Vuls 0.9.0, executed through Docker image
+scanning. In our experiments, we used Vuls 0.9.0, executed through Docker image
 \texttt{vuls/vuls:0.9.0} in remote dynamic mode.
 
 \href{https://github.com/quay/clair}{Clair} is an open-source and
 extensible vulnerability scanner for Docker and appc container images,
 developed by CoreOS (now Container Linux), a Linux distribution to deploy
-container clusters. Clair has a client-server architecture, in which the
-server scans Docker images layer by layer and maintains a database of
-vulnerabilities. We used Clair through
+container clusters.
+%  Clair has a client-server architecture, in which the
+% server scans Docker images layer by layer and maintains a database of
+% vulnerabilities.
+ We used Clair through
 \href{https://github.com/arminc/clair-scanner}{Clair-scanner}, a tool to
 facilitate the testing of container images against a local Clair server. 
 % Clair-scanner scans the image,
@@ -210,7 +212,7 @@ facilitate the testing of container images against a local Clair server.
 % Clair also uses NVD database for getting vulnerability metadata.
 We used Clair version 2.0.6, executed through
 Docker image \texttt{arminc/clair-local-scan:v2.0.6}. For the vulnerability
-database, we use Docker image \texttt{arminc/clair-db:latest}, last
+database, we used Docker image \texttt{arminc/clair-db:latest}, last
 updated on 2019-09-18.
 
 \href{https://github.com/singularityhub/stools}{Singularity Tools} (Stools)
@@ -235,21 +237,19 @@ Assessment Language (OVAL) database, an international open standard that
 supports various OS distributions including Ubuntu, Debian and CentOS but
 not Alpine. The second one are vulnerability databases from specific OS
 distributions, such as Alpine-SecDB, Debian Security Bug Tracker, Ubuntu
-CVE Tracker, or Red Hat Security Data. OS distributions often assign a
+CVE Tracker, or Red Hat Security Data. In these databases, OS distributions often assign a
 status to each vulnerability, to keep track of required and available
 security fixes in different versions of the distribution. Vuls uses OVAL
 databases for all distributions except Alpine. On the contrary, Clair exclusively refers to
-distribution-specific databases. Anchore uses OVAL only for CentOS
-\tristan{any idea why?}.\change{Through our scanning experiments I learned that
-Oval CentOS database was not listing all vulnerabilities and Anchore team already
-realized that. In their recent releases CentOS OVAL is deprecated and they started 
-referring to Red Hat Enterprise Linux (RHEL) data}
- It is also worth noting that there is no vulnerability data
+distribution-specific databases. Anchore uses OVAL only for CentOS, as distribution-specific databases
+are assumed to be more complete.
+It is also worth noting that there is no vulnerability data
 for Ubuntu 17.04 and 17.10 distributions in the OVAL database, since these
 distributions have reached end of life, meaning that images with these
-distributions cannot be scanned with Vuls \tristan{why doesn't vuls use
-Ubuntu CVE tracker?}.\change{They have it
-in their TODO list}.
+distributions cannot be scanned with Vuls.
+%  \tristan{why doesn't vuls use
+% Ubuntu CVE tracker?}.\change{They have it
+% in their TODO list}.
 \tristan{In Vuls, what happens when 2 databases are used?}.
 \change{Using OVAL database alone is not sufficient because
 OVAL does not contain all vulnerabilities as the main intention
