@@ -319,9 +319,9 @@ with a Jupyter notebook to regenerate the figures.
 \begin{figure*}
 \includegraphics[width=\textwidth]{Figures/results.pdf}
 \caption{\label{fig:vulnerabilities} Number of vulnerabilities detected by
-Anchore in container images. \textbf{(A)} Number of vulnerabilities by
+Anchore and Stools in container images. \textbf{(A)} Number of vulnerabilities by
 container image and severity, showing hundreds of detected vulnerabilities
-per image (mean: 468). \textbf{(B)} Effect of image minification and
+per image. Images s*,t*,u*,v*,w* and x* are Singularity images and scanned by Stools. \textbf{(B)} Effect of image minification and
 package update on 5 container images, showing that both techniques are
 complementary \textbf{(C)} Number of vulnerabilities by number of
 packages, showing a strong linear relationship. \textbf{(D)} Number of
@@ -419,12 +419,33 @@ that scanning results only overlapped by 60\%. Vuls and Clair appear to be in be
 agreement, with a Jaccard coefficient of 0.8.
 
 % where do the discrepancies come from?
-The vulnerabilities detected by Anchore only (region \textbf{(1)} in
-Fig~\ref{fig:venn}) are all in the development package (headers) of the C
-library (\texttt{linux-libc-dev} in Ubuntu). \tristan{not all in fact... I
-wasn't sure how to interpret all these differences (see last section in the
-notebook), let's discuss it during a meeting.}
-
+We analyzed these results and figured out some reasons behind the discrepancies of the results.
+The 4443 out of 4453 vulnerabilities detected by Anchore only (region \textbf{(1)} in
+Fig~\ref{fig:venn}) are in the development package (headers) of the C
+library (\texttt{linux-libc-dev} in Ubuntu and Debian). Clair detects only Debian vulnerabilities
+in \texttt{linux-libc-dev}, whereas Vuls do not detect vulnerabilities in this package at all.
+The remaining 10 vulnerabilities in region \textbf{1} are reported in the binary or subpackages 
+of vulnerable packages, which is not reported by Vuls and Clair.
+Also, Anchore filters the vulnerabilities that are \texttt{minor} and 
+ignored by Debian. These are the main reasons behind vulnerabilities in 
+region \textbf{2} and region \textbf{3}. Clair's wrong detections also adds up to region \textbf{3}.
+Vulnerabilities in region \textbf{4} all exist in Ubuntu distribution 
+and are not detected by Clair. We noticed that this is happening because Clair refers 
+to Ubuntu CVE tracker database and in this database there are two entries for Ubuntu 14.04, 
+one for LTS and another for ESM release. Clair mistakenly grabs ESM entry and detects vulnerabilities 
+according to it, whereas LTS release is present in the image. There are also a couple of 
+bugs in Anchore which we noticed in our analysis and reported to the Anchore's developer 
+team through their Slack channel. First is the \textit{epoch bug}, which gets triggered 
+when there is an epoch (\texttt{:}) in the package version. Another is \textit{out of standard bug}, 
+which gets triggered when the vulnerability is ignored 
+by Ubuntu. These two bugs are also the reasons behind vulnerabilities in region \textbf{6} 
+in addition to Anchore intentionally ignoring \texttt{minor} Debian vulnerabilities. 
+Furthermore, Vuls reports vulnerabilities which have \textit{TEMP} 
+identifier, whereas both Clair and Anchore decides not to report them. These 
+vulnerabilities have a temporary identifier and can be changed anytime so it is not
+recommended for external references. There are 32 temporary vulnerabilities in region \textbf{7}.
+The remaining vulnerabilities in this region exist in Centos distribution and according to our analysis
+these are the misses in Anchore and Clair.
 
 % \begin{table*}
 % 	\csvreader[%
@@ -446,8 +467,7 @@ notebook), let's discuss it during a meeting.}
 	detected vulnerabilities are quite low, showing important discrepancies
 	between the scanners: Jaccard(Anchore, Clair) = 0.59, Jaccard(Anchore, Vuls) =
 	0.59, Jaccard(Vuls, Clair) = 0.82. Two Ubuntu 17.04 images weren't
-	included in this comparison as they cannot be scanned by Vuls.
-	\tristan{add Centos images to the analysis using the notebook}}
+	included in this comparison as they cannot be scanned by Vuls.}
 \end{figure}
 
 % In most cases,

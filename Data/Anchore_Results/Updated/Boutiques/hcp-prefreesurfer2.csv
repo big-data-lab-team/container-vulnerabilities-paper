@@ -1,2 +1,4 @@
-Vulnerability_ID        Package                                   Severity        Fix                       CVE Refs        Vulnerability URL                                      
-RHSA-2017:0372          kernel-headers-3.10.0-1062.4.1.el7        High            0:4.5.0-15.2.1.el7                        https://access.redhat.com/errata/RHSA-2017:0372        
+Vulnerability_ID   Package   Severity
+CVE-2016-5195   kernel-headers-3.10.0-1062.4.1.el7   High
+CVE-2016-7039   kernel-headers-3.10.0-1062.4.1.el7   High
+CVE-2016-8666   kernel-headers-3.10.0-1062.4.1.el7   High
