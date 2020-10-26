@@ -318,17 +318,18 @@ with a Jupyter notebook to regenerate the figures.
 \caption{\label{fig:vulnerabilities} Number of vulnerabilities detected by
 Anchore and Stools in container images. \textbf{(A)} Number of vulnerabilities by
 container image and severity, showing hundreds of detected vulnerabilities
-per image. Images s*,t*,u*,v*,w* and x* are Singularity images scanned by Stools. \textbf{(B)} Effect of image minification and
+per image. Images s*,t*,u*,v*,w* and x* are Singularity images scanned by Stools and
+others are Docker images scanned using Anchore. \textbf{(B)} Effect of image minification and
 package update on 5 container images, showing that both techniques are
 complementary \textbf{(C)} Number of vulnerabilities by number of
-packages, showing a strong linear relationship \tristan{add Singularity images and update regression parameters accordingly.}. \textbf{(D)} Number of
+packages, showing a strong linear relationship. \textbf{(D)} Number of
 vulnerabilities by number of packages \emph{after package update}, showing that software updates 
 importantly reduce the number of detected vulnerabilities.}
 \end{figure*}
 
 An important amount of vulnerabilities were found in the tested container
- images (Fig~\ref{fig:vulnerabilities}-\textbf{A}), with an average of 468 vulnerabilities
-  per image and a median of 372 \tristan{update values with singularity images}. In comparison, no vulnerabilities were found in base
+ images (Fig~\ref{fig:vulnerabilities}-\textbf{A}), with an average of 460 vulnerabilities
+  per image and a median of 321. In comparison, no vulnerabilities were found in base
  Docker images \texttt{ubuntu:20.04} and \texttt{centos:7} after package
  update. Moreover, a significant fraction of detected vulnerabilities are
  of high severity
@@ -343,8 +344,8 @@ An important amount of vulnerabilities were found in the tested container
 
 Unsurprisingly, a strong linear relationship is found between the number of
 detected vulnerabilities and the number of packages present in the
-image (Fig~\ref{fig:vulnerabilities}-\textbf{C}, r=0.83,
-$p\textless10^{-10}$) \tristan{update values with singularity images}. On average, 1.8 vulnerabilities are introduced for
+image (Fig~\ref{fig:vulnerabilities}-\textbf{C}, r=0.82,
+$p\textless10^{-12}$). On average, 1.7 vulnerabilities are introduced for
 each new package installation. This observation motivates a systematic
 review of software dependencies by application developers, to avoid
 unnecessary packages in container images. This is also an argument in favor of lightweight
@@ -357,7 +358,7 @@ average, although data is too scarce to conclude.
 Updating container images reduces the number of vulnerabilities by package
 by a factor of 3 on average, resulting in only 0.6 extra vulnerabilities by
 package (Fig~\ref{fig:vulnerabilities}-\textbf{D}, r=0.81,
-$p\textless10^{-7}$). Twelve container images are missing on this figure:
+$p\textless10^{-8}$). Twelve container images are missing on this figure:
 six of them could not be updated due to various issues with the package
 manager, and six of them are Singularity images that we didn't update.
 % \change{3 out of these missing 6 images retured an error while updating which
