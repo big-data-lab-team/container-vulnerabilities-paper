@@ -58,7 +58,7 @@ in the images and widens the attack surface of the infrastructure. This
 paper presents a vulnerability analysis of container images for scientific
 data analysis. We compare results obtained with four vulnerability
 scanners, focusing on the use case of neuroscience data analysis, and
-quantifying the effect of images updates and minification on the number of
+quantifying the effect of image update and minification on the number of
 vulnerabilities. We find that container images used for neuroscience data analysis
 contain hundreds of vulnerabilities, that software updates remove about two
 thirds of these vulnerabilities, and that removing unused packages is also
@@ -97,14 +97,14 @@ updated due to concerns that software updates will interfere with
 the results~\cite{gronenschild2012effects, glatard2015reproducibility}.
 Images also typically include more dependencies than required, to make them
 easier to reuse between experiments. As a result, over 30\% of official
-images in DockerHub have been shown to contain high priority security
+images in DockerHub have been shown to contain high-priority security
 vulnerabilities~\cite{gummaraju2015over}, images on average contain over
 180 vulnerabilities~\cite{Shu2017}, and vulnerabilities are often caused by
 outdated packages~\cite{zerouali2019relation}.
 
 In this study, we focus on the vulnerabilities present in container images
-deployed on HPC clusters for scientific data analysis. We address the
-following questions:
+deployed on HPC clusters for scientific data analysis, in particular in the
+neuroimaging domain. We address the following questions:
 
 \textit{What is the current amount of vulnerabilities in
 container images deployed on HPC clusters?} Vulnerabilities are possible
@@ -113,19 +113,18 @@ and the integrity of user data. We report vulnerability scans produced
 by four popular image scanning tools: Anchore, Vuls, Clair, and Singularity tools.
 
 \textit{Can the amount of vulnerabilities be reduced by updating the images?}  
-For many reasons related to reproducibility and lifecycle of research
+For many reasons related to reproducibility and the lifecycle of research
 projects, container images deployed on HPC clusters often include outdated
 software. We report on the effect of software updates on the amount of
 vulnerabilities found in images.
 
 \textit{Can the amount of vulnerabilities be reduced by minifying images?} 
 Container images often include more software packages than necessary for 
-typical analysis. We report on the impact of unused software packages on
+a typical analysis. We report on the impact of unused software packages on
 the presence of vulnerabilities.
 
 The remainder of this paper 
-describes the materials and tools used in the
-experiments, including container images, image scanners, and our methodology for updating and minifying images.
+describes the container images and scanners used in our experiment, and our methodology for updating and minifying images.
 Results present the vulnerabilities detected in container
 images, quantify the effectiveness of updating and minifying images, and
 explain the differences observed between scanners. In conclusion, we
