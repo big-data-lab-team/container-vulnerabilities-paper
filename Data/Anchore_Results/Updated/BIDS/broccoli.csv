@@ -1,2 +1,2 @@
-Vulnerability ID        Package                     Severity        Fix                   CVE Refs        Vulnerability URL                                      
-RHSA-2013:0568          dbus-glib-0.86-6.el6        High            0:0.86-6.el6_4                        https://access.redhat.com/errata/RHSA-2013:0568        
+"Vulnerability_ID   Package   Severity"
+"CVE-2013-0292   dbus-glib-0.86-6.el6   High      "
