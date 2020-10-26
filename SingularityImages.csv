@@ -1,7 +1,0 @@
-Images,OS distribution,Packages
-c3genomics/genpipes,centos:7,222
-bioinformatics-group/aqua-singularity-recipe,debian:9,164
-MontrealSergiy/BEst,ubuntu:16.04,257
-aces/cbrain-containers-recipes:fsl_v6.0.1,ubuntu:16.04,220
-shots47s/bids-freesurfer-6.0,ubuntu:14.04,302
-shots47s/bids-fmriprep-1.2.3,ubuntu:16.04,446
