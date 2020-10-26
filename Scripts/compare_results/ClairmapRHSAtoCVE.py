@@ -19,8 +19,11 @@ def domapping(rhsa2cve_file: str, rhsa_file: str, output_file: str) -> None:
     None
     """
     cves: Dict[str, Tuple[str, str]] = {}
-
+    
     with open(rhsa2cve_file, "r") as fin:
+        lines = fin.readlines()
+
+    with open(rhsa_file, "r") as fin:
         words = map(str.split, fin.readlines())
         rhsa: Dict[str, Tuple[str, str]] = {
             word[4]: (word[3], word[6])
@@ -28,8 +31,6 @@ def domapping(rhsa2cve_file: str, rhsa_file: str, output_file: str) -> None:
             if (len(word) > 1 and "|" not in [word[3], word[4]])
         }
 
-    with open(rhsa_file, "r") as fin:
-        lines = fin.readlines()
 
     for k, v in rhsa.items():
         for line in lines:
@@ -41,7 +42,7 @@ def domapping(rhsa2cve_file: str, rhsa_file: str, output_file: str) -> None:
     with open(output_file, "w") as fout:
         fout.write("Vulnerability_ID     Package    Severity\n")
         for k, v in cves.items():
-            fout.write(f"{k} {v[0]} {v[1]}\n")
+            fout.write(f"{k} {v[1]} {v[0]}\n")
 
 
 if __name__ == "__main__":

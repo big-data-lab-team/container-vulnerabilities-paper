@@ -25,20 +25,21 @@ def domapping(input_file: str, output_file: str) -> None:
         rows = list(map(str.split, fin.readlines()))
 
         for row in rows[1:]:
-            vul, severity, package = row
+            vul, package, severity = [row[r] for r in (0,1,2)]
             rhsa[vul] = (package, severity)
 
     with open("redhat.xml", "r") as fin:
         content = "".join(fin.readlines())
         bs_content = bs(content, "lxml")
-
         for k, v in rhsa.items():
             req_id = bs_content.find("reference", {"ref_id": k})
             results = list(req_id.next_siblings)
-
+            
             for result in results:
-                if "ref_id" in result:
+                try:
                     cves[result["ref_id"]] = (v[0], v[1])
+                except:
+                    continue
 
     with open(output_file, "w") as fout:
         fout.write("Vulnerability_ID   Package   Severity\n")
