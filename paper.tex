@@ -33,6 +33,8 @@
 \newcommand{\reprozip}[0]{ReproZip\xspace}
 \newcommand{\rom}[1]{\lowercase\expandafter{\romannumeral #1\relax}}
 \newcommand{\tristan}[1]{\color{red}From Tristan: #1\color{black}}
+\definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
+\newcommand{\revision}[1]{\color{ao(english)}#1\color{black}\xspace}
 
 \renewcommand{\labelitemi}{$\textendash$}
 \title{An Analysis of Security Vulnerabilities in Container Images for Scientific Data Analysis}
@@ -50,7 +52,7 @@
 
 \begin{abstract}
 Software containers greatly facilitate the deployment and reproducibility
-of scientific data analyses on high-performance computing clusters
+of scientific data analyses, \revision{especially} on high-performance computing clusters
 (HPC). However, container images often contain outdated or unnecessary
 software packages, which increases the number of security vulnerabilities
 in the images and widens the attack surface of the infrastructure. This
@@ -73,7 +75,7 @@ Containers; Docker; Singularity; Security Vulnerabilities; Neuroimaging.
 \section{Introduction}
 
 Software containers have emerged has an efficient solution to deploy
-scientific data analyses on HPC clusters, due
+scientific data analyses, due
 to their portability, ease of use, and limited overhead. On HPC systems, the
 Singularity~\cite{kurtzer2017singularity} framework is often preferred to
 \href{http://docker.com}{Docker} due to its
@@ -82,7 +84,7 @@ Docker images. Singularity is now available in dozens of HPC
 clusters around the world and routinely used for Big Data analysis.
 
 Taking advantage of core Linux kernel features such as namespaces, control
-groups and chroot, containers isolate processes from the host computer, and
+groups and chroot, containers isolate processes from the host computer, and \revision{often can}
 control the memory, CPU, network and file-system resources assigned to
 them. However, containers still share the kernel, mounted file systems and
 some devices with the host, which raises security
@@ -90,10 +92,12 @@ concerns~\cite{martin2018docker, sultan2019container, combe2016docker} and
 opens the door to privilege escalation, denial of service, information leak
 and other types of attacks~\cite{gantikow2016providing}. 
 
-Container images typically include full operating system (OS) distributions in
-addition to data analysis software and their dependencies. They are rarely
-updated due to concerns that software updates will interfere with
-the results~\cite{gronenschild2012effects, glatard2015reproducibility}.
+Container images typically include full operating system (OS) distributions
+in addition to data analysis software and their dependencies. They are
+rarely updated due to concerns that \revision{updated} software may \revision{be
+incompatible or may} interfere with the
+results \revision{via numerical perturbations propagating in the
+analyses in unknown ways}~\cite{gronenschild2012effects, glatard2015reproducibility}.
 Images also typically include more dependencies than required, to make them
 easier to reuse between experiments. As a result, over 30\% of official
 images in DockerHub have been shown to contain high-priority security
@@ -112,9 +116,10 @@ and the integrity of user data. We report vulnerability scans produced
 by four popular image scanning tools: Anchore, Vuls, Clair, and Singularity tools.
 
 \textit{Can the amount of vulnerabilities be reduced by updating the images?}  
-For many reasons related to reproducibility and the lifecycle of research
-projects, container images deployed on HPC clusters often include outdated
-software. We report on the effect of software updates on the amount of
+\revision{To avoid breaking software dependencies and introducing numerical
+ perturbations, container images deployed on HPC clusters often include
+ outdated software}. We report
+on the effect of software updates on the amount of
 vulnerabilities found in images.
 
 \textit{Can the amount of vulnerabilities be reduced by minifying images?} 
@@ -187,7 +192,7 @@ scanning. In our experiments, we used Vuls 0.9.0, executed through Docker image
 \texttt{vuls/vuls:0.9.0} in remote dynamic mode.
 
 \href{https://github.com/quay/clair}{Clair} is an open-source and
-extensible vulnerability scanner for Docker and appc container images,
+extensible vulnerability scanner for Docker and \revision{OCI (Open Container Initiative)} container images,
 developed by CoreOS (now Container Linux), a Linux distribution to deploy
 container clusters.
 %  Clair has a client-server architecture, in which the
@@ -251,7 +256,7 @@ distributions cannot be scanned with Vuls.
 % OVAL does not contain all vulnerabilities as the main intention
 % of the OVAL database is to provide a detailed description of the most recent vulnerabilities}.
 
-For CentOS images, Anchore and Clair give scanning results using Red Hat
+For CentOS images, Anchore and Clair \revision{report} scanning results using Red Hat
 Security Advisory (RHSA) identifiers, whereas Vuls uses the Common
 Vulnerabilities and Exposures (CVE) identifiers used in OVAL. We mapped
 RHSA identifiers to corresponding CVE identifiers, to allow for a
@@ -299,8 +304,18 @@ the \href{https://github.com/ReproNim/neurodocker}{Neurodocker} tool
 initially, but it did not affect the detected vulnerabilities
 as it was removing unused files without using the package manager.
 
-Using this approach, we minified five Debian- or Ubuntu-based BIDS app images,
-using basic analysis examples found in the applications documentation.
+Image minification is a tedious operation\revision{, as it requires (1) creating
+relevant analysis examples and (2) running these examples in the container
+image}, to identify the packages required by the application. The
+resulting \revision{minified} container image is only valid for the examples selected
+in the minification process, as other executions might require a
+different set of packages. 
+
+\revision{While the Boutiques specification allows developers to 
+specify analysis tests, we found that this feature was not consistently used in 
+the studied container images. Therefore, we relied on analysis examples found in the 
+documentation of the applications.   
+Using this approach, we minified five Debian- or Ubuntu-based BIDS app images.}
 
 \section{Results}
 
@@ -318,7 +333,8 @@ with a Jupyter notebook to regenerate the figures.
 Anchore and Stools in container images. \textbf{(A)} Number of vulnerabilities by
 container image and severity, showing hundreds of detected vulnerabilities
 per image. Images s*,t*,u*,v*,w* and x* are Singularity images scanned by Stools and
-others are Docker images scanned using Anchore. \textbf{(B)} Effect of image minification and
+others are Docker images scanned using Anchore. \revision{High and critical vulnerabilities are 
+represented with the same solid color and critical vulnerabilities are reported between brackets.} \textbf{(B)} Effect of image minification and
 package update on 5 container images, showing that both techniques are
 complementary \textbf{(C)} Number of vulnerabilities by number of
 packages, showing a strong linear relationship. \textbf{(D)} Number of
@@ -328,15 +344,21 @@ importantly reduce the number of detected vulnerabilities.}
 
 An important amount of vulnerabilities were found in the tested container
  images (Fig~\ref{fig:vulnerabilities}-\textbf{A}), with an average of 460 vulnerabilities
-  per image and a median of 321. In comparison, no vulnerabilities were found in base
- Docker images \texttt{ubuntu:20.04} and \texttt{centos:7} after package
- update. Moreover, a significant fraction of detected vulnerabilities are
+  per image and a median of 321. Moreover, a significant fraction of detected vulnerabilities are
  of high severity
  (\href{https://www.first.org/cvss/specification-document}{CVSS} score
  >=7.0) and a few of them are of critical severity (CVSS >= 9.0). Remote
  attackers could possibly exploit these vulnerabilities to execute
- arbitrary code in the container, by crafting responses to specific network
- requests. Images based on the Alpine distribution 
+ arbitrary code in the container \revision{or to store arbitrary files in the system}. 
+ \revision{For instance, vulnerability CVE-2019-3462 could lead to remote
+ code execution through human-in-the-middle attacks and vulnerability CVE-2018-1000802
+ could lead to arbitrary file injections in the filesystem through unfiltered Python user input.}
+ \revision{Among other consequences, remote code execution and injection of
+ arbitrary files could be leveraged to steal user credentials, to use CPU
+ cycles or storage space for illegitimate purposes, or to attempt
+ denial-of-service attacks against the system.}
+ 
+ Images based on the Alpine distribution 
  had the lowest numbers of vulnerabilities, but no significant difference
  in the numbers of vulnerabilities detected in 
  Ubuntu, Debian or CentOS distributions was observed.
@@ -359,24 +381,18 @@ by a factor of 3 on average, resulting in only 0.6 extra vulnerabilities by
 package (Fig~\ref{fig:vulnerabilities}-\textbf{D}, r=0.81,
 $p\textless10^{-7}$). Twelve container images are missing on this figure:
 six of them could not be updated due to various issues with the package
-manager, and six of them are Singularity images that we didn't update.
+manager, and six of them are Singularity images that we did not update.
 % \change{3 out of these missing 6 images retured an error while updating which
 % indicates a problem with the package installer, 2 were unable to update because they
 % reached EOL and last one with CentOS 7.1.1503 returned libselinux conflicts with systemd} 
-In spite of the associated reproducibility challenges, updating
-packages therefore appears to be an efficient way to avoid vulnerabilities. It
+\revision{Software updates did not break the tested
+analyses in the remaining images. We did not investigate the potential consequences of image updates
+on numerical stability as it would require a full separate study. Updating}
+packages appears to be an efficient way to avoid vulnerabilities. It
 is not an ultimate solution though, as a substantial number of
 vulnerabilities remain.
 
 \subsection{Effect of minification}
-
-Another approach to reduce the number of vulnerabilities involves deleting
-unnecessary packages from the container images. It is a tedious operation,
-as it requires running an actual data analysis in the container image, to
-identify the packages required by the application. In addition, the
-resulting container image is only valid for the specific type of analysis
-used in the minification process, as other executions might require a
-different set of packages. 
 
 Using the ReproZip-based approach described previously, we minified 5
 different images covering the spectrum of detected vulnerabilities
@@ -393,6 +409,11 @@ minification less useful. In other cases, a limited number of unnecessary packag
 a significant number of vulnerabilities, which makes minification very impactful. 
 This was the case in images \textbf{d}, \textbf{S} and \textbf{U}, where removing compilers
 and kernel headers reduced the number of vulnerabilities by an important fraction. 
+\revision{Minification did not create any errors in these images as all the
+dependencies were taken care of carefully. Common packages removed by the
+minification process were compilers, unused Python packages, and unused
+file compression utilities.}
+
 
 \subsection{Combined effect of image update and  minification}
 
@@ -838,9 +859,11 @@ before new software versions are released.
 
 Describing specific attacks against HPC systems that would exploit
 vulnerabilities in container images is out of the scope of our study. We
-believe that such attacks are likely to exist, although attacking HPC
-systems through containers is challenging due to their relative isolation
-from the host system. First, under the assumption that legitimate HPC
+believe that such attacks are likely to exist \revision{given that critical vulnerabilities 
+allowing for arbitrary code execution or file injection were found.}
+Attacking HPC
+systems through containers remains challenging due to their relative isolation
+from the host system. Under the assumption that legitimate HPC
 users can be trusted, attackers would have to be remote to the container,
 either in the same network or on a remote network. Two main types of
 attacks can be envisaged in these conditions: network-based attacks,
@@ -849,11 +872,10 @@ and data-based attacks, exploiting vulnerabilities through the processing
 of malicious data injected through third-party systems.
 
 Several types of escalation attacks could be envisaged once remote
-attackers gain access to the container, in particular related to (1) using
-the resources allocated to the container for malicious use, such as storing
-data in the file system or using CPU cycles, resulting in denial of service
+attackers gain access to the container, in particular related to \revision{(1) stealing user credentials}, (2) using
+the resources allocated to the container for malicious use, resulting in denial of service
 for the user running the container and possibly for other HPC users, and
-(2) attacking a host network service, for instance a scheduler or a file
+(3) attacking a host network service, for instance a scheduler or a file
 system daemon. Exploits in the host kernel to break out of the container
 are always possible but unlikely assuming that the host system is
 maintained by professional system administrators.
