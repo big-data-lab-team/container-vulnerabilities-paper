@@ -1,5 +1,9 @@
 # Vulnerability analysis of container images
 
+
+[![DOI](https://zenodo.org/badge/307525894.svg)](https://zenodo.org/badge/latestdoi/307525894)
+
+
 The paper is written in Latex and can be compiled as follows:
 ```
 pdflatex paper ; bibtex paper ; pdflatex paper ; pdflatex paper
