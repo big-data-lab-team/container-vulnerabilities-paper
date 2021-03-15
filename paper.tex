@@ -34,7 +34,7 @@
 \newcommand{\rom}[1]{\lowercase\expandafter{\romannumeral #1\relax}}
 \newcommand{\tristan}[1]{\color{red}From Tristan: #1\color{black}}
 \definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
-\newcommand{\revision}[1]{\color{ao(english)}#1\color{black}\xspace}
+\newcommand{\revision}[1]{#1\xspace} %\color{ao(english)}#1\color{black}\xspace}
 
 \renewcommand{\labelitemi}{$\textendash$}
 \title{An Analysis of Security Vulnerabilities in Container Images for Scientific Data Analysis}
@@ -645,11 +645,22 @@ connections are likely to remain more common.
 
 \section{Availability of Data and Materials}
 
-The data and scripts used in this study are available in the GitHub repository at
-\url{https://github.com/big-data-lab-team/container-vulnerabilities-paper}
-with a Jupyter notebook to regenerate the figures. This manuscript is based on 
-version 0.2 of the repository, available as DOI \href{https://zenodo.org/record/4569271}{10.5281/zenodo.4569271}.
+The data and scripts used in this study are available on GitHub
+with a Jupyter notebook to regenerate the figures:
+\begin{enumerate}
+\item Project name: container-vulnerabilities-paper
+\item Project home page:\\ \url{https://github.com/big-data-lab-team/container-vulnerabilities-paper}
+\item Operating system: Platform independent
+\item Programming language: Python
+\item Other requirements: Jupyter >= 1.0.0, Matplotlib >= 3.3.0, NumPy >= 1.19.1, Pandas >=1.0.5, SciPy >= 1.6.0
+\item License: GNU General Public License v3.0
+\end{enumerate}
 
+\section{Availability of Supporting Data}
+
+Kaur B; Dugré M; Hanna A; Glatard T: Supporting data for ``An Analysis of
+Security Vulnerabilities in Container Images for Scientific Data Analysis"
+GigaScience Database. 2021. \url{http://dx.doi.org/10.5524/100880}
 
 \section{Competing interests}
 
